@@ -75,5 +75,5 @@ By agreeing to this contract, each team member acknowledges their commitment to 
 
 **[Pranav Kumar Mahesh]**
 
-**[Your Name]**
+**[Christopher Prasetya Mulya]**
 
