@@ -19,7 +19,6 @@ information you need to contribute effectively.
 4.  [Development Workflow](#development-workflow)
 5.  [Documentation](#documentation)
 6.  [Code Review](#code-review)
-7. [Acknowledgments](#acknowledgments)
 
 ## Getting Started
 
