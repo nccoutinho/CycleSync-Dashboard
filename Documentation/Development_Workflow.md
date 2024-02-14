@@ -1,12 +1,12 @@
-# Dashkick Analytics Development Workflow
+# Development Workflow
 
 ## Introduction
 
-Welcome to the development workflow guide for the `dashkickAnalytics` package. This document outlines the procedures and best practices for contributing to the development of the package. By following this workflow, you can ensure a smooth and efficient collaboration process.
+Welcome to the development workflow guide for our package. This document outlines the procedures and best practices for contributing to the development of the package. By following this workflow, you can ensure a smooth and efficient collaboration process.
 
 ## Version Control
 
-We use Git for version control. The main repository for the `dashkickAnalytics` package is hosted on GitHub at [link_to_your_repository]. Contributors should clone the repository to their local machine and work on feature branches.
+We use Git for version control. The main repository for the project is hosted on GitHub at [Project](https://github.com/cmulya/DATA551-Project). Contributors should clone the repository to their local machine and work on feature branches.
 
 ## Branching Strategy
 
@@ -32,14 +32,6 @@ All PRs require at least one code review before merging. Reviewers should ensure
 - The changes address the stated issue or feature requirements.
 - Tests adequately cover the changes, and documentation is updated if necessary.
 
-## Testing
-
-We have a comprehensive testing suite for the `dashkickAnalytics` package. Contributors should write unit tests for new features and bug fixes using the appropriate testing framework. Tests should cover edge cases and ensure code reliability and robustness.
-
-## Release Management
-
-Releases of the `dashkickAnalytics` package are managed using semantic versioning. After merging changes into the `main` branch, the package version is incremented according to the significance of the changes (major, minor, patch). Release notes are updated with details of the changes included in each release.
-
 ## Conclusion
 
-Following this development workflow will help maintain consistency, quality, and stability in the `dashkickAnalytics` package. If you have any questions or need assistance, feel free to reach out to the project maintainers.
+Following this development workflow will help maintain consistency, quality, and stability in the project. If you have any questions or need assistance, feel free to reach out to the project maintainers.

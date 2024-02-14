@@ -4,12 +4,12 @@ Authors:
   - Natalie Coutinho  
   - Pranav Kumar Mahesh
   
-date: 2024-02-08
+date: 2024-02-14
 ---
 
-# Contributing to DashKick Analytics
+# Contributing Guide
 
-Thank you for considering contributing to DashKick Analytics! Your participation is essential for the growth and improvement of our project.
+Thank you for considering to contribute! Your participation is essential for the growth and improvement of our project.
 
 ## Getting Started
 
@@ -20,7 +20,7 @@ Thank you for considering contributing to DashKick Analytics! Your participation
    - Clone your forked repository to your local machine using `git clone`.
 
 3. **Install Dependencies:**
-   - Make sure to install any project dependencies. Check the [README](https://github.com/nccoutinho/DashKick_Analytics/blob/main/README.md) for guidance.
+   - Make sure to install any project dependencies. Check the [README](https://github.com/cmulya/DATA551-Project/blob/main/README.md) for guidance.
 
 4. **Create a Branch:**
    - Create a new branch for your contribution using `git checkout -b feature/my-feature`.
@@ -57,6 +57,6 @@ Thank you for considering contributing to DashKick Analytics! Your participation
 
 ## Thank You
 
-Thank you for contributing to DashKick Analytics! Your efforts help us create a better tool for football analytics enthusiasts. If you have any questions, feel free to reach out to the maintainers.
+Thank you for contributing to our project! If you have any questions, feel free to reach out to the maintainers.
 
 Happy coding!
