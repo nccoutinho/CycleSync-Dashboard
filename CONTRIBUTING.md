@@ -4,7 +4,7 @@ Christopher Mulya
 Natalie Coutinho  
 Pranav Kumar Mahesh
 
-2024-02-08
+2024-02-14
 
 # DashKick Analytics Contributions Guide
 
