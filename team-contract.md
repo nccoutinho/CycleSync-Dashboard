@@ -18,7 +18,7 @@ The purpose of this document is to establish guidelines and expectations for col
 ### Repository Usage
 1. **Commit Messages:** Write clear and concise commit messages.
 
-## Style of Work Ethic in Terms of Contribution
+### Style of Work Ethic in Terms of Contribution
 Our team values a strong work ethic when it comes to contributing to the project. Here are the principles we adhere to:
 
 1. **Proactive Engagement:**
