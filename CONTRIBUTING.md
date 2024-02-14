@@ -54,10 +54,4 @@ pull request.
 
 All code contributions go through a review process.
 
-## Acknowledgments
-
-We appreciate all contributors for their time and effort. See the
-[Acknowledgments](https://github.com/cmulya/DATA551-Project/blob/main/Documentation/Acknowledgement.md) file for a list of contributors
-and contributors’ guidelines.
-
 Thank you for contributing to our project!
