@@ -1,56 +1,50 @@
-Contributing to our project
-================
-Christopher Mulya  
-Natalie Coutinho  
-Pranav Kumar Mahesh
+# Contribution Guidelines
 
-2024-02-14
-
-# Contributions Guide
-
-We appreciate your interest in contributing to our project. This document outlines the guidelines and
-information you need to contribute effectively.
-
-## Table of Contents
-
-1.  [Getting Started](#getting-started)
-2.  [Code of Conduct](#code-of-conduct)
-3.  [How to Contribute](#how-to-contribute)
-4.  [Development Workflow](#development-workflow)
-5.  [Documentation](#documentation)
-6.  [Code Review](#code-review)
-
-## Getting Started
-
-Before you begin contributing, ensure you have read and understood the
-[README](https://github.com/cmulya/DATA551-Project/blob/main/README.md)
-file for information about the project, its structure, and dependencies.
+We welcome all contributions to this project! If you notice a bug or have a feature request, please [open up an issue]. Before contributing, please take a moment to review the following guidelines:
 
 ## Code of Conduct
 
-Please review our [Code of Conduct](https://github.com/cmulya/DATA551-Project/blob/main/CODE_OF_CONDUCT.md) before
-contributing. We aim to foster an inclusive and respectful community.
+All contributors must abide by our [code of conduct](https://github.com/cmulya/DATA551-Project/blob/main/CODE_OF_CONDUCT.md). Please review it carefully before engaging in any contribution activities.
 
 ## How to Contribute
 
-We welcome contributions from the community! If you’re new to
-contributing to open source projects, check out our [Contributing
-Guide](https://github.com/cmulya/DATA551-Project/blob/main/Documentation/Contributing_Guide.md) for detailed information on how you can get
-involved.
+1. **Fork the Repository**: Start by forking the repository to your own GitHub account.
 
-## Development Workflow
+2. **Clone the Repository**: Clone the forked repository to your local machine using the `git clone` command:
 
-To understand our development workflow, refer to our [Development
-Workflow Guide](https://github.com/cmulya/DATA551-Project/blob/main/Documentation/Development_Workflow.md). This guide provides information on branching strategies, pull requests, and more.
+   ```bash
+   git clone https://github.com/your-username/repository-name.git
+   ```
 
-## Documentation
+3. **Create a Branch**: Create a new branch for your contribution:
 
-Contributions to documentation are highly valuable. If you find areas
-where the documentation can be improved or expanded, please submit a
-pull request.
+   ```bash
+   git checkout -b feature/your-feature-name
+   ```
+
+4. **Make Changes**: Make your desired changes to the codebase.
+
+5. **Commit Changes**: Commit your changes with a descriptive commit message:
+
+   ```bash
+   git commit -m "Add your descriptive message here"
+   ```
+
+6. **Push Changes**: Push your changes to your forked repository:
+
+   ```bash
+   git push origin feature/your-feature-name
+   ```
+
+7. **Submit a Pull Request**: Once you have pushed your changes to your forked repository, submit a pull request to the original repository. Be sure to include a detailed description of your
+   changes.
 
 ## Code Review
 
-All code contributions go through a review process.
+All pull requests will be reviewed by the project maintainers. Feedback will be provided, and changes may be requested before merging.
 
-Thank you for contributing to our project!
+## Help Needed
+
+If you're unsure about how to contribute or need assistance with anything, feel free to reach out to us by opening an issue or contacting one of the project maintainers directly.
+
+Thank you for your interest in contributing to our project!
