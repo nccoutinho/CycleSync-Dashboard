@@ -1,6 +1,6 @@
 # Contribution Guidelines
 
-We welcome all contributions to this project! If you notice a bug or have a feature request, please [open up an issue]. Before contributing, please take a moment to review the following guidelines:
+We welcome all contributions to this project! If you notice a bug or have a feature request, please [open up an issue](https://github.com/cmulya/DATA551-Project/blob/main/Documentation/Contributing_Guide.md). Before contributing, please take a moment to review the following guidelines:
 
 ## Code of Conduct
 
@@ -45,6 +45,6 @@ All pull requests will be reviewed by the project maintainers. Feedback will be 
 
 ## Help Needed
 
-If you're unsure about how to contribute or need assistance with anything, feel free to reach out to us by opening an issue or contacting one of the project maintainers directly.
+If you're unsure about how to contribute or need assistance with anything, feel free to reach out to us by [opening an issue](https://github.com/cmulya/DATA551-Project/blob/main/Documentation/Contributing_Guide.md) or contacting one of the project maintainers directly.
 
 Thank you for your interest in contributing to our project!
