@@ -1,62 +1,23 @@
----
-Authors: 
-  - Christopher Mulya  
-  - Natalie Coutinho  
-  - Pranav Kumar Mahesh
-  
-date: 2024-02-14
----
+# Contributing Guidelines
 
-# Contributing Guide
+Thank you for considering contributing to our project! Before opening an issue, please take a moment to review the following guidelines to help us address your concern effectively.
 
-Thank you for considering to contribute! Your participation is essential for the growth and improvement of our project.
+## Opening an Issue
 
-## Getting Started
+If you've encountered a bug, have a feature request, or want to suggest an improvement, please follow these steps:
 
-1. **Fork the Repository:**
-   - Fork the DashKick Analytics repository to your GitHub account.
+1. **Search Existing Issues**: Before opening a new issue, please search existing issues to see if your concern has already been reported or discussed.
 
-2. **Clone the Repository:**
-   - Clone your forked repository to your local machine using `git clone`.
+2. **Use Descriptive Titles**: Use a clear and descriptive title for your issue to help us understand what the problem or request is about at a glance.
 
-3. **Install Dependencies:**
-   - Make sure to install any project dependencies. Check the [README](https://github.com/cmulya/DATA551-Project/blob/main/README.md) for guidance.
+3. **Provide Context**: Provide as much context as possible about the issue or request. This may include steps to reproduce a bug, specific use cases for a feature request, or any relevant details about your environment.
 
-4. **Create a Branch:**
-   - Create a new branch for your contribution using `git checkout -b feature/my-feature`.
+4. **Include Screenshots or Code Samples**: If applicable, include screenshots or code samples that help illustrate the issue or request.
 
-## Making Changes
+5. **Be Respectful**: Remember to be respectful and constructive in your communication. We welcome feedback and contributions from all members of our community.
 
-1. **Code Conventions:**
-   - Follow the project's coding conventions. 
+## Code of Conduct
 
-2. **Commit Changes:**
-   - Commit your changes with clear, concise messages. 
+By opening an issue, you agree to abide by our [Code of Conduct](https://github.com/cmulya/DATA551-Project/blob/main/CODE_OF_CONDUCT.md). Please review it before engaging in any discussions or contributing to the project.
 
-3. **Test Your Changes:**
-   - Ensure that your changes pass existing tests and consider adding new tests if applicable.
-
-## Submitting Changes
-
-1. **Push Changes:**
-   - Push your changes to your forked repository with `git push origin feature/my-feature`.
-
-2. **Create a Pull Request:**
-   - Open a pull request from your branch to the `main` branch of the DashKick Analytics repository.
-
-3. **Describe Your Changes:**
-   - Provide a clear and detailed description of your changes in the pull request.
-
-## Code Review
-
-1. **Feedback:**
-   - Be open to feedback and address any comments or suggestions made during the code review process.
-
-2. **Continuous Improvement:**
-   - Use the feedback received to improve your code and contribute to the overall quality of the project.
-
-## Thank You
-
-Thank you for contributing to our project! If you have any questions, feel free to reach out to the maintainers.
-
-Happy coding!
+Thank you for helping to improve our project!
