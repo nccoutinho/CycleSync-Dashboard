@@ -7,7 +7,7 @@ Authors:
 date: 2024-02-14
 ---
 
-# Contributing to DashKick Analytics
+# Contributing Guide
 
 Thank you for considering to contribute! Your participation is essential for the growth and improvement of our project.
 
