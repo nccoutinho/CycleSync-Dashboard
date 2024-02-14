@@ -73,7 +73,7 @@ By agreeing to this contract, each team member acknowledges their commitment to 
 
 **[Natalie Coutinho]**
 
-**[Your Name]**
+**[Pranav Kumar Mahesh]**
 
 **[Your Name]**
 
