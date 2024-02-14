@@ -1,4 +1,4 @@
-Contributing to DashKick Analytics
+Contributing to our project
 ================
 Christopher Mulya  
 Natalie Coutinho  
@@ -6,7 +6,7 @@ Pranav Kumar Mahesh
 
 2024-02-14
 
-# DashKick Analytics Contributions Guide
+# Contributions Guide
 
 We appreciate your interest in contributing to our project. This document outlines the guidelines and
 information you need to contribute effectively.
