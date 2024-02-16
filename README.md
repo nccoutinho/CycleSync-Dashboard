@@ -8,7 +8,7 @@ The dashboard's interface is designed to streamline data visualization, prioriti
 
 Ultimately, the Bikeshare Dashboard project aims to revolutionize bikeshare system management, positioning the Mobi by Rogers Bikeshare system as a model of efficiency and innovation. By leveraging the power of data analytics, the project seeks to empower stakeholders, enhance user satisfaction, and propel the bikeshare industry forward into a future driven by connectivity and smart technology.
 
-**App Sketch**
+### App Sketch
 
 ![Dashboard](https://github.com/cmulya/DATA551-Project/blob/main/App%20Sketch/Dashboard.png)
 
