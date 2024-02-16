@@ -28,3 +28,11 @@ Our Bikeshare Dashboard project is centered around a dataset from Mobi by Rogers
 4. Equipped with insights from both the Historical Bike Availability Map and line charts, Sarah identifies a correlation between the popularity of electric bikes in certain areas and the seasonal preferences of long-term subscribers. This prompts her to strategize the introduction of promotional campaigns for '365 Day Pass plus' members during peak seasons in these areas.
 
 This scenario showcases how the Historical Bike Availability Map's geospatial density plot, combined with targeted filters, and the line chart visualizations with membership tier filtering, can empower operational managers like Sarah to derive nuanced insights, optimize resource allocation, and enhance bikeshare experiences within the Mobi by Rogers system.
+
+**App Sketch**
+
+Page 1 [!https://github.com/cmulya/DATA551-Project/blob/main/App%20Sketch/1.png]
+
+Page 2 [!https://github.com/cmulya/DATA551-Project/blob/main/App%20Sketch/2.png]
+
+Page 3 [!https://github.com/cmulya/DATA551-Project/blob/main/App%20Sketch/3.jpeg]
