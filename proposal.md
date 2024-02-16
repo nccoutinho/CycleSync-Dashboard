@@ -31,8 +31,8 @@ This scenario showcases how the Historical Bike Availability Map's geospatial de
 
 **App Sketch**
 
-Page 1 [!https://github.com/cmulya/DATA551-Project/blob/main/App%20Sketch/1.png]
+![Dashboard](https://github.com/cmulya/DATA551-Project/blob/main/App%20Sketch/1.png)
 
-Page 2 [!https://github.com/cmulya/DATA551-Project/blob/main/App%20Sketch/2.png]
+![Trends](https://github.com/cmulya/DATA551-Project/blob/main/App%20Sketch/2.png)
 
-Page 3 [!https://github.com/cmulya/DATA551-Project/blob/main/App%20Sketch/3.jpeg]
+![Maps](https://github.com/cmulya/DATA551-Project/blob/main/App%20Sketch/3.jpeg)
