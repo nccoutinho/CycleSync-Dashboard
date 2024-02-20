@@ -83,3 +83,40 @@ sort_table_2 = dcc.Dropdown(
    ],
    value='electric_bike'
 )
+
+# CHARTS / TABLE
+map_plot = dbc.Card(
+    [
+        dbc.CardHeader(
+            html.H4("Geospatial Bike Concentration Plot", className="card-title", style={"color": "white"}),
+            style={"background-color": "#D80808"}
+        ),
+        dbc.CardBody(
+            dbc.Col([
+                dcc.Loading(
+                    id="loading-1",
+                    type="circle",
+                    children=html.Iframe(
+                        id="polar_chart",
+                        style={
+                            "height": "22rem",
+                            "width": "100%",
+                            "border": "0",
+                            "display": "flex",
+                            "align-items": "center",
+                            "justify-content": "center"
+                            }
+                        ),
+                    color="#D80808"
+                )
+            ])
+        )
+    ],
+    className="mb-3",
+    style={
+        "width": "90%",
+        "margin-left": "auto",
+        "border": "1px solid lightgray",
+        "box-shadow": "0px 1px 4px 0px rgba(0, 0, 0, 0.1)"
+    }
+)
