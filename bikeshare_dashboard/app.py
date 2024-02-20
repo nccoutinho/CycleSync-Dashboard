@@ -64,3 +64,22 @@ sidebar = dbc.Col(
     width=2.1,
     style={"background-color": "#f8f9fa", "height": "100vh", "position": "fixed", "padding-top": "20px"},
 )
+
+# TABLE FILTER
+sort_table_1 = dcc.Dropdown(
+    id='table_filter_1',
+    options=[
+        {'label': 'Density plot', 'value': 'density_plot'},
+        {'label': 'Marker plot', 'value': 'marker_plot'}
+   ],
+   value='density_plot'
+)
+
+sort_table_2 = dcc.Dropdown(
+    id='table_filter_2',
+    options=[
+        {'label': 'Electric bike', 'value': 'electric_bike'},
+        {'label': 'Classic bike', 'value': 'classic_bike'}
+   ],
+   value='electric_bike'
+)
