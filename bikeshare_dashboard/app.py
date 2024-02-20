@@ -19,3 +19,28 @@ app = dash.Dash(
         dbc.themes.JOURNAL,
     ]
 )
+
+# Server
+server = app.server
+
+# Title
+app.title = 'Bikeshare Dashboard'
+
+# HEADER
+header = html.Div(
+    id="app-header",
+    children=[
+        html.H1(
+            "Bikeshare Dashboard",
+            style={
+                "display": "inline",
+                "font-size": "1.5em",
+                "margin-left": "1.8px",
+                "color": "white",  # Set font color to white
+                "background-color": "#D80808",  # Set background color to red
+                "padding": "10px"  # Add padding for better appearance
+            }
+        )
+    ],
+    style={"align": "center", "margin-left": 15}
+)
