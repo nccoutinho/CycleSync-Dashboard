@@ -120,3 +120,46 @@ map_plot = dbc.Card(
         "box-shadow": "0px 1px 4px 0px rgba(0, 0, 0, 0.1)"
     }
 )
+
+# LAYOUT
+app.layout = html.Div(
+    [
+        dcc.Location(id='url', refresh=False),  # Location component to track the URL
+        sidebar,
+        html.Div(
+            [
+                html.Hr(),
+                html.Div(
+                    [
+                        html.H6("Page / ", style={'display': 'inline'}),
+                        html.Span(id='current-page', style={'font-weight': 'bold'})
+                    ],
+                    className='top-bar',
+                    style={'margin-bottom': '20px'}  # Add vertical space between the sidebar and top bar
+                ),
+                dbc.Row(
+                    [
+                        dbc.Col(
+                            [
+                                html.H5("View:"),
+                                sort_table_1,
+                                html.H5("Bike type:"),
+                                sort_table_2
+                            ],
+                            width=2,
+                            style={'margin-right': '20px'}  # Add horizontal space between top bar and sort tables
+                        ),
+                        dbc.Col(
+                            map_plot,
+                            width=9
+                        ),
+                    ],
+                    justify="center",
+                    style={'margin-top': '20px'}  # Add vertical space between top bar and sort tables/map_plot
+                ),
+                html.Hr()
+            ],
+            style={"margin": "0", "margin-left": "220px", "padding-left": "20px"}  # Adjusted styles for better alignment
+        ),
+    ]
+)
