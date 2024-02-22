@@ -54,6 +54,14 @@ trips_by_day = combined_df['Day of Week'].value_counts()
 sorted_days = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday']
 trips_by_day = trips_by_day.reindex(sorted_days)
 
+# Remove null records
+combined_df = combined_df.dropna(subset=['Return station'])
+
+# Get the top 10 most common end trip stations
+top_end_stations = combined_df['Return station'].value_counts().nlargest(10)
+
+# Calculate percentages
+percentage_values = (top_end_stations / top_end_stations.sum()) * 100
 
 # Initialize Dash app
 app = dash.Dash(__name__)
