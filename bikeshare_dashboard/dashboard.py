@@ -114,3 +114,62 @@ max_duration = generate_card("Maximum duration", "30 Mins", "fas fa-hourglass")
 max_distance = generate_card("Maximum distance", "8 KM", "fas fa-road")
 busiest_station = generate_card("Busiest station", "8th & Ash", "fas fa-building")
 busiest_day = generate_card("Busiest day", "Saturday", "fas fa-calendar-alt")
+
+# SECOND ROW:
+active_stations = dbc.Card(
+    [
+        dbc.CardBody(
+            [
+                html.H1("142", style={"color": "#D80808", "margin-bottom": "25px", "font-size": "5.5em"}),
+                dbc.Col(html.H6("active stations around the city, accessible 24/7, 365 days a year."))
+            ],
+            style={"display": "flex", "flex-direction": "column", "justify-content": "center"}
+        )
+    ],
+    className="mb-3",
+    style={
+        "width": "29%",
+        "height": "300px",
+        "margin-left": "auto",
+        "border": "1px solid lightgray",
+        "box-shadow": "0px 1px 4px 0px rgba(0, 0, 0, 0.1)"
+    }
+)
+
+pie_chart = dbc.Card(
+    [
+        dbc.CardBody(
+            [
+                dbc.Col("insert pie chart here.")
+            ],
+            style={"display": "flex", "flex-direction": "column", "justify-content": "center"}
+        )
+    ],
+    className="mb-3",
+    style={
+        "width": "29%",
+        "height": "300px",
+        "margin-left": "auto",
+        "border": "1px solid lightgray",
+        "box-shadow": "0px 1px 4px 0px rgba(0, 0, 0, 0.1)"
+    }
+)
+
+day_of_week = dbc.Card(
+    [
+        dbc.CardBody(
+            [
+                dbc.Col("insert bar plot here.")
+            ],
+            style={"display": "flex", "flex-direction": "column", "justify-content": "center"}
+        )
+    ],
+    className="mb-3",
+    style={
+        "width": "29%",
+        "height": "300px",
+        "margin-left": "auto",
+        "border": "1px solid lightgray",
+        "box-shadow": "0px 1px 4px 0px rgba(0, 0, 0, 0.1)"
+    }
+)
