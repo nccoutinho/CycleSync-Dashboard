@@ -249,6 +249,14 @@ app.layout = html.Div(
                     justify="center",
                     style={'margin-top': '20px', 'padding-right': '60px'}  
                 ),
+                dbc.Row(
+                    [
+                        temperature_duration,
+                        common_end_station
+                    ],
+                    justify="center",
+                    style={'margin-top': '20px', 'padding-right': '60px'}  
+                ),
                 html.Hr()
             ],
             style={"margin": "0", "margin-left": "230px", "padding-left": "20px"}  # Adjusted styles for better alignment
