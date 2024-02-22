@@ -38,6 +38,23 @@ station_counts = combined_df['Departure station'].value_counts()
 # Get the number of unique stations
 num_stations = len(station_counts)
 
+# Remove null records
+combined_df = combined_df.dropna(subset=['Departure'])
+
+# Convert 'Departure Date' column to datetime
+combined_df['Departure'] = pd.to_datetime(combined_df['Departure'])
+
+# Extract day of the week
+combined_df['Day of Week'] = combined_df['Departure'].dt.day_name()
+
+# Count trips by day of the week
+trips_by_day = combined_df['Day of Week'].value_counts()
+
+# Sort days of the week
+sorted_days = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday']
+trips_by_day = trips_by_day.reindex(sorted_days)
+
+
 # Initialize Dash app
 app = dash.Dash(__name__)
 
