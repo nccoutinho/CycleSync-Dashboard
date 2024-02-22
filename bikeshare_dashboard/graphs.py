@@ -8,7 +8,7 @@ import dash_html_components as html
 from dash.dependencies import Input, Output
 
 # Path to the folder containing your files
-folder_path = './dataset'
+folder_path = '../dataset'
 
 # Initialize an empty list to store DataFrames
 dfs = []
