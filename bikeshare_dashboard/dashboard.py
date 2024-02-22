@@ -173,3 +173,46 @@ day_of_week = dbc.Card(
         "box-shadow": "0px 1px 4px 0px rgba(0, 0, 0, 0.1)"
     }
 )
+
+# LAYOUT
+app.layout = html.Div(
+    [
+        dcc.Location(id='url', refresh=False),  # Location component to track the URL
+        sidebar,
+        html.Div(
+            [
+                html.Hr(),
+                html.Div(
+                    [
+                        html.H6("Page / ", style={'display': 'inline'}),
+                        html.Span(id='current-page', style={'font-weight': 'bold'})
+                    ],
+                    className='top-bar',
+                    style={'margin-bottom': '20px'}  # Add vertical space between the sidebar and top bar
+                ),
+                dbc.Row(
+                    [
+                        no_of_rides,
+                        max_duration,
+                        max_distance,
+                        busiest_station,
+                        busiest_day
+                    ],
+                    justify="center",
+                    style={'margin-top': '20px', 'padding-right': '60px'}  
+                ),
+                dbc.Row(
+                    [
+                        active_stations,
+                        pie_chart,
+                        day_of_week
+                    ],
+                    justify="center",
+                    style={'margin-top': '20px', 'padding-right': '60px'}  
+                ),
+                html.Hr()
+            ],
+            style={"margin": "0", "margin-left": "230px", "padding-left": "20px"}  # Adjusted styles for better alignment
+        ),
+    ]
+)
