@@ -64,3 +64,53 @@ sidebar = dbc.Col(
     width=2.1,
     style={"background-color": "#f8f9fa", "height": "100vh", "position": "fixed", "padding-top": "20px"},
 )
+
+# CHARTS / TABLE
+# FIRST ROW:
+# Define a function to generate card with icon
+def generate_card(title, content, icon):
+    return dbc.Card(
+        [
+            dbc.CardHeader(
+                html.H6(title, className="card-title", style={"color": "gray", "margin-bottom": "0"}),
+                style={"background-color": "transparent", "border": "none"}
+            ),
+            dbc.CardBody(
+                [
+                    html.Div(
+                        [
+                            html.H3(content),
+                            html.Div(
+                                [
+                                    html.Div(
+                                        [
+                                            html.I(className=icon, style={"color": "white", "fontSize": "1.4em"}),
+                                        ],
+                                        style={"background-color": "#D80808", "padding": "9px", "border-radius": "8px"}
+                                    ),
+                                ],
+                                style={"display": "flex", "align-items": "center"}
+                            ),
+                        ],
+                        style={"display": "flex", "justify-content": "space-between"}
+                    ),
+                ],
+                style={"padding": "20px"}
+            ),
+        ],
+        className="mb-3",
+        style={
+            "width": "16%",
+            "margin-left": "auto",
+            "border": "1px solid lightgray",
+            "box-shadow": "0px 1px 4px 0px rgba(0, 0, 0, 0.1)"
+        }
+    )
+
+
+
+no_of_rides = generate_card("No. of rides", "6.5 M", "fas fa-bicycle")
+max_duration = generate_card("Maximum duration", "30 Mins", "fas fa-hourglass")
+max_distance = generate_card("Maximum distance", "8 KM", "fas fa-road")
+busiest_station = generate_card("Busiest station", "8th & Ash", "fas fa-building")
+busiest_day = generate_card("Busiest day", "Saturday", "fas fa-calendar-alt")
