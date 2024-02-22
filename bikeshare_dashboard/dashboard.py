@@ -44,3 +44,23 @@ header = html.Div(
     ],
     style={"align": "center", "margin-left": 15}
 )
+
+# SIDEBAR
+sidebar = dbc.Col(
+    [
+        header,
+        html.Div(style={"height": "20px"}),
+        dbc.Nav(
+            [
+                dbc.NavItem(dbc.NavLink("Dashboard", href="/dashboard")),
+                dbc.NavItem(dbc.NavLink("Trends", href="/trends")),
+                dbc.NavItem(dbc.NavLink("Map", href="/map")),
+            ],
+            vertical=True,
+            pills=True,
+            className="mb-3",
+        ),
+    ],
+    width=2.1,
+    style={"background-color": "#f8f9fa", "height": "100vh", "position": "fixed", "padding-top": "20px"},
+)
