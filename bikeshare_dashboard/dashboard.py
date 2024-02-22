@@ -174,6 +174,45 @@ day_of_week = dbc.Card(
     }
 )
 
+# THIRD ROW:
+temperature_duration = dbc.Card(
+    [
+        dbc.CardBody(
+            [
+                dbc.Col("insert heat map here.")
+            ],
+            style={"display": "flex", "flex-direction": "column", "justify-content": "center"}
+        )
+    ],
+    className="mb-3",
+    style={
+        "width": "50%",
+        "height": "350px",
+        "margin-left": "auto",
+        "border": "1px solid lightgray",
+        "box-shadow": "0px 1px 4px 0px rgba(0, 0, 0, 0.1)"
+    }
+)
+
+common_end_station = dbc.Card(
+    [
+        dbc.CardBody(
+            [
+                dbc.Col("insert bar plot here.")
+            ],
+            style={"display": "flex", "flex-direction": "column", "justify-content": "center"}
+        )
+    ],
+    className="mb-3",
+    style={
+        "width": "41%",
+        "height": "350px",
+        "margin-left": "auto",
+        "border": "1px solid lightgray",
+        "box-shadow": "0px 1px 4px 0px rgba(0, 0, 0, 0.1)"
+    }
+)
+
 # LAYOUT
 app.layout = html.Div(
     [
