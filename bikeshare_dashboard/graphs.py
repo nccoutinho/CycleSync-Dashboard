@@ -66,5 +66,30 @@ app.layout = html.Div(
     ]
 )
 
+# Define layout of the app2
+app.layout = html.Div(
+    children=[
+        html.H1("Trips by Day of the Week"),
+        dcc.Graph(
+            id='trips-by-day-bar',
+            figure={
+                'data': [
+                    {'x': trips_by_day.index, 
+                     'y': trips_by_day.values, 
+                     'type': 'bar', 
+                     'name': 'Trips', 
+                     'marker': {'color': 'indianred'},
+                     'hovertemplate': 'Day: %{x}<br>Trips: %{y:,.0f}'},
+                ],
+                'layout': {
+                    'title': 'Trips by Day of the Week',
+                    'xaxis': {'title': 'Day of the Week'},
+                    'yaxis': {'title': 'Trips'},
+                }
+            }
+        )
+    ]
+)
+
 if __name__ == '__main__':
     app.run_server(debug=True)
