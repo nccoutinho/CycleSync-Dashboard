@@ -104,6 +104,19 @@ station_counts = combined_df['Departure station'].value_counts()
 # Get the number of unique stations
 num_stations = len(station_counts)
 
+# Convert 'Departure Date' column to datetime
+combined_df['Departure'] = pd.to_datetime(combined_df['Departure'])
+
+# Extract day of the week
+combined_df['Day of Week'] = combined_df['Departure'].dt.day_name()
+
+# Count trips by day of the week
+trips_by_day = combined_df['Day of Week'].value_counts()
+
+# Sort days of the week
+sorted_days = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday']
+trips_by_day = trips_by_day.reindex(sorted_days)
+
 # --------------------------------------
 # EMPTY CARDS / BOXES
 # FIRST ROW:
@@ -195,11 +208,12 @@ pie_chart = dbc.Card(
     }
 )
 
+
 day_of_week = dbc.Card(
     [
         dbc.CardBody(
             [
-                dbc.Col("insert bar plot here.")
+                dbc.Col("insert plot")
             ],
             style={"display": "flex", "flex-direction": "column", "justify-content": "center"}
         )
@@ -214,16 +228,36 @@ day_of_week = dbc.Card(
     }
 )
 
+
 # THIRD ROW:
 temperature_duration = dbc.Card(
     [
-        dbc.CardBody(
-            [
-                dbc.Col("insert heat map here.")
+                dbc.Col(
+                    [
+                        html.H1("Trips by Day of the Week", style={"font-size": "1.5em"}),
+                        dcc.Graph(
+                            id='trips-by-day-bar',
+                            figure={
+                                'data': [
+                                    {'x': trips_by_day.index, 
+                                     'y': trips_by_day.values, 
+                                     'type': 'bar', 
+                                     'name': 'Trips', 
+                                     'marker': {'color': 'indianred'},
+                                     'hovertemplate': 'Day: %{x}<br>Trips: %{y:,.0f}'},
+                                ],
+                                'layout': {
+                                    'xaxis': {'title': 'Day of the Week'},
+                                    'yaxis': {'title': 'Trips'},
+                                    'width': 0.0000000001,
+                                    'height': 300
+                                }
+                            }
+                        )
+                    ],
+                    width=12  # Adjust the width as needed
+                )
             ],
-            style={"display": "flex", "flex-direction": "column", "justify-content": "center"}
-        )
-    ],
     className="mb-3",
     style={
         "width": "50%",
