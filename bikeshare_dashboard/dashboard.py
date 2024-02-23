@@ -95,6 +95,8 @@ for filename in os.listdir(folder_path):
 # Concatenate all DataFrames in the list into one
 combined_df = pd.concat(dfs, ignore_index=True)
 
+# ---------------PLOT 1-----------------------
+
 # Remove null records
 combined_df = combined_df.dropna(subset=['Departure station'])
 
@@ -103,6 +105,8 @@ station_counts = combined_df['Departure station'].value_counts()
 
 # Get the number of unique stations
 num_stations = len(station_counts)
+
+# ---------------PLOT 2-----------------------
 
 # Convert 'Departure Date' column to datetime
 combined_df['Departure'] = pd.to_datetime(combined_df['Departure'])
