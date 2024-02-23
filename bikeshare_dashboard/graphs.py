@@ -90,11 +90,35 @@ app.layout = html.Div(
                      'hovertemplate': 'Day: %{x}<br>Trips: %{y:,.0f}'},
                 ],
                 'layout': {
-                    'title': 'Trips by Day of the Week',
                     'xaxis': {'title': 'Day of the Week'},
                     'yaxis': {'title': 'Trips'},
                 }
             }
+        )
+    ]
+)
+
+# Create a horizontal bar graph using Plotly Express
+fig = px.bar(
+    top_end_stations,
+    orientation='h',
+    labels={'Return Station', 'Count'},
+    color=percentage_values.index,  # Use the stations as the color variable
+    text=percentage_values.round(2).astype(str) + '%'  # Display percentages as text on the bars
+)
+
+# Sort bars in descending order
+fig.update_yaxes(categoryorder='total ascending')
+
+# Remove color legend
+fig.update_layout(showlegend=False)
+
+# Define layout of the app
+app.layout = html.Div(
+    children=[
+        html.H1("Top 10 Most Common End Trip Stations"),
+        dcc.Graph(
+            figure=fig.update_traces(marker_color='indianred')
         )
     ]
 )
