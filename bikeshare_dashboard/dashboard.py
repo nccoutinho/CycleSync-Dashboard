@@ -135,7 +135,7 @@ values.append(sum(counts_list[18:]))
 
 total_count = sum(values)
 
-# ---------------PLOT 3-----------------------
+# ---------------PLOT 4-----------------------
 
 # Remove null records
 combined_df = combined_df.dropna(subset=['Return station'])
@@ -145,6 +145,26 @@ top_end_stations = combined_df['Return station'].value_counts().nlargest(10)
 
 # Calculate percentages
 percentage_values = (top_end_stations / top_end_stations.sum()) * 100
+
+# Create a horizontal bar graph using Plotly Express
+fig = px.bar(
+    top_end_stations,
+    orientation='h',
+    labels={'Return Station', 'Count'},
+    color=percentage_values.index,  # Use the stations as the color variable
+    text=percentage_values.round(2).astype(str) + '%'  # Display percentages as text on the bars
+)
+# Sort bars in descending order
+fig.update_yaxes(categoryorder='total ascending')
+
+# Remove color legend
+fig.update_layout(showlegend=False)
+
+# Remove y-axis and x-axis names
+fig.update_layout(
+    xaxis_title='',
+    yaxis_title='',
+)
 
 # --------------------------------------
 # EMPTY CARDS / BOXES
@@ -210,8 +230,8 @@ active_stations = dbc.Card(
     ],
     className="mb-3",
     style={
-        "width": "29%",
-        "height": "300px",
+        "width": "45%",
+        "height": "400px",
         "margin-left": "auto",
         "border": "1px solid lightgray",
         "box-shadow": "0px 1px 4px 0px rgba(0, 0, 0, 0.1)"
@@ -255,8 +275,8 @@ pie_chart = dbc.Card(
     ],
     className="mb-3",
     style={
-        "width": "29%",
-        "height": "300px",
+        "width": "47%",
+        "height": "400px",
         "margin-left": "auto",
         "border": "1px solid lightgray",
         "box-shadow": "0px 1px 4px 0px rgba(0, 0, 0, 0.1)"
@@ -264,28 +284,28 @@ pie_chart = dbc.Card(
 )
 
 
-day_of_week = dbc.Card(
-    [
-        dbc.CardBody(
-            [
-                dbc.Col()
-            ],
-            style={"display": "flex", "flex-direction": "column", "justify-content": "center"}
-        )
-    ],
-    className="mb-3",
-    style={
-        "width": "29%",
-        "height": "300px",
-        "margin-left": "auto",
-        "border": "1px solid lightgray",
-        "box-shadow": "0px 1px 4px 0px rgba(0, 0, 0, 0.1)"
-    }
-)
+# day_of_week = dbc.Card(
+#     [
+#         dbc.CardBody(
+#             [
+#                 dbc.Col()
+#             ],
+#             style={"display": "flex", "flex-direction": "column", "justify-content": "center"}
+#         )
+#     ],
+#     className="mb-3",
+#     style={
+#         "width": "29%",
+#         "height": "300px",
+#         "margin-left": "auto",
+#         "border": "1px solid lightgray",
+#         "box-shadow": "0px 1px 4px 0px rgba(0, 0, 0, 0.1)"
+#     }
+# )
 
 
 # THIRD ROW:
-temperature_duration = dbc.Card(
+trip_day = dbc.Card(
     [
                 dbc.Col(
                     [
@@ -325,16 +345,19 @@ temperature_duration = dbc.Card(
 
 common_end_station = dbc.Card(
     [
-        dbc.CardBody(
-            [
-                dbc.Col("insert bar plot here.")
-            ],
-            style={"display": "flex", "flex-direction": "column", "justify-content": "center"}
-        )
+                dbc.Col(
+                    [
+                        html.H1("Top 10 Most Common End Trip Stations"),
+                        dcc.Graph(
+                            figure=fig.update_traces(marker_color='indianred')
+                            )
+                    ],
+                    width=12  # Adjust the width as needed
+                )
     ],
     className="mb-3",
     style={
-        "width": "41%",
+        "width": "42%",
         "height": "350px",
         "margin-left": "auto",
         "border": "1px solid lightgray",
@@ -373,15 +396,14 @@ app.layout = html.Div(
                 dbc.Row(
                     [
                         active_stations,
-                        pie_chart,
-                        day_of_week
+                        pie_chart
                     ],
                     justify="center",
                     style={'margin-top': '20px', 'padding-right': '60px'}  
                 ),
                 dbc.Row(
                     [
-                        temperature_duration,
+                        trip_day,
                         common_end_station
                     ],
                     justify="center",

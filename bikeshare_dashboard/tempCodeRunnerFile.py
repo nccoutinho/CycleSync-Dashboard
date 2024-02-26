@@ -4,6 +4,7 @@ import dash_mantine_components as dmc
 import pandas as pd
 import altair as alt
 import os
+import plotly.graph_objects as go
 import plotly.express as px
 import altair as alt
 from datetime import date
@@ -95,6 +96,8 @@ for filename in os.listdir(folder_path):
 # Concatenate all DataFrames in the list into one
 combined_df = pd.concat(dfs, ignore_index=True)
 
+# ---------------PLOT 1-----------------------
+
 # Remove null records
 combined_df = combined_df.dropna(subset=['Departure station'])
 
@@ -103,6 +106,65 @@ station_counts = combined_df['Departure station'].value_counts()
 
 # Get the number of unique stations
 num_stations = len(station_counts)
+
+# ---------------PLOT 2-----------------------
+
+# Convert 'Departure Date' column to datetime
+combined_df['Departure'] = pd.to_datetime(combined_df['Departure'])
+
+# Extract day of the week
+combined_df['Day of Week'] = combined_df['Departure'].dt.day_name()
+
+# Count trips by day of the week
+trips_by_day = combined_df['Day of Week'].value_counts()
+
+# Sort days of the week
+sorted_days = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday']
+trips_by_day = trips_by_day.reindex(sorted_days)
+
+# ---------------PLOT 3-----------------------
+
+counts_series = combined_df['Membership type'].value_counts()
+index_list = counts_series.index.tolist()
+counts_list = counts_series.tolist()
+
+labels = index_list[:18]
+labels.append('Others')
+values = counts_list[:18]
+values.append(sum(counts_list[18:]))
+
+total_count = sum(values)
+
+# ---------------PLOT 4-----------------------
+
+# Remove null records
+combined_df = combined_df.dropna(subset=['Return station'])
+
+# Get the top 10 most common end trip stations
+top_end_stations = combined_df['Return station'].value_counts().nlargest(10)
+
+# Calculate percentages
+percentage_values = (top_end_stations / top_end_stations.sum()) * 100
+
+# Create a horizontal bar graph using Plotly Express
+fig = px.bar(
+    top_end_stations,
+    orientation='h',
+    labels={'Return Station', 'Count'},
+    color=percentage_values.index,  # Use the stations as the color variable
+    text=percentage_values.round(2).astype(str) + '%'  # Display percentages as text on the bars
+)
+# Sort bars in descending order
+fig.update_yaxes(categoryorder='total ascending')
+
+# Remove color legend
+fig.update_layout(showlegend=False)
+
+# Remove y-axis and x-axis names
+fig.update_layout(
+    xaxis_title='',
+    yaxis_title='',
+)
 
 # --------------------------------------
 # EMPTY CARDS / BOXES
@@ -168,62 +230,109 @@ active_stations = dbc.Card(
     ],
     className="mb-3",
     style={
-        "width": "29%",
-        "height": "300px",
+        "width": "45%",
+        "height": "400px",
         "margin-left": "auto",
         "border": "1px solid lightgray",
         "box-shadow": "0px 1px 4px 0px rgba(0, 0, 0, 0.1)"
     }
 )
+
 
 pie_chart = dbc.Card(
     [
         dbc.CardBody(
             [
-                dbc.Col("insert pie chart here.")
+                dbc.Col(
+                    [
+                        dcc.Graph(
+                            figure=go.Figure(
+                                data=[go.Pie(
+                                    labels=labels,
+                                    values=values,
+                                    hole=0.5,
+                                    textinfo='none',
+                                    marker=dict(colors=px.colors.sequential.Reds[::-1])
+                                )],
+                                layout=dict(
+                                    title='Rides by Membership Type',
+                                    title_x=0.5,
+                                    title_font_size=20,
+                                    showlegend=False
+                                )
+                            )
+                        ),
+                        html.Div(
+                            'Number of Rides: ' + str(total_count),
+                            style={'text-align': 'center', 'font-size': '15px'}
+                        )
+                    ],
+                    width=12
+                )
             ],
             style={"display": "flex", "flex-direction": "column", "justify-content": "center"}
         )
     ],
     className="mb-3",
     style={
-        "width": "29%",
-        "height": "300px",
+        "width": "47%",
+        "height": "400px",
         "margin-left": "auto",
         "border": "1px solid lightgray",
         "box-shadow": "0px 1px 4px 0px rgba(0, 0, 0, 0.1)"
     }
 )
 
-day_of_week = dbc.Card(
-    [
-        dbc.CardBody(
-            [
-                dbc.Col("insert bar plot here.")
-            ],
-            style={"display": "flex", "flex-direction": "column", "justify-content": "center"}
-        )
-    ],
-    className="mb-3",
-    style={
-        "width": "29%",
-        "height": "300px",
-        "margin-left": "auto",
-        "border": "1px solid lightgray",
-        "box-shadow": "0px 1px 4px 0px rgba(0, 0, 0, 0.1)"
-    }
-)
+
+# day_of_week = dbc.Card(
+#     [
+#         dbc.CardBody(
+#             [
+#                 dbc.Col()
+#             ],
+#             style={"display": "flex", "flex-direction": "column", "justify-content": "center"}
+#         )
+#     ],
+#     className="mb-3",
+#     style={
+#         "width": "29%",
+#         "height": "300px",
+#         "margin-left": "auto",
+#         "border": "1px solid lightgray",
+#         "box-shadow": "0px 1px 4px 0px rgba(0, 0, 0, 0.1)"
+#     }
+# )
+
 
 # THIRD ROW:
-temperature_duration = dbc.Card(
+trip_day = dbc.Card(
     [
-        dbc.CardBody(
-            [
-                dbc.Col("insert heat map here.")
+                dbc.Col(
+                    [
+                        html.H1("Trips by Day of the Week", style={"font-size": "1.5em"}),
+                        dcc.Graph(
+                            id='trips-by-day-bar',
+                            figure={
+                                'data': [
+                                    {'x': trips_by_day.index, 
+                                     'y': trips_by_day.values, 
+                                     'type': 'bar', 
+                                     'name': 'Trips', 
+                                     'marker': {'color': 'indianred'},
+                                     'hovertemplate': 'Day: %{x}<br>Trips: %{y:,.0f}'},
+                                ],
+                                'layout': {
+                                    'xaxis': {'title': 'Day of the Week'},
+                                    'yaxis': {'title': 'Trips'},
+                                    'width': 0.0000000001,
+                                    'height': 300
+                                }
+                            }
+                        )
+                    ],
+                    width=12  # Adjust the width as needed
+                )
             ],
-            style={"display": "flex", "flex-direction": "column", "justify-content": "center"}
-        )
-    ],
     className="mb-3",
     style={
         "width": "50%",
@@ -236,16 +345,19 @@ temperature_duration = dbc.Card(
 
 common_end_station = dbc.Card(
     [
-        dbc.CardBody(
-            [
-                dbc.Col("insert bar plot here.")
-            ],
-            style={"display": "flex", "flex-direction": "column", "justify-content": "center"}
-        )
+                dbc.Col(
+                    [
+                        html.H1("Top 10 Most Common End Trip Stations"),
+                        dcc.Graph(
+                            figure=fig.update_traces(marker_color='indianred')
+                            )
+                    ],
+                    width=12  # Adjust the width as needed
+                )
     ],
     className="mb-3",
     style={
-        "width": "41%",
+        "width": "42%",
         "height": "350px",
         "margin-left": "auto",
         "border": "1px solid lightgray",
@@ -284,15 +396,14 @@ app.layout = html.Div(
                 dbc.Row(
                     [
                         active_stations,
-                        pie_chart,
-                        day_of_week
+                        pie_chart
                     ],
                     justify="center",
                     style={'margin-top': '20px', 'padding-right': '60px'}  
                 ),
                 dbc.Row(
                     [
-                        temperature_duration,
+                        trip_day,
                         common_end_station
                     ],
                     justify="center",
