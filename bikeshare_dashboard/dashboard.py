@@ -135,6 +135,17 @@ values.append(sum(counts_list[18:]))
 
 total_count = sum(values)
 
+# ---------------PLOT 3-----------------------
+
+# Remove null records
+combined_df = combined_df.dropna(subset=['Return station'])
+
+# Get the top 10 most common end trip stations
+top_end_stations = combined_df['Return station'].value_counts().nlargest(10)
+
+# Calculate percentages
+percentage_values = (top_end_stations / top_end_stations.sum()) * 100
+
 # --------------------------------------
 # EMPTY CARDS / BOXES
 # FIRST ROW:
@@ -257,7 +268,7 @@ day_of_week = dbc.Card(
     [
         dbc.CardBody(
             [
-                dbc.Col("insert plot")
+                dbc.Col()
             ],
             style={"display": "flex", "flex-direction": "column", "justify-content": "center"}
         )
