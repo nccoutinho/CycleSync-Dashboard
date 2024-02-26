@@ -222,8 +222,8 @@ active_stations = dbc.Card(
     [
         dbc.CardBody(
             [
-                html.H1(f"{num_stations}", style={"color": "#D80808", "margin-bottom": "25px", "font-size": "5.5em"}),
-                dbc.Col(html.H6("active stations around the city, accessible 24/7, 365 days a year."))
+                html.H1(f"{num_stations}", style={"color": "#D80808", "margin-bottom": "25px", "font-size": "7.5em"}),
+                dbc.Col(html.H5("active stations around the city, accessible 24/7, 365 days a year."))
             ],
             style={"display": "flex", "flex-direction": "column", "justify-content": "center"}
         )
@@ -231,7 +231,7 @@ active_stations = dbc.Card(
     className="mb-3",
     style={
         "width": "45%",
-        "height": "400px",
+        "height": "490px",
         "margin-left": "auto",
         "border": "1px solid lightgray",
         "box-shadow": "0px 1px 4px 0px rgba(0, 0, 0, 0.1)"
@@ -245,6 +245,7 @@ pie_chart = dbc.Card(
             [
                 dbc.Col(
                     [
+                        html.H1("Rides by Membership Type", style={"font-size": "1.5em"}),
                         dcc.Graph(
                             figure=go.Figure(
                                 data=[go.Pie(
@@ -255,12 +256,10 @@ pie_chart = dbc.Card(
                                     marker=dict(colors=px.colors.sequential.Reds[::-1])
                                 )],
                                 layout=dict(
-                                    title='Rides by Membership Type',
-                                    title_x=0.5,
-                                    title_font_size=20,
                                     showlegend=False
                                 )
-                            )
+                            ),
+                            style={'height': '400px'}  # Adjust the height here
                         ),
                         html.Div(
                             'Number of Rides: ' + str(total_count),
@@ -276,12 +275,12 @@ pie_chart = dbc.Card(
     className="mb-3",
     style={
         "width": "47%",
-        "height": "400px",
         "margin-left": "auto",
         "border": "1px solid lightgray",
         "box-shadow": "0px 1px 4px 0px rgba(0, 0, 0, 0.1)"
     }
 )
+
 
 
 # day_of_week = dbc.Card(
