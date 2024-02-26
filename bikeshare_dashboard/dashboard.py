@@ -4,6 +4,7 @@ import dash_mantine_components as dmc
 import pandas as pd
 import altair as alt
 import os
+import plotly.graph_objects as go
 import plotly.express as px
 import altair as alt
 from datetime import date
@@ -121,6 +122,19 @@ trips_by_day = combined_df['Day of Week'].value_counts()
 sorted_days = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday']
 trips_by_day = trips_by_day.reindex(sorted_days)
 
+# ---------------PLOT 3-----------------------
+
+counts_series = combined_df['Membership type'].value_counts()
+index_list = counts_series.index.tolist()
+counts_list = counts_series.tolist()
+
+labels = index_list[:18]
+labels.append('Others')
+values = counts_list[:18]
+values.append(sum(counts_list[18:]))
+
+total_count = sum(values)
+
 # --------------------------------------
 # EMPTY CARDS / BOXES
 # FIRST ROW:
@@ -193,11 +207,37 @@ active_stations = dbc.Card(
     }
 )
 
+
 pie_chart = dbc.Card(
     [
         dbc.CardBody(
             [
-                dbc.Col("insert pie chart here.")
+                dbc.Col(
+                    [
+                        dcc.Graph(
+                            figure=go.Figure(
+                                data=[go.Pie(
+                                    labels=labels,
+                                    values=values,
+                                    hole=0.5,
+                                    textinfo='none',
+                                    marker=dict(colors=px.colors.sequential.Reds[::-1])
+                                )],
+                                layout=dict(
+                                    title='Rides by Membership Type',
+                                    title_x=0.5,
+                                    title_font_size=20,
+                                    showlegend=False
+                                )
+                            )
+                        ),
+                        html.Div(
+                            'Number of Rides: ' + str(total_count),
+                            style={'text-align': 'center', 'font-size': '15px'}
+                        )
+                    ],
+                    width=12
+                )
             ],
             style={"display": "flex", "flex-direction": "column", "justify-content": "center"}
         )
