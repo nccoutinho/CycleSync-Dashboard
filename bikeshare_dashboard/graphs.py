@@ -98,6 +98,7 @@ app.layout = html.Div(
     ]
 )
 
+
 # Create a horizontal bar graph using Plotly Express
 fig = px.bar(
     top_end_stations,
@@ -112,6 +113,12 @@ fig.update_yaxes(categoryorder='total ascending')
 
 # Remove color legend
 fig.update_layout(showlegend=False)
+
+# Remove y-axis and x-axis names
+fig.update_layout(
+    xaxis_title='',
+    yaxis_title='',
+)
 
 # Define layout of the app
 app.layout = html.Div(
