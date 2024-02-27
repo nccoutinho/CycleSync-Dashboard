@@ -104,10 +104,12 @@ combined_df = pd.concat(dfs, ignore_index=True)
 rides_count = len(combined_df)
 
 # Assuming combined_df has been defined and 'Departure Temperature' column is present
-average_departure_temperature = combined_df['Departure temperature (C)'].mean()
+average_departure_temperature = round(combined_df['Departure temperature (C)'].mean(),0)
 
 # Find the maximum covered distance
 max_covered_distance = combined_df['Covered distance (m)'].max()
+
+max_covered_distance_kilometers = round((max_covered_distance / 1000 ),0)
 
 # Remove null records
 combined_df = combined_df.dropna(subset=['Departure station'])
@@ -251,8 +253,8 @@ def generate_card(title, content, icon):
 
 no_of_rides = generate_card("No. of rides", rides_count, "fas fa-bicycle")
 avg_temperature = generate_card("Average temperature", average_departure_temperature, "fas fa-hourglass")
-max_distance = generate_card("Maximum distance", max_covered_distance, "fas fa-road")
-busiest_station = generate_card("Busiest station", busiest_station_departure, "fas fa-building")
+max_distance = generate_card("Maximum distance", max_covered_distance_kilometers, "fas fa-road")
+busiest_station = generate_card("Busiest station", busiest_station_departure[5:], "fas fa-building")
 busiest_day = generate_card("Busiest day", busiest_day_weekly, "fas fa-calendar-alt")
 
 # SECOND ROW:
