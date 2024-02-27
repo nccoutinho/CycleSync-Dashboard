@@ -116,7 +116,7 @@ combined_df = combined_df.dropna(subset=['Departure station'])
 station_counts = combined_df['Departure station'].value_counts()
 
 # Get the busiest station
-busiest_station = station_counts.idxmax()
+busiest_station_departure = station_counts.idxmax()
 
 # Convert 'Departure' to datetime
 combined_df['Departure'] = pd.to_datetime(combined_df['Departure'])
@@ -125,7 +125,7 @@ combined_df['Departure'] = pd.to_datetime(combined_df['Departure'])
 combined_df['Day of Week'] = combined_df['Departure'].dt.day_name()
 
 # Count the number of trips for each day of the week
-busiest_day = combined_df['Day of Week'].value_counts().idxmax()
+busiest_day_weekly = combined_df['Day of Week'].value_counts().idxmax()
 
 # ---------------PLOT 1-----------------------
 
@@ -249,11 +249,11 @@ def generate_card(title, content, icon):
 
 
 
-no_of_rides = generate_card("No. of rides", "6.5 M", "fas fa-bicycle")
-max_duration = generate_card("Maximum duration", "30 Mins", "fas fa-hourglass")
-max_distance = generate_card("Maximum distance", "8 KM", "fas fa-road")
-busiest_station = generate_card("Busiest station", "8th & Ash", "fas fa-building")
-busiest_day = generate_card("Busiest day", "Saturday", "fas fa-calendar-alt")
+no_of_rides = generate_card("No. of rides", rides_count, "fas fa-bicycle")
+avg_temperature = generate_card("Average temperature", average_departure_temperature, "fas fa-hourglass")
+max_distance = generate_card("Maximum distance", max_covered_distance, "fas fa-road")
+busiest_station = generate_card("Busiest station", busiest_station_departure, "fas fa-building")
+busiest_day = generate_card("Busiest day", busiest_day_weekly, "fas fa-calendar-alt")
 
 # SECOND ROW:
 active_stations = dbc.Card(
@@ -408,7 +408,7 @@ app.layout = html.Div(
                     style={'margin-bottom': '20px', 'padding': '10px', 'background-color': '#f8f9fa'}  
                 ),
                 dbc.Row(
-                    [no_of_rides, max_duration, max_distance, busiest_station, busiest_day],
+                    [no_of_rides, avg_temperature, max_distance, busiest_station, busiest_day],
                     justify="center",
                     style={'margin-top': '20px', 'padding-right': '60px'}  
                 ),
