@@ -96,6 +96,37 @@ for filename in os.listdir(folder_path):
 # Concatenate all DataFrames in the list into one
 combined_df = pd.concat(dfs, ignore_index=True)
 
+
+
+# ---------------ROW 1-----------------------
+
+# Get the count of rides
+rides_count = len(combined_df)
+
+# Assuming combined_df has been defined and 'Departure Temperature' column is present
+average_departure_temperature = combined_df['Departure temperature (C)'].mean()
+
+# Find the maximum covered distance
+max_covered_distance = combined_df['Covered distance (m)'].max()
+
+# Remove null records
+combined_df = combined_df.dropna(subset=['Departure station'])
+
+# Count occurrences of each station
+station_counts = combined_df['Departure station'].value_counts()
+
+# Get the busiest station
+busiest_station = station_counts.idxmax()
+
+# Convert 'Departure' to datetime
+combined_df['Departure'] = pd.to_datetime(combined_df['Departure'])
+
+# Extract day of the week
+combined_df['Day of Week'] = combined_df['Departure'].dt.day_name()
+
+# Count the number of trips for each day of the week
+busiest_day = combined_df['Day of Week'].value_counts().idxmax()
+
 # ---------------PLOT 1-----------------------
 
 # Remove null records
