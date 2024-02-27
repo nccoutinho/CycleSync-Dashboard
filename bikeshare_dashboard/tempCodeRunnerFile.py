@@ -135,6 +135,12 @@ values.append(sum(counts_list[18:]))
 
 total_count = sum(values)
 
+fig2 = go.Figure(data=[go.Pie(labels=labels, values=values, hole=0.5, textinfo='none', marker=dict(colors=px.colors.sequential.Reds[::-1]))])
+
+fig2.add_annotation(text='Number of Rides<br>' + str(total_count), showarrow=False, font=dict(size=15), x=0.5, y=0.5)
+
+fig2.update_layout(showlegend=False)
+
 # ---------------PLOT 4-----------------------
 
 # Remove null records
@@ -165,6 +171,7 @@ fig.update_layout(
     xaxis_title='',
     yaxis_title='',
 )
+
 
 # --------------------------------------
 # EMPTY CARDS / BOXES
@@ -222,16 +229,16 @@ active_stations = dbc.Card(
     [
         dbc.CardBody(
             [
-                html.H1(f"{num_stations}", style={"color": "#D80808", "margin-bottom": "25px", "font-size": "5.5em"}),
-                dbc.Col(html.H6("active stations around the city, accessible 24/7, 365 days a year."))
+                html.H1(f"{num_stations}", style={"color": "#D80808", "margin-bottom": "25px", "font-size": "5.9em"}),
+                dbc.Col(html.H5("active stations around the city, accessible 24/7, 365 days a year."))
             ],
             style={"display": "flex", "flex-direction": "column", "justify-content": "center"}
         )
     ],
     className="mb-3",
     style={
-        "width": "45%",
-        "height": "400px",
+        "width": "38%",
+        "height": "240px",
         "margin-left": "auto",
         "border": "1px solid lightgray",
         "box-shadow": "0px 1px 4px 0px rgba(0, 0, 0, 0.1)"
@@ -247,29 +254,10 @@ pie_chart = dbc.Card(
                     [
                         html.H1("Rides by Membership Type", style={"font-size": "1.5em"}),
                         dcc.Graph(
-                            figure=go.Figure(
-                                data=[go.Pie(
-                                    labels=labels,
-                                    values=values,
-                                    hole=0.5,
-                                    textinfo='none',
-                                    marker=dict(colors=px.colors.sequential.Reds[::-1])
-                                )]
-                                # layout=dict(
-                                #     title='Rides by Membership Type',
-                                #     title_x=0.5,
-                                #     title_font_size=16,
-                                #     showlegend=False
-                                # )
-                            ),
-                            style={'height': '348px'}  # Adjust the height here
-                        ),
-                        html.Div(
-                            'Number of Rides: ' + str(total_count),
-                            style={'text-align': 'center', 'font-size': '15px'}
-                        )
+                            figure=fig2
+                            )
                     ],
-                    width=12
+                    width=12  # Adjust the width as needed
                 )
             ],
             style={"display": "flex", "flex-direction": "column", "justify-content": "center"}
@@ -349,9 +337,12 @@ common_end_station = dbc.Card(
     [
                 dbc.Col(
                     [
-                        html.H1("Top 10 Most Common End Trip Stations"),
+                        html.H1("Top 10 Most Common End Trip Stations", style={"font-size": "1.5em"}),
                         dcc.Graph(
-                            figure=fig.update_traces(marker_color='indianred')
+                            figure=fig.update_traces(marker_color='indianred').update_layout(
+                                width=560,  # set the width to 800 pixels
+                                height=560,  # set the height to 600 pixels
+                                )
                             )
                     ],
                     width=12  # Adjust the width as needed
@@ -359,8 +350,8 @@ common_end_station = dbc.Card(
     ],
     className="mb-3",
     style={
-        "width": "42%",
-        "height": "350px",
+        "width": "38%",
+        "height": "600px",
         "margin-left": "auto",
         "border": "1px solid lightgray",
         "box-shadow": "0px 1px 4px 0px rgba(0, 0, 0, 0.1)"
@@ -371,7 +362,7 @@ common_end_station = dbc.Card(
 # LAYOUT
 app.layout = html.Div(
     [
-        dcc.Location(id='url', refresh=False),  # Location component to track the URL
+        dcc.Location(id='url', refresh=False),
         sidebar,
         html.Div(
             [
@@ -382,38 +373,29 @@ app.layout = html.Div(
                         html.Span(id='current-page', style={'font-weight': 'bold'})
                     ],
                     className='top-bar',
-                    style={'margin-bottom': '20px'}  # Add vertical space between the sidebar and top bar
+                    style={'margin-bottom': '20px', 'padding': '10px', 'background-color': '#f8f9fa'}  
+                ),
+                dbc.Row(
+                    [no_of_rides, max_duration, max_distance, busiest_station, busiest_day],
+                    justify="center",
+                    style={'margin-top': '20px'}  
                 ),
                 dbc.Row(
                     [
-                        no_of_rides,
-                        max_duration,
-                        max_distance,
-                        busiest_station,
-                        busiest_day
+                        dbc.Col(
+                            [active_stations, common_end_station],
+                            width=6,  # Adjust the width as needed
+                        ),
+                        dbc.Col(
+                            [pie_chart, trip_day],
+                            width=6,  # Adjust the width as needed
+                        )
                     ],
-                    justify="center",
-                    style={'margin-top': '20px', 'padding-right': '60px'}  
-                ),
-                dbc.Row(
-                    [
-                        active_stations,
-                        pie_chart
-                    ],
-                    justify="center",
-                    style={'margin-top': '20px', 'padding-right': '60px'}  
-                ),
-                dbc.Row(
-                    [
-                        trip_day,
-                        common_end_station
-                    ],
-                    justify="center",
-                    style={'margin-top': '20px', 'padding-right': '60px'}  
+                    style={'margin-top': '20px'}  
                 ),
                 html.Hr()
             ],
-            style={"margin": "0", "margin-left": "230px", "padding-left": "20px"}  # Adjusted styles for better alignment
+            style={"margin": "0", "margin-left": "230px", "padding-left": "20px"}  
         ),
     ]
 )
