@@ -96,6 +96,9 @@ for filename in os.listdir(folder_path):
 # Concatenate all DataFrames in the list into one
 combined_df = pd.concat(dfs, ignore_index=True)
 
+# Removing the bike column
+combined_df = combined_df.drop(['Bike'], axis = 1)
+
 # Remove NA values
 combined_df.dropna(inplace=True)
 
