@@ -3,7 +3,12 @@ import dash_bootstrap_components as dbc
 import dash_mantine_components as dmc
 import pandas as pd
 import altair as alt
+import os
+import plotly.graph_objects as go
+import plotly.express as px
+import altair as alt
 from datetime import date
+import calendar
 
 alt.data_transformers.disable_max_rows()
 
@@ -96,6 +101,69 @@ seasonal_bike_distance = seasonal_bike_distance.loc[seasonal_bike_distance['Mont
 seasonal_bike_distance['Month'] = pd.Categorical(seasonal_bike_distance['Month'], categories=month_order, ordered=True)
 seasonal_bike_distance = seasonal_bike_distance.sort_values(by='Month')
 
+# Create separate line plots for each season
+fig_winter = px.line(
+    average_counts[average_counts['Month'].isin(['Dec', 'Jan', 'Feb', 'Mar'])],
+    x='Month',
+    y='Bike Count',
+    title='Average Bike Departures in Winter',
+    line_shape='linear',
+    color_discrete_sequence=['blue'],
+    hover_data={'Month': True, 'Bike Count': True, 'Season': True}  
+)
+
+
+fig_spring = px.line(
+    average_counts[average_counts['Month'].isin(['Mar', 'Apr', 'May', 'Jun'])],
+    x='Month',
+    y='Bike Count',
+    title='Average Bike Departures in Spring',
+    line_shape='linear',
+    color_discrete_sequence=['green'],
+    hover_data={'Month': True, 'Bike Count': True, 'Season': True}  
+)
+
+
+fig_summer = px.line(
+    average_counts[average_counts['Month'].isin(['Jun', 'Jul', 'Aug', 'Sep'])],
+    x='Month',
+    y='Bike Count',
+    title='Average Bike Departures in Summer',
+    line_shape='linear',
+    color_discrete_sequence=['red'],
+    hover_data={'Month': True, 'Bike Count': True, 'Season': True}  
+)
+
+
+fig_fall = px.line(
+    average_counts[average_counts['Month'].isin(['Sep', 'Oct', 'Nov'])],
+    x='Month',
+    y='Bike Count',
+    title='Average Bike Departures in Fall',
+    line_shape='linear',
+    color_discrete_sequence=['yellow'],
+    hover_data={'Month': True, 'Bike Count': True, 'Season': True} 
+)
+
+
+# Combine the line plots
+fig_combined = fig_winter.add_traces(fig_spring.data)
+fig_combined.add_traces(fig_summer.data)
+fig_combined.add_traces(fig_fall.data)
+
+
+# Update layout
+fig_combined.update_layout(
+    yaxis_title='Average Bike Departure Count',
+    xaxis=dict(
+        rangeslider=dict(
+            visible=True
+        ),
+        type='category'
+    )
+)
+
+
 # Setup app and layout/frontend
 app = dash.Dash(
     __name__,
@@ -184,9 +252,14 @@ map_plot = dbc.Card(
         # ),
         dbc.CardBody(
             dbc.Col([
-                
-])
+                html.H1("Average Bike Departures by Season and Month"),
+                dcc.Graph(
+                figure=fig_combined.update_traces(marker_color='indianred')
         )
+    ]
+)
+                
+)
     ],
     className="mb-3",
     style={
