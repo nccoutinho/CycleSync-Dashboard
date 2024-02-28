@@ -10,6 +10,92 @@ alt.data_transformers.disable_max_rows()
 # Read in data globally
 #data = pd.read_csv('../dataset/Mobi_System_Data_2023-01.csv', parse_dates=True, index_col=0)
 
+# --------------------------------------
+# STATISTICS CODE
+# Number of active station:
+# Path to the folder containing your files
+folder_path = '../dataset'
+
+# Initialize an empty list to store DataFrames
+dfs = []
+
+# Iterate over each file in the folder
+for filename in os.listdir(folder_path):
+    if filename.endswith('.csv'):  # Assuming all files are CSV, you can change the condition accordingly
+        file_path = os.path.join(folder_path, filename)
+        # Try different encodings to read the file
+        for encoding in ['utf-8', 'latin-1']:  # You can add more encodings to try if needed
+            try:
+                df = pd.read_csv(file_path, encoding=encoding)
+                dfs.append(df)  # Append the DataFrame to the list
+                break  # Break the loop if reading is successful
+            except UnicodeDecodeError:
+                print(f"Error decoding file {filename} with encoding {encoding}. Trying another encoding...")
+
+# Concatenate all DataFrames in the list into one
+combined_df = pd.concat(dfs, ignore_index=True)
+
+# Removing the bike column
+combined_df = combined_df.drop(['Bike'], axis = 1)
+
+# Remove NA values
+combined_df.dropna(inplace=True)
+
+# Remove rows with negative duration
+combined_df = combined_df[combined_df['Duration (sec.)'] >= 0]
+
+# Data cleaning
+combined_df.loc[combined_df['Departure station'].str.startswith('0099'), 'Departure station'] = "0099 šxʷƛ̓ənəq Xwtl'e7énḵ Square - Vancouver Art Gallery North Plaza"
+combined_df.loc[combined_df['Return station'].str.startswith('0099'), 'Return station'] = "0099 šxʷƛ̓ənəq Xwtl'e7énḵ Square - Vancouver Art Gallery North Plaza"
+combined_df.loc[combined_df['Departure station'].str.startswith('0136'), 'Departure station'] = '0136 David Lam Park - West'
+combined_df.loc[combined_df['Return station'].str.startswith('0136'), 'Return station'] = '0136 David Lam Park - West'
+combined_df.loc[combined_df['Departure station'].str.startswith('0201'), 'Departure station'] = '0201 Shaw Tower'
+combined_df.loc[combined_df['Return station'].str.startswith('0201'), 'Return station'] = '0201 Shaw Tower'
+combined_df.loc[combined_df['Departure station'].str.startswith('0237'), 'Departure station'] = '0237 Glen & 6th'
+combined_df.loc[combined_df['Return station'].str.startswith('0237'), 'Return station'] = '0237 Glen & 6th'
+combined_df.loc[combined_df['Departure station'].str.startswith('1002'), 'Departure station'] = '1002 PNE - Hastings & Windermere'
+combined_df.loc[combined_df['Return station'].str.startswith('1002'), 'Return station'] = '1002 PNE - Hastings & Windermere'
+combined_df.loc[combined_df['Departure station'].str.startswith('2143'), 'Departure station'] = '2143 War Memorial Gym'
+combined_df.loc[combined_df['Return station'].str.startswith('2143'), 'Return station'] = '2143 War Memorial Gym'
+combined_df.loc[combined_df['Departure station'].str.startswith('0154'), 'Departure station'] = '0155 Arbutus & McNicoll'
+combined_df.loc[combined_df['Return station'].str.startswith('0154'), 'Return station'] = '0155 Arbutus & McNicoll'
+combined_df.loc[combined_df['Departure station'].str.startswith('0165'), 'Departure station'] = '0150 Alexander & Main'
+combined_df.loc[combined_df['Return station'].str.startswith('0165'), 'Return station'] = '0150 Alexander & Main'
+values_to_remove = ['0980 Workshop - Balancer Bike Check In', '0981 Workshop - Service Complete', '0982 Workshop - Bike Testing', '0987 Quebec Yard - Rogers', '0991 HQ Workshop', '0992 Workshop - Return to Smoove', '0994 Workshop - Transmitter Testing', '0995 Workshop - Transmitter On Deck', '0997 Workshop - Demo Station', '0985 Quebec Yard - To Service', '1000 Temporary Station', '1000 Vancouver PRIDE Valet Station', '3000 Temporary Station - Celebration of Light']
+combined_df = combined_df[~combined_df['Departure station'].isin(values_to_remove)]
+combined_df = combined_df[~combined_df['Return station'].isin(values_to_remove)]
+
+# Convert 'Departure' to datetime
+combined_df['Departure'] = pd.to_datetime(combined_df['Departure'])
+
+# Extract month and season
+combined_df['Month'] = combined_df['Departure'].dt.month
+combined_df['Season'] = combined_df['Departure'].dt.month % 12 // 3 + 1
+
+# Map season and month names
+combined_df['Season'] = combined_df['Season'].map({1: 'Winter', 2: 'Spring', 3: 'Summer', 4: 'Fall'})
+combined_df['Month'] = combined_df['Month'].apply(lambda x: calendar.month_abbr[x])
+
+# Group by season, then by month, and calculate average count of bike departures
+seasonal_bike_count = combined_df.groupby(['Season', 'Month']).size().reset_index(name='Bike Count')
+average_counts = seasonal_bike_count.groupby(['Month', 'Season'])['Bike Count'].mean().reset_index()
+
+# Group by season, then by month, and calculate average covered distance of bike trips
+seasonal_bike_distance = combined_df.groupby(['Season', 'Month'])['Covered distance (m)'].mean().reset_index(name='Average Covered Distance (m)')
+
+# Define custom sort order for months
+month_order = ['Dec', 'Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov']
+
+# Sort the DataFrame by the 'Month' column using the custom order
+average_counts = average_counts.loc[average_counts['Month'].isin(month_order)]
+average_counts['Month'] = pd.Categorical(average_counts['Month'], categories=month_order, ordered=True)
+average_counts = average_counts.sort_values(by='Month')
+
+# Sort the DataFrame by the 'Month' column using the custom order
+seasonal_bike_distance = seasonal_bike_distance.loc[seasonal_bike_distance['Month'].isin(month_order)]
+seasonal_bike_distance['Month'] = pd.Categorical(seasonal_bike_distance['Month'], categories=month_order, ordered=True)
+seasonal_bike_distance = seasonal_bike_distance.sort_values(by='Month')
+
 # Setup app and layout/frontend
 app = dash.Dash(
     __name__,
@@ -98,23 +184,8 @@ map_plot = dbc.Card(
         # ),
         dbc.CardBody(
             dbc.Col([
-                dcc.Loading(
-                    id="loading-1",
-                    type="circle",
-                    children=html.Iframe(
-                        id="polar_chart",
-                        style={
-                            "height": "22rem",
-                            "width": "100%",
-                            "border": "0",
-                            "display": "flex",
-                            "align-items": "center",
-                            "justify-content": "center"
-                            }
-                        ),
-                    color="#D80808"
-                )
-            ])
+                
+])
         )
     ],
     className="mb-3",
