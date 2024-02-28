@@ -193,8 +193,8 @@ app.layout = html.Div(
                         html.H6("Page / ", style={'display': 'inline'}),
                         html.H1("Average Bike Departures by Season and Month", style={"margin-bottom": "20px"}),
                         dcc.Graph(id='trend-plot1', figure={}),
-   
-                        html.H1("Average Covered Distance (m) by Season and Month", style={"margin-bottom": "20px"}),  # Add heading for the second chart
+
+                        html.H1("Average Covered Distance by Season and Month", style={"margin-bottom": "20px"}),
                         dcc.Graph(id='trend-plot2', figure={})
                     ],
                     className='top-bar',
@@ -316,12 +316,7 @@ def update_chart1(selected_bike, selected_membership):
     # Update layout
     fig.update_layout(
         yaxis_title='Average Bike Departure Count',
-        xaxis=dict(
-            rangeslider=dict(
-                visible=True
-            ),
-            type='category'
-        )
+        xaxis_title=None
     )
     return {'data': fig['data'], 'layout': fig['layout']}
 
@@ -411,13 +406,9 @@ def update_chart2(selected_bike, selected_membership):
     # Update layout
     fig.update_layout(
         yaxis_title='Average Covered Distance (m)',
-        xaxis=dict(
-            rangeslider=dict(
-                visible=True
-            ),
-            type='category'
-        )
+        xaxis_title=None
     )
+
     return {'data': fig['data'], 'layout': fig['layout']}
 
 if __name__ == '__main__':
