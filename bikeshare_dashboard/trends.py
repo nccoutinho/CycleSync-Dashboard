@@ -46,6 +46,17 @@ combined_df = combined_df.drop(['Bike'], axis = 1)
 # Remove NA values
 combined_df.dropna(inplace=True)
 
+# Convert 'Departure' to datetime
+combined_df['Departure'] = pd.to_datetime(combined_df['Departure'])
+
+# Extract month and season
+combined_df['Month'] = combined_df['Departure'].dt.month
+combined_df['Season'] = combined_df['Departure'].dt.month % 12 // 3 + 1
+
+# Map season and month names
+combined_df['Season'] = combined_df['Season'].map({1: 'Winter', 2: 'Spring', 3: 'Summer', 4: 'Fall'})
+combined_df['Month'] = combined_df['Month'].apply(lambda x: calendar.month_abbr[x])
+
 # Remove rows with negative duration
 combined_df = combined_df[combined_df['Duration (sec.)'] >= 0]
 
@@ -69,95 +80,6 @@ combined_df.loc[combined_df['Return station'].str.startswith('0165'), 'Return st
 values_to_remove = ['0980 Workshop - Balancer Bike Check In', '0981 Workshop - Service Complete', '0982 Workshop - Bike Testing', '0987 Quebec Yard - Rogers', '0991 HQ Workshop', '0992 Workshop - Return to Smoove', '0994 Workshop - Transmitter Testing', '0995 Workshop - Transmitter On Deck', '0997 Workshop - Demo Station', '0985 Quebec Yard - To Service', '1000 Temporary Station', '1000 Vancouver PRIDE Valet Station', '3000 Temporary Station - Celebration of Light']
 combined_df = combined_df[~combined_df['Departure station'].isin(values_to_remove)]
 combined_df = combined_df[~combined_df['Return station'].isin(values_to_remove)]
-
-# Convert 'Departure' to datetime
-combined_df['Departure'] = pd.to_datetime(combined_df['Departure'])
-
-# Extract month and season
-combined_df['Month'] = combined_df['Departure'].dt.month
-combined_df['Season'] = combined_df['Departure'].dt.month % 12 // 3 + 1
-
-# Map season and month names
-combined_df['Season'] = combined_df['Season'].map({1: 'Winter', 2: 'Spring', 3: 'Summer', 4: 'Fall'})
-combined_df['Month'] = combined_df['Month'].apply(lambda x: calendar.month_abbr[x])
-
-# Group by season, then by month, and calculate average count of bike departures
-seasonal_bike_count = combined_df.groupby(['Season', 'Month']).size().reset_index(name='Bike Count')
-average_counts = seasonal_bike_count.groupby(['Month', 'Season'])['Bike Count'].mean().reset_index()
-
-# Group by season, then by month, and calculate average covered distance of bike trips
-seasonal_bike_distance = combined_df.groupby(['Season', 'Month'])['Covered distance (m)'].mean().reset_index(name='Average Covered Distance (m)')
-
-# Define custom sort order for months
-month_order = ['Dec', 'Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov']
-
-# Sort the DataFrame by the 'Month' column using the custom order
-average_counts = average_counts.loc[average_counts['Month'].isin(month_order)]
-average_counts['Month'] = pd.Categorical(average_counts['Month'], categories=month_order, ordered=True)
-average_counts = average_counts.sort_values(by='Month')
-
-# Sort the DataFrame by the 'Month' column using the custom order
-seasonal_bike_distance = seasonal_bike_distance.loc[seasonal_bike_distance['Month'].isin(month_order)]
-seasonal_bike_distance['Month'] = pd.Categorical(seasonal_bike_distance['Month'], categories=month_order, ordered=True)
-seasonal_bike_distance = seasonal_bike_distance.sort_values(by='Month')
-
-# Create separate line plots for each season
-fig_winter = px.line(
-    average_counts[average_counts['Month'].isin(['Dec', 'Jan', 'Feb', 'Mar'])],
-    x='Month',
-    y='Bike Count',
-    line_shape='linear',
-    color_discrete_sequence=['blue'],
-    hover_data={'Month': True, 'Bike Count': True, 'Season': True}  
-)
-
-
-fig_spring = px.line(
-    average_counts[average_counts['Month'].isin(['Mar', 'Apr', 'May', 'Jun'])],
-    x='Month',
-    y='Bike Count',
-    line_shape='linear',
-    color_discrete_sequence=['green'],
-    hover_data={'Month': True, 'Bike Count': True, 'Season': True}  
-)
-
-
-fig_summer = px.line(
-    average_counts[average_counts['Month'].isin(['Jun', 'Jul', 'Aug', 'Sep'])],
-    x='Month',
-    y='Bike Count',
-    line_shape='linear',
-    color_discrete_sequence=['red'],
-    hover_data={'Month': True, 'Bike Count': True, 'Season': True}  
-)
-
-
-fig_fall = px.line(
-    average_counts[average_counts['Month'].isin(['Sep', 'Oct', 'Nov'])],
-    x='Month',
-    y='Bike Count',
-    line_shape='linear',
-    color_discrete_sequence=['yellow'],
-    hover_data={'Month': True, 'Bike Count': True, 'Season': True} 
-)
-
-
-# Combine the line plots
-fig_combined = fig_winter.add_traces(fig_spring.data)
-fig_combined.add_traces(fig_summer.data)
-fig_combined.add_traces(fig_fall.data)
-
-
-# Update layout
-fig_combined.update_layout(
-    yaxis_title='Average Bike Departure Count',
-    xaxis=dict(
-        rangeslider=dict(
-            visible=True
-        ),
-        type='category'
-    )
-)
 
 # Setup app and layout/frontend
 app = dash.Dash(
@@ -224,47 +146,19 @@ sort_table_2 = dcc.Dropdown(
         {'label': '365 Day Pass Standard', 'value': '365_day_pass_standard'},
         {'label': '365 Day Pass Plus', 'value': '365_day_pass_plus'}
    ],
-   value='pay_per_ride'
+   value='pay_per_ride',
+   clearable=False
 )
 
 sort_table_1 = dcc.Dropdown(
     id='table_filter_2',
     options=[
-        {'label': 'Total', 'value': 'total'},
-        {'label': 'All', 'value': 'all'},
-        {'label': 'Electric bike', 'value': 'electric_bike'},
-        {'label': 'Classic bike', 'value': 'classic_bike'}
+        {'label': 'Electric', 'value': 'electric'},
+        {'label': 'Classic', 'value': 'classic'},
+        {'label': 'Both', 'value': 'both'}
    ],
-   value='total'
-)
-
-# CHARTS / TABLE
-map_plot = dbc.Card(
-    [
-        # dbc.CardHeader(
-        #     html.H4("Geospatial Bike Concentration Plot", className="card-title", style={"color": "white"}),
-        #     style={"background-color": "#D80808"}
-        # ),
-        dbc.CardBody(
-            dbc.Col([
-                html.H1("Average Bike Departures by Season and Month"),
-                dcc.Graph(
-                id="map_plot",
-                figure=fig_combined.update_traces(marker_color='indianred')
-        )
-    ]
-)
-                
-)
-    ],
-    className="mb-3",
-    style={
-        "width": "90%",
-        #"height": "90%",
-        "margin-left": "auto",
-        "border": "1px solid lightgray",
-        "box-shadow": "0px 1px 4px 0px rgba(0, 0, 0, 0.1)"
-    }
+   value='both',
+   clearable=False
 )
 
 # LAYOUT
@@ -278,7 +172,7 @@ app.layout = html.Div(
                 html.Div(
                     [
                         html.H6("Page / ", style={'display': 'inline'}),
-                        html.Span(id='current-page', style={'font-weight': 'bold'})
+                        dcc.Graph(id='map-plot', figure={})
                     ],
                     className='top-bar',
                     style={'margin-bottom': '20px'}  # Add vertical space between the sidebar and top bar
@@ -287,16 +181,16 @@ app.layout = html.Div(
                     [
                         dbc.Col(
                             [
-                                html.H5("View:"),
+                                html.H5("Bike Type:"),
                                 sort_table_1,
-                                html.H5("Bike type:"),
+                                html.H5("Membershipy Type:"),
                                 sort_table_2
                             ],
                             width=2,
                             style={'margin-right': '20px'}  # Add horizontal space between top bar and sort tables
                         ),
                         dbc.Col(
-                            map_plot,
+                            #map_plot,
                             width=9
                         ),
                     ],
@@ -311,28 +205,100 @@ app.layout = html.Div(
 )
 
 @app.callback(
-    Output('map_plot', 'figure'),
+    Output('map-plot', 'figure'),
     [Input('table_filter_2', 'value')]
 )
 def update_chart(selected_option):
-    filtered_data = average_counts[average_counts['Month'].isin(['Sep', 'Oct', 'Nov'])]
-
+    
     # Check if 'Electric bike' is selected
-    if selected_option == 'electric_bike':
+    if selected_option == 'electric':
         # Filter data for 'Electric bike'
-        filtered_data = filtered_data[filtered_data['Electric bike'] == True]
+        df = combined_df[combined_df['Electric bike'] == True]
+    elif selected_option == 'classic':
+        df = combined_df[combined_df['Electric bike'] == False]
+    else:
+        df = combined_df
 
-    # Create a line chart using Plotly Express
-    fig = px.line(
-        filtered_data,
+    # Group by season, then by month, and calculate average count of bike departures
+    seasonal_bike_count = df.groupby(['Season', 'Month']).size().reset_index(name='Bike Count')
+    average_counts = seasonal_bike_count.groupby(['Month', 'Season'])['Bike Count'].mean().reset_index()
+
+    # Group by season, then by month, and calculate average covered distance of bike trips
+    seasonal_bike_distance = df.groupby(['Season', 'Month'])['Covered distance (m)'].mean().reset_index(name='Average Covered Distance (m)')
+
+    # Define custom sort order for months
+    month_order = ['Dec', 'Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov']
+
+    # Sort the DataFrame by the 'Month' column using the custom order
+    average_counts = average_counts.loc[average_counts['Month'].isin(month_order)]
+    average_counts['Month'] = pd.Categorical(average_counts['Month'], categories=month_order, ordered=True)
+    average_counts = average_counts.sort_values(by='Month')
+
+    # Sort the DataFrame by the 'Month' column using the custom order
+    seasonal_bike_distance = seasonal_bike_distance.loc[seasonal_bike_distance['Month'].isin(month_order)]
+    seasonal_bike_distance['Month'] = pd.Categorical(seasonal_bike_distance['Month'], categories=month_order, ordered=True)
+    seasonal_bike_distance = seasonal_bike_distance.sort_values(by='Month')
+
+
+    # Create separate line plots for each season
+    fig_winter = px.line(
+        average_counts[average_counts['Month'].isin(['Dec', 'Jan', 'Feb', 'Mar'])],
+        x='Month',
+        y='Bike Count',
+        line_shape='linear',
+        color_discrete_sequence=['blue'],
+        hover_data={'Month': True, 'Bike Count': True, 'Season': True}  
+    )
+
+
+    fig_spring = px.line(
+        average_counts[average_counts['Month'].isin(['Mar', 'Apr', 'May', 'Jun'])],
+        x='Month',
+        y='Bike Count',
+        line_shape='linear',
+        color_discrete_sequence=['green'],
+        hover_data={'Month': True, 'Bike Count': True, 'Season': True}  
+    )
+
+
+    fig_summer = px.line(
+        average_counts[average_counts['Month'].isin(['Jun', 'Jul', 'Aug', 'Sep'])],
+        x='Month',
+        y='Bike Count',
+        line_shape='linear',
+        color_discrete_sequence=['red'],
+        hover_data={'Month': True, 'Bike Count': True, 'Season': True}  
+    )
+
+
+    fig_fall = px.line(
+        average_counts[average_counts['Month'].isin(['Sep', 'Oct', 'Nov'])],
         x='Month',
         y='Bike Count',
         line_shape='linear',
         color_discrete_sequence=['yellow'],
-        hover_data={'Month': True, 'Bike Count': True, 'Season': True}
+        hover_data={'Month': True, 'Bike Count': True, 'Season': True} 
     )
 
-    return fig
+
+    # Combine the line plots
+    fig = fig_winter.add_traces(fig_spring.data)
+    fig.add_traces(fig_summer.data)
+    fig.add_traces(fig_fall.data)
+
+
+    # Update layout
+    fig.update_layout(
+        yaxis_title='Average Bike Departure Count',
+        xaxis=dict(
+            rangeslider=dict(
+                visible=True
+            ),
+            type='category'
+        )
+    )
+
+    return {'data': fig['data'], 'layout': fig['layout']}
 
 
 
