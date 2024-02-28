@@ -249,7 +249,7 @@ def generate_card(title, content, icon):
                 [
                     html.Div(
                         [
-                            html.H3(content),
+                            html.H5(content),
                             html.Div(
                                 [
                                     html.Div(
@@ -259,7 +259,7 @@ def generate_card(title, content, icon):
                                         style={"background-color": "#D80808", "padding": "9px", "border-radius": "8px"}
                                     ),
                                 ],
-                                style={"display": "flex", "align-items": "center"}
+                                style={"display": "flex", "align-items": "center", "padding-left" : "5px"}
                             ),
                         ],
                         style={"display": "flex", "justify-content": "space-between"}
