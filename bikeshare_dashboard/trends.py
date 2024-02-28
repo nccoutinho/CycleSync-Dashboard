@@ -44,3 +44,47 @@ header = html.Div(
     ],
     style={"align": "center", "margin-left": 15}
 )
+
+# SIDEBAR
+sidebar = dbc.Col(
+    [
+        header,
+        html.Div(style={"height": "20px"}),
+        dbc.Nav(
+            [
+                dbc.NavItem(dbc.NavLink("Dashboard", href="/dashboard")),
+                dbc.NavItem(dbc.NavLink("Trends", href="/trends")),
+                dbc.NavItem(dbc.NavLink("Map", href="/map")),
+            ],
+            vertical=True,
+            pills=True,
+            className="mb-3",
+        ),
+    ],
+    width=2.1,
+    style={"background-color": "#f8f9fa", "height": "100vh", "position": "fixed", "padding-top": "20px"},
+)
+
+# TABLE FILTER
+sort_table_2 = dcc.Dropdown(
+    id='table_filter_1',
+    options=[
+        {'label': 'Pay per Ride', 'value': 'pay_per_ride'},
+        {'label': '24 Hour Pass', 'value': '24_hour_pass'},
+        {'label': '30 Day Pass', 'value': '30_day_pass'},
+        {'label': '365 Day Pass Standard', 'value': '365_day_pass_standard'},
+        {'label': '365 Day Pass Plus', 'value': '365_day_pass_plus'}
+   ],
+   value='pay_per_ride'
+)
+
+sort_table_1 = dcc.Dropdown(
+    id='table_filter_2',
+    options=[
+        {'label': 'Total', 'value': 'total'},
+        {'label': 'All', 'value': 'all'},
+        {'label': 'Electric bike', 'value': 'electric_bike'},
+        {'label': 'Classic bike', 'value': 'classic_bike'}
+   ],
+   value='total'
+)
