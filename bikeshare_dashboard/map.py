@@ -156,25 +156,6 @@ sidebar = dbc.Col(
     style={"background-color": "#f8f9fa", "height": "100vh", "position": "fixed", "padding-top": "20px"},
 )
 
-# TABLE FILTER
-sort_table_1 = dcc.Dropdown(
-    id='table_filter_1',
-    options=[
-        {'label': 'Density plot', 'value': 'density_plot'},
-        {'label': 'Marker plot', 'value': 'marker_plot'}
-   ],
-   value='density_plot'
-)
-
-sort_table_2 = dcc.Dropdown(
-    id='table_filter_2',
-    options=[
-        {'label': 'Electric bike', 'value': 'electric_bike'},
-        {'label': 'Classic bike', 'value': 'classic_bike'}
-   ],
-   value='electric_bike'
-)
-
 # LAYOUT
 app.layout = html.Div(
     [
@@ -186,6 +167,8 @@ app.layout = html.Div(
                 html.Div(
                     [
                         html.H6("Page / ", style={'display': 'inline'}),
+                        html.H3("Geospatial Activity Map"),
+                        html.P("Utilize either counts or a heat map visualization for comprehensive insights into Mobi bike-sharing station usage patterns."),
                         html.Span(id='map-container', style={'font-weight': 'bold'})
                     ],
                     className='top-bar',
@@ -195,22 +178,24 @@ app.layout = html.Div(
                     [
                         dbc.Col(
                             [
+                                # Dropdown to choose the plot type.
                                 html.Div([
-                                    html.H5("View:"),  # Title for plot type dropdown
+                                    html.H5("View:"),
                                     dcc.Dropdown(
                                         id='plot-type-dropdown',
                                         options=[
                                             {'label': 'Marker Plot', 'value': 'marker plot'},
                                             {'label': 'Density Plot', 'value': 'density plot'}
                                         ],
-                                        value='marker plot',  # Default selected value
+                                        value='marker plot',
                                         multi = False,
-                                        clearable=False  # Prevent clearing the dropdown
+                                        clearable=False
                                     )
                                 ]),
                                 html.Div(),
+                                # Dropdown to choose bike type.
                                 html.Div([
-                                    html.H5("Bike Type:"),  # Title for dropdown
+                                    html.H5("Bike Type:"),
                                     dcc.Dropdown(
                                         id='bike-type-dropdown',
                                         options=[
@@ -218,16 +203,16 @@ app.layout = html.Div(
                                             {'label': 'Classic', 'value': 'classic'},
                                             {'label': 'Both', 'value': 'both'}
                                         ],
-                                        value = 'both',  # Default selected values
-                                        multi = False,  # Allow multiple selection
+                                        value = 'both',
+                                        multi = False,
                                         clearable=False
-                                    ),
-                                    html.Div(id='selected-plot')
+                                    )
                                 ])
                             ],
                             width=2,
-                            style={'margin-right': '20px'}  # Add horizontal space between top bar and sort tables
+                            style={'margin-right': '20px'}
                         ),
+                        # Range slider for month
                         dbc.Col(
                             [
                                 dcc.RangeSlider(
@@ -235,6 +220,7 @@ app.layout = html.Div(
                                     marks=marks,
                                     min=0,
                                     max=len(months) - 1,
+                                    step=1,
                                     value=[0, len(months) - 1]
                                 )
                             ],
@@ -278,6 +264,7 @@ app.layout = html.Div(
 
 def update_map(value, bike_type, plot_type):
     
+    # Filtering based on bike type
     if bike_type == 'electric':
         df = combined_df[combined_df['Electric bike'] == True]
     elif bike_type == 'classic':
@@ -302,6 +289,7 @@ def update_map(value, bike_type, plot_type):
 
     total_counts_by_station = df2.groupby(['Station', 'Coordinates', 'Month'])['Total Count'].sum().reset_index(name='Total Count')
     
+    # Obtain the coordinates of the markers.
     marker_locations = total_counts_by_station.to_dict(orient='records')
     
     for entry in marker_locations:
@@ -325,6 +313,7 @@ def update_map(value, bike_type, plot_type):
     # Add GeoJSON boundary to the map
     folium.GeoJson(vancouver_geojson).add_to(map_vancouver)
     
+    # Filtering based on the plot type
     if plot_type == 'marker plot':
         # Add markers to specific locations
         for item in filtered_marker_locations:
@@ -339,12 +328,12 @@ def update_map(value, bike_type, plot_type):
 
         # Save the map to HTML and return it
         map_html = map_vancouver.get_root().render()
-        return html.Iframe(srcDoc=map_html, width='100%', height='500')
+        return html.Iframe(srcDoc=map_html, width='100%', height='600')
     else:
         # Create HeatMap layer
         heatmap_data = [(loc['Coordinates'][0], loc['Coordinates'][1], loc['Total Count']) for loc in filtered_marker_locations]
         HeatMap(heatmap_data, radius=15, max_zoom=13).add_to(map_vancouver)
-
+        
         # Save the map to HTML and return it
         map_html = map_vancouver.get_root().render()
         return html.Iframe(srcDoc=map_html, width='100%', height='600')
