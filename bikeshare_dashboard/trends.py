@@ -140,13 +140,32 @@ sidebar = dbc.Col(
 sort_table_2 = dcc.Dropdown(
     id='table_filter_1',
     options=[
-        {'label': 'Pay per Ride', 'value': 'pay_per_ride'},
-        {'label': '24 Hour Pass', 'value': '24_hour_pass'},
-        {'label': '30 Day Pass', 'value': '30_day_pass'},
-        {'label': '365 Day Pass Standard', 'value': '365_day_pass_standard'},
-        {'label': '365 Day Pass Plus', 'value': '365_day_pass_plus'}
-   ],
-   value='pay_per_ride',
+        {'label': 'All', 'value': 'all'},
+        {'label': '24 Hour', 'value': '24 Hour'},
+        {'label': '30 Day Pass', 'value': '30 Day Pass'},
+        {'label': '365 Corporate Plus', 'value': '365 Corporate Plus'},
+        {'label': '365 Corporate Plus Renewal', 'value': '365 Corporate Plus Renewal'},
+        {'label': '365 Corporate Standard', 'value': '365 Corporate Standard'},
+        {'label': '365 Corporate Standard Renewal', 'value': '365 Corporate Standard Renewal'},
+        {'label': '365 Day Founding Plus', 'value': '365 Day Founding Plus'},
+        {'label': '365 Day Founding Standard', 'value': '365 Day Founding Standard'},
+        {'label': '365 Day Pass Plus', 'value': '365 Day Pass Plus'},
+        {'label': '365 Day Pass Plus SALE', 'value': '365 Day Pass Plus SALE'},
+        {'label': '365 Day Pass Standard', 'value': '365 Day Pass Standard'},
+        {'label': '365 Day Pass Standard SALE', 'value': '365 Day Pass Standard SALE'},
+        {'label': 'Archived Monthly Plus', 'value': 'Archived Monthly Plus'},
+        {'label': 'Archived Monthly Standard', 'value': 'Archived Monthly Standard'},
+        {'label': 'Community Pass', 'value': 'Community Pass'},
+        {'label': 'Community Pass E-bike', 'value': 'Community Pass E-bike'},
+        {'label': 'Community Pass E-bike (PWD)', 'value': 'Community Pass E-bike (PWD)'},
+        {'label': 'Herbaland Pass', 'value': 'Herbaland Pass'},
+        {'label': 'Limited Classic Bikes Only (60 min)', 'value': 'Limited Classic Bikes Only (60 min)'},
+        {'label': 'Pay Per Ride', 'value': 'Pay Per Ride'},
+        {'label': 'UBC Inclusive Corporate Pass', 'value': 'UBC Inclusive Corporate Pass'},
+        {'label': 'VIP', 'value': 'VIP'}
+],
+   value=['all'],
+   multi=True,
    clearable=False
 )
 
@@ -206,18 +225,22 @@ app.layout = html.Div(
 
 @app.callback(
     Output('map-plot', 'figure'),
-    [Input('table_filter_2', 'value')]
+    [Input('table_filter_2', 'value'),
+     Input('table_filter_1', 'value')]
 )
-def update_chart(selected_option):
+def update_chart(selected_bike, selected_membership):
     
     # Check if 'Electric bike' is selected
-    if selected_option == 'electric':
+    if selected_bike == 'electric':
         # Filter data for 'Electric bike'
         df = combined_df[combined_df['Electric bike'] == True]
-    elif selected_option == 'classic':
+    elif selected_bike == 'classic':
         df = combined_df[combined_df['Electric bike'] == False]
     else:
         df = combined_df
+
+    if 'all' not in selected_membership:
+        df = df[df['Membership type'].isin([m for m in selected_membership])]
 
     # Group by season, then by month, and calculate average count of bike departures
     seasonal_bike_count = df.groupby(['Season', 'Month']).size().reset_index(name='Bike Count')
@@ -297,7 +320,6 @@ def update_chart(selected_option):
             type='category'
         )
     )
-
     return {'data': fig['data'], 'layout': fig['layout']}
 
 
