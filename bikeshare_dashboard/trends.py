@@ -81,6 +81,8 @@ values_to_remove = ['0980 Workshop - Balancer Bike Check In', '0981 Workshop - S
 combined_df = combined_df[~combined_df['Departure station'].isin(values_to_remove)]
 combined_df = combined_df[~combined_df['Return station'].isin(values_to_remove)]
 
+months = sorted(combined_df['Month'].unique().tolist())
+
 # Setup app and layout/frontend
 app = dash.Dash(
     __name__,
@@ -183,10 +185,10 @@ sort_table_1 = dcc.Dropdown(
 slider = dcc.RangeSlider(
     id='month_range_slider',
     marks={i+1: calendar.month_abbr[i+1] for i in range(12)},
-    min=1,
-    max=12,
+    min=0,
+    max=len(months) - 1,
     step=1,
-    value=[1, 12]  # Initial range from Jan to Dec
+    value=[0, len(months) - 1]  # Initial range from Jan to Dec
 )
 
 # LAYOUT
@@ -245,9 +247,8 @@ app.layout = html.Div(
 )
 def update_chart1(selected_bike, selected_membership, selected_month):
 
-    start_month, end_month = selected_month
-
-    selected_month_range = [int(month) for month in selected_month]
+    start_month = months[selected_month[0]]
+    end_month = months[selected_month[1]]
     
     # Check if 'Electric bike' is selected
     if selected_bike == 'electric':
@@ -262,7 +263,8 @@ def update_chart1(selected_bike, selected_membership, selected_month):
         df = df[df['Membership type'].isin([m for m in selected_membership])]
 
     # Filter data based on selected months
-    df = df[df['Month'].astype(int).between(selected_month_range[0], selected_month_range[1])]
+    
+    df = df[df['Month'].between(start_month, end_month)]
 
     # Group by season, then by month, and calculate average count of bike departures
     seasonal_bike_count = df.groupby(['Season', 'Month']).size().reset_index(name='Bike Count')
@@ -350,7 +352,8 @@ def update_chart1(selected_bike, selected_membership, selected_month):
 
 def update_chart2(selected_bike, selected_membership, selected_month):
 
-    start_month, end_month = selected_month
+    start_month = months[selected_month[0]]
+    end_month = months[selected_month[1]]
     
     # Check if 'Electric bike' is selected
     if selected_bike == 'electric':
