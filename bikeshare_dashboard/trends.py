@@ -169,3 +169,22 @@ app.layout = html.Div(
         ),
     ]
 )
+
+# Callback to update the current page based on the URL
+@app.callback(
+    Output('current-page', 'children'),
+    [Input('url', 'pathname')]
+)
+def update_current_page(pathname):
+    if pathname == '/dashboard':
+        return 'Dashboard'
+    elif pathname == '/trends':
+        return 'Trends'
+    elif pathname == '/map':
+        return 'Map'
+    else:
+        return 'Unknown Page'
+
+
+if __name__ == '__main__':
+    app.run_server(debug=True, port=8056) 
