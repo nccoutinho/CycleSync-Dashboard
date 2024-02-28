@@ -10,6 +10,86 @@ alt.data_transformers.disable_max_rows()
 # Read in data globally
 #data = pd.read_csv('../dataset/Mobi_System_Data_2023-01.csv', parse_dates=True, index_col=0)
 
+# Path to the folder containing your files
+folder_path = '../dataset'
+
+# Initialize an empty list to store DataFrames
+dfs = []
+
+# Iterate over each file in the folder
+for filename in os.listdir(folder_path):
+    if filename.endswith('.csv'):  # Assuming all files are CSV, you can change the condition accordingly
+        file_path = os.path.join(folder_path, filename)
+        # Try different encodings to read the file
+        for encoding in ['utf-8', 'latin-1']:  # You can add more encodings to try if needed
+            try:
+                df = pd.read_csv(file_path, encoding=encoding)
+                dfs.append(df)  # Append the DataFrame to the list
+                break  # Break the loop if reading is successful
+            except UnicodeDecodeError:
+                print(f"Error decoding file {filename} with encoding {encoding}. Trying another encoding...")
+
+# Concatenate all DataFrames in the list into one
+combined_df = pd.concat(dfs, ignore_index=True)
+
+# Removing the bike column
+combined_df = combined_df.drop(['Bike'], axis = 1)
+
+# Remove NA values
+combined_df.dropna(inplace=True)
+
+# Remove rows with negative duration
+combined_df = combined_df[combined_df['Duration (sec.)'] >= 0]
+
+# Data cleaning
+combined_df.loc[combined_df['Departure station'].str.startswith('0099'), 'Departure station'] = "0099 šxʷƛ̓ənəq Xwtl'e7énḵ Square - Vancouver Art Gallery North Plaza"
+combined_df.loc[combined_df['Return station'].str.startswith('0099'), 'Return station'] = "0099 šxʷƛ̓ənəq Xwtl'e7énḵ Square - Vancouver Art Gallery North Plaza"
+combined_df.loc[combined_df['Departure station'].str.startswith('0136'), 'Departure station'] = '0136 David Lam Park - West'
+combined_df.loc[combined_df['Return station'].str.startswith('0136'), 'Return station'] = '0136 David Lam Park - West'
+combined_df.loc[combined_df['Departure station'].str.startswith('0201'), 'Departure station'] = '0201 Shaw Tower'
+combined_df.loc[combined_df['Return station'].str.startswith('0201'), 'Return station'] = '0201 Shaw Tower'
+combined_df.loc[combined_df['Departure station'].str.startswith('0237'), 'Departure station'] = '0237 Glen & 6th'
+combined_df.loc[combined_df['Return station'].str.startswith('0237'), 'Return station'] = '0237 Glen & 6th'
+combined_df.loc[combined_df['Departure station'].str.startswith('1002'), 'Departure station'] = '1002 PNE - Hastings & Windermere'
+combined_df.loc[combined_df['Return station'].str.startswith('1002'), 'Return station'] = '1002 PNE - Hastings & Windermere'
+combined_df.loc[combined_df['Departure station'].str.startswith('2143'), 'Departure station'] = '2143 War Memorial Gym'
+combined_df.loc[combined_df['Return station'].str.startswith('2143'), 'Return station'] = '2143 War Memorial Gym'
+combined_df.loc[combined_df['Departure station'].str.startswith('0154'), 'Departure station'] = '0155 Arbutus & McNicoll'
+combined_df.loc[combined_df['Return station'].str.startswith('0154'), 'Return station'] = '0155 Arbutus & McNicoll'
+combined_df.loc[combined_df['Departure station'].str.startswith('0165'), 'Departure station'] = '0150 Alexander & Main'
+combined_df.loc[combined_df['Return station'].str.startswith('0165'), 'Return station'] = '0150 Alexander & Main'
+values_to_remove = ['0980 Workshop - Balancer Bike Check In', '0981 Workshop - Service Complete', '0982 Workshop - Bike Testing', '0987 Quebec Yard - Rogers', '0991 HQ Workshop', '0992 Workshop - Return to Smoove', '0994 Workshop - Transmitter Testing', '0995 Workshop - Transmitter On Deck', '0997 Workshop - Demo Station', '0985 Quebec Yard - To Service', '1000 Temporary Station', '1000 Vancouver PRIDE Valet Station', '3000 Temporary Station - Celebration of Light']
+combined_df = combined_df[~combined_df['Departure station'].isin(values_to_remove)]
+combined_df = combined_df[~combined_df['Return station'].isin(values_to_remove)]
+
+
+dfc = pd.read_csv('data.csv')
+dfc.drop(columns=['comments'], inplace=True)
+
+departure_counts = combined_df.groupby(['Departure station', 'Month']).agg({'Electric bike': 'count'}).reset_index()
+return_counts = combined_df.groupby(['Return station', 'Month']).agg({'Electric bike': 'count'}).reset_index()
+
+# Rename columns for clarity
+departure_counts.columns = ['Station', 'Month', 'Departure Count']
+return_counts.columns = ['Station', 'Month', 'Return Count']
+
+# Merge the two DataFrames on Station and Month
+combined_counts = pd.merge(departure_counts, return_counts, on=['Station', 'Month'], how='outer').fillna(0)
+combined_counts['Total Count'] = combined_counts['Departure Count'] + combined_counts['Return Count']
+
+combined_counts.drop(['Departure Count', 'Return Count'], axis = 1, inplace = True)
+
+df2 = pd.merge(combined_counts, dfc, on = ['Station'])
+
+total_counts_by_station = df2.groupby(['Station', 'Coordinates', 'Month'])['Total Count'].sum().reset_index(name='Total Count')
+
+marker_locations = total_counts_by_station.to_dict(orient='records')
+
+for entry in marker_locations:
+    entry['Coordinates'] = tuple(map(float, entry['Coordinates'].strip('()').split(', ')))
+
+
+
 # Setup app and layout/frontend
 app = dash.Dash(
     __name__,
