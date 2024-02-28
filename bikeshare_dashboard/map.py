@@ -86,7 +86,20 @@ vancouver_geojson = {
 }
 
 months = sorted(combined_df['Month'].unique().tolist())
-marks = {i: month[:3] for i, month in enumerate(months)}
+marks = {
+    0: {'label': 'Jan'},
+    1: {'label': 'Feb'},
+    2: {'label': 'Mar'},
+    3: {'label': 'Apr'},
+    4: {'label': 'May'},
+    5: {'label': 'Jun'},
+    6: {'label': 'Jul'},
+    7: {'label': 'Aug'},
+    8: {'label': 'Sep'},
+    9: {'label': 'Oct'},
+    10: {'label': 'Nov'},
+    11: {'label': 'Dec'}
+}
 
 # Setup app and layout/frontend
 app = dash.Dash(
@@ -217,7 +230,6 @@ app.layout = html.Div(
                         ),
                         dbc.Col(
                             [
-                                #map_plot,
                                 dcc.RangeSlider(
                                     id='map-month-range-slider',
                                     marks=marks,
@@ -226,7 +238,7 @@ app.layout = html.Div(
                                     value=[0, len(months) - 1]
                                 )
                             ],
-                            width=9
+                            style={'margin-top': '20px'}
                         ),
                     ],
                     justify="center",
@@ -234,7 +246,7 @@ app.layout = html.Div(
                 ),
                 html.Hr()
             ],
-            style={"margin": "0", "margin-left": "220px", "padding-left": "20px"}  # Adjusted styles for better alignment
+            style={'margin': '0', 'margin-left': '220px', 'padding-left': '20px'}  # Adjusted styles for better alignment
         ),
     ]
 )
