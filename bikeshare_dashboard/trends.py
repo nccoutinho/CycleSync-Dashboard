@@ -180,6 +180,15 @@ sort_table_1 = dcc.Dropdown(
    clearable=False
 )
 
+slider = dcc.RangeSlider(
+    id='month_range_slider',
+    marks={i+1: calendar.month_abbr[i+1] for i in range(12)},
+    min=1,
+    max=12,
+    step=1,
+    value=[1, 12]  # Initial range from Jan to Dec
+)
+
 # LAYOUT
 app.layout = html.Div(
     [
@@ -195,7 +204,9 @@ app.layout = html.Div(
                         dcc.Graph(id='trend-plot1', figure={}),
 
                         html.H1("Average Covered Distance by Season and Month", style={"margin-bottom": "20px"}),
-                        dcc.Graph(id='trend-plot2', figure={})
+                        dcc.Graph(id='trend-plot2', figure={}),
+
+                        slider
                     ],
                     className='top-bar',
                     style={'margin-bottom': '20px'}  # Add vertical space between the sidebar and top bar
@@ -229,9 +240,14 @@ app.layout = html.Div(
 @app.callback(
     Output('trend-plot1', 'figure'),
     [Input('table_filter_2', 'value'),
-     Input('table_filter_1', 'value')]
+     Input('table_filter_1', 'value'),
+     Input('month_range_slider', 'value')]
 )
-def update_chart1(selected_bike, selected_membership):
+def update_chart1(selected_bike, selected_membership, selected_month):
+
+    start_month, end_month = selected_month
+
+    selected_month_range = [int(month) for month in selected_month]
     
     # Check if 'Electric bike' is selected
     if selected_bike == 'electric':
@@ -244,6 +260,9 @@ def update_chart1(selected_bike, selected_membership):
 
     if 'all' not in selected_membership:
         df = df[df['Membership type'].isin([m for m in selected_membership])]
+
+    # Filter data based on selected months
+    df = df[df['Month'].astype(int).between(selected_month_range[0], selected_month_range[1])]
 
     # Group by season, then by month, and calculate average count of bike departures
     seasonal_bike_count = df.groupby(['Season', 'Month']).size().reset_index(name='Bike Count')
@@ -316,17 +335,22 @@ def update_chart1(selected_bike, selected_membership):
     # Update layout
     fig.update_layout(
         yaxis_title='Average Bike Departure Count',
-        xaxis_title=None
+        xaxis = dict(
+            title=None
+        )
     )
     return {'data': fig['data'], 'layout': fig['layout']}
 
 @app.callback(
     Output('trend-plot2', 'figure'),
     [Input('table_filter_2', 'value'),
-     Input('table_filter_1', 'value')]
+     Input('table_filter_1', 'value'),
+     Input('month_range_slider', 'value')]
 )
 
-def update_chart2(selected_bike, selected_membership):
+def update_chart2(selected_bike, selected_membership, selected_month):
+
+    start_month, end_month = selected_month
     
     # Check if 'Electric bike' is selected
     if selected_bike == 'electric':
@@ -339,6 +363,9 @@ def update_chart2(selected_bike, selected_membership):
 
     if 'all' not in selected_membership:
         df = df[df['Membership type'].isin([m for m in selected_membership])]
+
+    # Filter data based on selected months
+    df = df[df['Month'].between(start_month, end_month)]
 
     # Group by season, then by month, and calculate average count of bike departures
     seasonal_bike_count = df.groupby(['Season', 'Month']).size().reset_index(name='Bike Count')
@@ -406,9 +433,11 @@ def update_chart2(selected_bike, selected_membership):
     # Update layout
     fig.update_layout(
         yaxis_title='Average Covered Distance (m)',
-        xaxis_title=None
+        xaxis = dict(
+            title=None
+        )
     )
-
+    
     return {'data': fig['data'], 'layout': fig['layout']}
 
 if __name__ == '__main__':
