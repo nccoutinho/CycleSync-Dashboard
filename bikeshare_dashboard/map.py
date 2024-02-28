@@ -7,7 +7,7 @@ from datetime import date
 import os
 import calendar
 import folium
-import plotly.graph_objs as go
+from folium.plugins import HeatMap
 
 alt.data_transformers.disable_max_rows()
 
@@ -86,20 +86,7 @@ vancouver_geojson = {
 }
 
 months = sorted(combined_df['Month'].unique().tolist())
-
-
-x_data = [1, 2, 3, 4, 5]
-y_data = [2, 4, 6, 8, 10]
-
-# Create a scatter plot
-other_plot = go.Figure(data=go.Scatter(x=x_data, y=y_data, mode='markers'))
-
-# Define layout for the scatter plot
-other_plot.update_layout(
-    title="Sample Scatter Plot",
-    xaxis_title="X Axis",
-    yaxis_title="Y Axis"
-)
+marks = {i: month[:3] for i, month in enumerate(months)}
 
 # Setup app and layout/frontend
 app = dash.Dash(
@@ -208,6 +195,7 @@ app.layout = html.Div(
                                         clearable=False  # Prevent clearing the dropdown
                                     )
                                 ]),
+                                html.Div(),
                                 html.Div([
                                     html.H5("Bike Type:"),  # Title for dropdown
                                     dcc.Dropdown(
@@ -232,7 +220,7 @@ app.layout = html.Div(
                                 #map_plot,
                                 dcc.RangeSlider(
                                     id='map-month-range-slider',
-                                    marks={i: month[:3] for i, month in enumerate(months)},
+                                    marks=marks,
                                     min=0,
                                     max=len(months) - 1,
                                     value=[0, len(months) - 1]
@@ -272,10 +260,11 @@ app.layout = html.Div(
 @app.callback(
     Output('map-container', 'children'),
     [Input('map-month-range-slider', 'value'),  # RangeSlider input
-     Input('bike-type-dropdown', 'value')]  # Dropdown input
+     Input('bike-type-dropdown', 'value'),
+     Input('plot-type-dropdown', 'value')]  # Dropdown input
 )
 
-def update_map(value, bike_type):
+def update_map(value, bike_type, plot_type):
     
     if bike_type == 'electric':
         df = combined_df[combined_df['Electric bike'] == True]
@@ -323,21 +312,30 @@ def update_map(value, bike_type):
 
     # Add GeoJSON boundary to the map
     folium.GeoJson(vancouver_geojson).add_to(map_vancouver)
+    
+    if plot_type == 'marker plot':
+        # Add markers to specific locations
+        for item in filtered_marker_locations:
+            location = item["Coordinates"]
+            name = item["Station"]
+            info = int(item["Total Count"])
+            folium.Marker(
+                location=location,
+                icon=folium.Icon(icon='bicycle', prefix='fa', color='red'),
+                tooltip=f"{name}: {info}"
+            ).add_to(map_vancouver)
 
-    # Add markers to specific locations
-    for item in filtered_marker_locations:
-        location = item["Coordinates"]
-        name = item["Station"]
-        info = int(item["Total Count"])
-        folium.Marker(
-            location=location,
-            icon=folium.Icon(icon='bicycle', prefix='fa', color='red'),
-            tooltip=f"{name}: {info}"
-        ).add_to(map_vancouver)
+        # Save the map to HTML and return it
+        map_html = map_vancouver.get_root().render()
+        return html.Iframe(srcDoc=map_html, width='100%', height='500')
+    else:
+        # Create HeatMap layer
+        heatmap_data = [(loc['Coordinates'][0], loc['Coordinates'][1], loc['Total Count']) for loc in filtered_marker_locations]
+        HeatMap(heatmap_data, radius=15, max_zoom=13).add_to(map_vancouver)
 
-    # Save the map to HTML and return it
-    map_html = map_vancouver.get_root().render()
-    return html.Iframe(srcDoc=map_html, width='100%', height='500')
+        # Save the map to HTML and return it
+        map_html = map_vancouver.get_root().render()
+        return html.Iframe(srcDoc=map_html, width='100%', height='600')
 
 
 
