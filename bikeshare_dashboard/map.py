@@ -4,6 +4,10 @@ import dash_mantine_components as dmc
 import pandas as pd
 import altair as alt
 from datetime import date
+import os
+import calendar
+import folium
+import plotly.graph_objs as go
 
 alt.data_transformers.disable_max_rows()
 
@@ -38,6 +42,13 @@ combined_df = combined_df.drop(['Bike'], axis = 1)
 # Remove NA values
 combined_df.dropna(inplace=True)
 
+combined_df['Departure'] = pd.to_datetime(combined_df['Departure'])
+
+# Extract month and season
+combined_df['Month'] = combined_df['Departure'].dt.month
+
+combined_df['Month'] = combined_df['Month'].apply(lambda x: calendar.month_abbr[x])
+
 # Remove rows with negative duration
 combined_df = combined_df[combined_df['Duration (sec.)'] >= 0]
 
@@ -66,29 +77,29 @@ combined_df = combined_df[~combined_df['Return station'].isin(values_to_remove)]
 dfc = pd.read_csv('data.csv')
 dfc.drop(columns=['comments'], inplace=True)
 
-departure_counts = combined_df.groupby(['Departure station', 'Month']).agg({'Electric bike': 'count'}).reset_index()
-return_counts = combined_df.groupby(['Return station', 'Month']).agg({'Electric bike': 'count'}).reset_index()
+vancouver_geojson = {
+    "type": "Feature",
+    "properties": {
+        "name": "Vancouver",
+        "description": "Boundary of the city of Vancouver, British Columbia, Canada"
+    }
+}
 
-# Rename columns for clarity
-departure_counts.columns = ['Station', 'Month', 'Departure Count']
-return_counts.columns = ['Station', 'Month', 'Return Count']
-
-# Merge the two DataFrames on Station and Month
-combined_counts = pd.merge(departure_counts, return_counts, on=['Station', 'Month'], how='outer').fillna(0)
-combined_counts['Total Count'] = combined_counts['Departure Count'] + combined_counts['Return Count']
-
-combined_counts.drop(['Departure Count', 'Return Count'], axis = 1, inplace = True)
-
-df2 = pd.merge(combined_counts, dfc, on = ['Station'])
-
-total_counts_by_station = df2.groupby(['Station', 'Coordinates', 'Month'])['Total Count'].sum().reset_index(name='Total Count')
-
-marker_locations = total_counts_by_station.to_dict(orient='records')
-
-for entry in marker_locations:
-    entry['Coordinates'] = tuple(map(float, entry['Coordinates'].strip('()').split(', ')))
+months = sorted(combined_df['Month'].unique().tolist())
 
 
+x_data = [1, 2, 3, 4, 5]
+y_data = [2, 4, 6, 8, 10]
+
+# Create a scatter plot
+other_plot = go.Figure(data=go.Scatter(x=x_data, y=y_data, mode='markers'))
+
+# Define layout for the scatter plot
+other_plot.update_layout(
+    title="Sample Scatter Plot",
+    xaxis_title="X Axis",
+    yaxis_title="Y Axis"
+)
 
 # Setup app and layout/frontend
 app = dash.Dash(
@@ -164,43 +175,6 @@ sort_table_2 = dcc.Dropdown(
    value='electric_bike'
 )
 
-# CHARTS / TABLE
-map_plot = dbc.Card(
-    [
-        dbc.CardHeader(
-            html.H4("Geospatial Bike Concentration Plot", className="card-title", style={"color": "white"}),
-            style={"background-color": "#D80808"}
-        ),
-        dbc.CardBody(
-            dbc.Col([
-                dcc.Loading(
-                    id="loading-1",
-                    type="circle",
-                    children=html.Iframe(
-                        id="polar_chart",
-                        style={
-                            "height": "22rem",
-                            "width": "100%",
-                            "border": "0",
-                            "display": "flex",
-                            "align-items": "center",
-                            "justify-content": "center"
-                            }
-                        ),
-                    color="#D80808"
-                )
-            ])
-        )
-    ],
-    className="mb-3",
-    style={
-        "width": "90%",
-        "margin-left": "auto",
-        "border": "1px solid lightgray",
-        "box-shadow": "0px 1px 4px 0px rgba(0, 0, 0, 0.1)"
-    }
-)
-
 # LAYOUT
 app.layout = html.Div(
     [
@@ -212,7 +186,7 @@ app.layout = html.Div(
                 html.Div(
                     [
                         html.H6("Page / ", style={'display': 'inline'}),
-                        html.Span(id='current-page', style={'font-weight': 'bold'})
+                        html.Span(id='map-container', style={'font-weight': 'bold'})
                     ],
                     className='top-bar',
                     style={'margin-bottom': '20px'}  # Add vertical space between the sidebar and top bar
@@ -221,16 +195,49 @@ app.layout = html.Div(
                     [
                         dbc.Col(
                             [
-                                html.H5("View:"),
-                                sort_table_1,
-                                html.H5("Bike type:"),
-                                sort_table_2
+                                html.Div([
+                                    html.H5("View:"),  # Title for plot type dropdown
+                                    dcc.Dropdown(
+                                        id='plot-type-dropdown',
+                                        options=[
+                                            {'label': 'Marker Plot', 'value': 'marker plot'},
+                                            {'label': 'Density Plot', 'value': 'density plot'}
+                                        ],
+                                        value='marker plot',  # Default selected value
+                                        multi = False,
+                                        clearable=False  # Prevent clearing the dropdown
+                                    )
+                                ]),
+                                html.Div([
+                                    html.H5("Bike Type:"),  # Title for dropdown
+                                    dcc.Dropdown(
+                                        id='bike-type-dropdown',
+                                        options=[
+                                            {'label': 'Electric', 'value': 'electric'},
+                                            {'label': 'Classic', 'value': 'classic'},
+                                            {'label': 'Both', 'value': 'both'}
+                                        ],
+                                        value = 'both',  # Default selected values
+                                        multi = False,  # Allow multiple selection
+                                        clearable=False
+                                    ),
+                                    html.Div(id='selected-plot')
+                                ])
                             ],
                             width=2,
                             style={'margin-right': '20px'}  # Add horizontal space between top bar and sort tables
                         ),
                         dbc.Col(
-                            map_plot,
+                            [
+                                #map_plot,
+                                dcc.RangeSlider(
+                                    id='map-month-range-slider',
+                                    marks={i: month[:3] for i, month in enumerate(months)},
+                                    min=0,
+                                    max=len(months) - 1,
+                                    value=[0, len(months) - 1]
+                                )
+                            ],
                             width=9
                         ),
                     ],
@@ -245,20 +252,94 @@ app.layout = html.Div(
 )
 
 # Callback to update the current page based on the URL
+# @app.callback(
+#     Output('current-page', 'children'),
+#     [Input('url', 'pathname')]
+# )
+# def update_current_page(pathname):
+#     if pathname == '/dashboard':
+#         return 'Dashboard'
+#     elif pathname == '/trends':
+#         return 'Trends'
+#     elif pathname == '/map':
+#         return 'Map'
+#     else:
+#         return 'Unknown Page'
+
+
+
+# Define callback to update the map
 @app.callback(
-    Output('current-page', 'children'),
-    [Input('url', 'pathname')]
+    Output('map-container', 'children'),
+    [Input('map-month-range-slider', 'value'),  # RangeSlider input
+     Input('bike-type-dropdown', 'value')]  # Dropdown input
 )
-def update_current_page(pathname):
-    if pathname == '/dashboard':
-        return 'Dashboard'
-    elif pathname == '/trends':
-        return 'Trends'
-    elif pathname == '/map':
-        return 'Map'
+
+def update_map(value, bike_type):
+    
+    if bike_type == 'electric':
+        df = combined_df[combined_df['Electric bike'] == True]
+    elif bike_type == 'classic':
+        df = combined_df[combined_df['Electric bike'] == False]
     else:
-        return 'Unknown Page'
+        df = combined_df
+    
+    departure_counts = df.groupby(['Departure station', 'Month']).agg({'Electric bike': 'count'}).reset_index()
+    return_counts = df.groupby(['Return station', 'Month']).agg({'Electric bike': 'count'}).reset_index()
+
+    # Rename columns for clarity
+    departure_counts.columns = ['Station', 'Month', 'Departure Count']
+    return_counts.columns = ['Station', 'Month', 'Return Count']
+
+    # Merge the two DataFrames on Station and Month
+    combined_counts = pd.merge(departure_counts, return_counts, on=['Station', 'Month'], how='outer').fillna(0)
+    combined_counts['Total Count'] = combined_counts['Departure Count'] + combined_counts['Return Count']
+
+    combined_counts.drop(['Departure Count', 'Return Count'], axis = 1, inplace = True)
+
+    df2 = pd.merge(combined_counts, dfc, on = ['Station'])
+
+    total_counts_by_station = df2.groupby(['Station', 'Coordinates', 'Month'])['Total Count'].sum().reset_index(name='Total Count')
+    
+    marker_locations = total_counts_by_station.to_dict(orient='records')
+    
+    for entry in marker_locations:
+        entry['Coordinates'] = tuple(map(float, entry['Coordinates'].strip('()').split(', ')))
+    
+    # Convert float values to integers
+    value = [int(v) for v in value]
+
+    # Filter marker locations based on selected months
+    months = sorted(set(item['Month'] for item in marker_locations))
+    start_month = months[value[0]]
+    end_month = months[value[1]]
+    filtered_marker_locations = [item for item in marker_locations if start_month <= item['Month'] <= end_month]
+
+    # Calculate total count
+    total_count = sum(item['Total Count'] for item in filtered_marker_locations)
+
+    # Create a Folium map centered around Vancouver
+    map_vancouver = folium.Map(location=[49.2827, -123.1207], zoom_start=12)
+
+    # Add GeoJSON boundary to the map
+    folium.GeoJson(vancouver_geojson).add_to(map_vancouver)
+
+    # Add markers to specific locations
+    for item in filtered_marker_locations:
+        location = item["Coordinates"]
+        name = item["Station"]
+        info = int(item["Total Count"])
+        folium.Marker(
+            location=location,
+            icon=folium.Icon(icon='bicycle', prefix='fa', color='red'),
+            tooltip=f"{name}: {info}"
+        ).add_to(map_vancouver)
+
+    # Save the map to HTML and return it
+    map_html = map_vancouver.get_root().render()
+    return html.Iframe(srcDoc=map_html, width='100%', height='500')
+
 
 
 if __name__ == '__main__':
-    app.run_server(debug=True, port=8056) 
+    app.run_server(debug=True, port=8053) 
