@@ -132,12 +132,12 @@ combined_df = combined_df[~combined_df['Return station'].isin(values_to_remove)]
 rides_count = len(combined_df)
 
 # Assuming combined_df has been defined and 'Departure Temperature' column is present
-average_departure_temperature = round(combined_df['Departure temperature (C)'].mean(),0)
+average_departure_temperature = f"{round(combined_df['Departure temperature (C)'].mean(),0)}°C"
 
 # Find the maximum covered distance
 max_covered_distance = combined_df['Covered distance (m)'].max()
 
-max_covered_distance_kilometers = round((max_covered_distance / 1000 ),0)
+max_covered_distance_kilometers = f"{round((max_covered_distance / 1000 ),0)} km"
 
 # Remove null records
 combined_df = combined_df.dropna(subset=['Departure station'])
