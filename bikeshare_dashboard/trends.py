@@ -193,6 +193,8 @@ app.layout = html.Div(
                         html.H6("Page / ", style={'display': 'inline'}),
                         html.H1("Average Bike Departures by Season and Month", style={"margin-bottom": "20px"}),
                         dcc.Graph(id='trend-plot1', figure={}),
+   
+                        html.H1("Average Covered Distance (m) by Season and Month", style={"margin-bottom": "20px"}),  # Add heading for the second chart
                         dcc.Graph(id='trend-plot2', figure={})
                     ],
                     className='top-bar',
