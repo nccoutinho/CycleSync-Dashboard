@@ -106,7 +106,6 @@ fig_winter = px.line(
     average_counts[average_counts['Month'].isin(['Dec', 'Jan', 'Feb', 'Mar'])],
     x='Month',
     y='Bike Count',
-    title='Average Bike Departures in Winter',
     line_shape='linear',
     color_discrete_sequence=['blue'],
     hover_data={'Month': True, 'Bike Count': True, 'Season': True}  
@@ -117,7 +116,6 @@ fig_spring = px.line(
     average_counts[average_counts['Month'].isin(['Mar', 'Apr', 'May', 'Jun'])],
     x='Month',
     y='Bike Count',
-    title='Average Bike Departures in Spring',
     line_shape='linear',
     color_discrete_sequence=['green'],
     hover_data={'Month': True, 'Bike Count': True, 'Season': True}  
@@ -128,7 +126,6 @@ fig_summer = px.line(
     average_counts[average_counts['Month'].isin(['Jun', 'Jul', 'Aug', 'Sep'])],
     x='Month',
     y='Bike Count',
-    title='Average Bike Departures in Summer',
     line_shape='linear',
     color_discrete_sequence=['red'],
     hover_data={'Month': True, 'Bike Count': True, 'Season': True}  
@@ -139,7 +136,6 @@ fig_fall = px.line(
     average_counts[average_counts['Month'].isin(['Sep', 'Oct', 'Nov'])],
     x='Month',
     y='Bike Count',
-    title='Average Bike Departures in Fall',
     line_shape='linear',
     color_discrete_sequence=['yellow'],
     hover_data={'Month': True, 'Bike Count': True, 'Season': True} 
@@ -162,7 +158,6 @@ fig_combined.update_layout(
         type='category'
     )
 )
-
 
 # Setup app and layout/frontend
 app = dash.Dash(
@@ -254,6 +249,7 @@ map_plot = dbc.Card(
             dbc.Col([
                 html.H1("Average Bike Departures by Season and Month"),
                 dcc.Graph(
+                id="map_plot",
                 figure=fig_combined.update_traces(marker_color='indianred')
         )
     ]
@@ -314,20 +310,30 @@ app.layout = html.Div(
     ]
 )
 
-# Callback to update the current page based on the URL
 @app.callback(
-    Output('current-page', 'children'),
-    [Input('url', 'pathname')]
+    Output('map_plot', 'figure'),
+    [Input('table_filter_2', 'value')]
 )
-def update_current_page(pathname):
-    if pathname == '/dashboard':
-        return 'Dashboard'
-    elif pathname == '/trends':
-        return 'Trends'
-    elif pathname == '/map':
-        return 'Map'
-    else:
-        return 'Unknown Page'
+def update_chart(selected_option):
+    filtered_data = average_counts[average_counts['Month'].isin(['Sep', 'Oct', 'Nov'])]
+
+    # Check if 'Electric bike' is selected
+    if selected_option == 'electric_bike':
+        # Filter data for 'Electric bike'
+        filtered_data = filtered_data[filtered_data['Electric bike'] == True]
+
+    # Create a line chart using Plotly Express
+    fig = px.line(
+        filtered_data,
+        x='Month',
+        y='Bike Count',
+        line_shape='linear',
+        color_discrete_sequence=['yellow'],
+        hover_data={'Month': True, 'Bike Count': True, 'Season': True}
+    )
+
+    return fig
+
 
 
 if __name__ == '__main__':
