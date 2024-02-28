@@ -74,7 +74,7 @@ combined_df = combined_df[~combined_df['Departure station'].isin(values_to_remov
 combined_df = combined_df[~combined_df['Return station'].isin(values_to_remove)]
 
 
-dfc = pd.read_csv('data.csv')
+dfc = pd.read_csv('../dataset/coordinates/station_coordinates.csv')
 dfc.drop(columns=['comments'], inplace=True)
 
 vancouver_geojson = {
