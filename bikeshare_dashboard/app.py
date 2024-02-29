@@ -15,9 +15,6 @@ from data_extraction import bikeshare_data
 
 alt.data_transformers.disable_max_rows()
 
-# Read in data globally
-#data = pd.read_csv('../dataset/Mobi_System_Data_2023-01.csv', parse_dates=True, index_col=0)
-
 # Setup app and layout/frontend
 app = dash.Dash(
     __name__,
@@ -54,31 +51,6 @@ header = html.Div(
     ],
     style={"align": "center", "margin-left": 15}
 )
-
-# --------------------------------------
-# SIDEBAR
-# sidebar = dbc.Col(
-#     [
-#         header,
-#         html.Div(style={"height": "20px"}),
-#         dbc.Nav(
-#             [
-#                 dbc.NavItem(dbc.NavLink("Dashboard", href="/dashboard")),
-#                 dbc.NavItem(dbc.NavLink("Trends", href="/trends")),
-#                 dbc.NavItem(dbc.NavLink("Map", href="/map")),
-#             ],
-#             vertical=True,
-#             pills=True,
-#             className="mb-3",
-#         ),
-#     ],
-#     width=2.1,
-#     style={"background-color": "#f8f9fa", "height": "100vh", "position": "fixed", "padding-top": "20px"},
-# )
-
-# --------------------------------------
-# STATISTICS CODE
-# Number of active station:
 
 combined_df, dfc = bikeshare_data()
 
