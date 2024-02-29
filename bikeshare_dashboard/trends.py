@@ -204,7 +204,53 @@ months = ['Dec', 'Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 
 # )
 
 # LAYOUT
-app.layout = html.Div(
+# app.layout = html.Div(
+#     [
+#         dcc.Location(id='url', refresh=False),  # Location component to track the URL
+#         sidebar,
+#         html.Div(
+#             [
+#                 html.Hr(),
+#                 html.Div(
+#                     [
+#                         html.H6("Page / ", style={'display': 'inline'}),
+#                         html.H1("Average Bike Departures by Season and Month", style={"margin-bottom": "20px"}),
+#                         dcc.Graph(id='trend-plot1', figure={}),
+
+#                         html.H1("Average Covered Distance by Season and Month", style={"margin-bottom": "20px"}),
+#                         dcc.Graph(id='trend-plot2', figure={}),
+
+#                         slider
+#                     ],
+#                     className='top-bar',
+#                     style={'margin-bottom': '20px'}  # Add vertical space between the sidebar and top bar
+#                 ),
+#                 dbc.Row(
+#                     [
+#                         dbc.Col(
+#                             [
+#                                 html.H5("Bike Type:"),
+#                                 sort_table_1,
+#                                 html.H5("Membershipy Type:"),
+#                                 sort_table_2
+#                             ],
+#                             width=2,
+#                             style={'margin-right': '20px'}  # Add horizontal space between top bar and sort tables
+#                         ),
+#                         dbc.Col(
+#                             width=9
+#                         ),
+#                     ],
+#                     justify="center",
+#                     style={'margin-top': '20px'}  # Add vertical space between top bar and sort tables/map_plot
+#                 ),
+#                 html.Hr()
+#             ],
+#             style={"margin": "0", "margin-left": "220px", "padding-left": "20px"}  # Adjusted styles for better alignment
+#         ),
+#     ]
+# )
+trends_layout = html.Div(
     [
         dcc.Location(id='url', refresh=False),  # Location component to track the URL
         sidebar,

@@ -422,7 +422,49 @@ common_end_station = dbc.Card(
 
 # --------------------------------------
 # LAYOUT
-app.layout = html.Div(
+# app.layout = html.Div(
+#     [
+#         dcc.Location(id='url', refresh=False),
+#         sidebar,
+#         html.Div(
+#             [
+#                 html.Hr(),
+#                 html.Div(
+#                     [
+#                         html.H6("Page / ", style={'display': 'inline'}),
+#                         html.Span(id='current-page', style={'font-weight': 'bold'})
+#                     ],
+#                     className='top-bar',
+#                     style={'margin-bottom': '20px', 'padding': '10px', 'background-color': '#f8f9fa'}  
+#                 ),
+#                 dbc.Row(
+#                     [no_of_rides, avg_temperature, max_distance, busiest_station, busiest_day],
+#                     justify="center",
+#                     style={'margin-top': '20px', 'padding-right': '60px'}  
+#                 ),
+#                 dbc.Row(
+#                     [
+#                         dbc.Col(
+#                             [active_stations, html.Div(style={'height': '20px'}), common_end_station],
+#                             width=5,
+#                             style={'margin-top': '10px', 'padding-left': '60px', 'padding-right': '20px'}  
+#                         ),
+#                         dbc.Col(
+#                             [pie_chart, html.Div(style={'height': '20px'}), trip_day],
+#                             width=5,
+#                             style={'margin-top': '10px', 'padding-left': '55px', 'padding-right': '60px'}  
+#                         )
+#                     ],
+#                     style={'margin-top': '20px'}  
+#                 ),
+#                 html.Hr()
+#             ],
+#             style={"margin": "0", "margin-left": "230px", "padding-left": "20px"}  
+#         ),
+#     ]
+# )
+
+dashboard_layout = html.Div(
     [
         dcc.Location(id='url', refresh=False),
         sidebar,

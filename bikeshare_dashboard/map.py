@@ -157,7 +157,87 @@ sidebar = dbc.Col(
 )
 
 # LAYOUT
-app.layout = html.Div(
+# app.layout = html.Div(
+#     [
+#         dcc.Location(id='url', refresh=False),  # Location component to track the URL
+#         sidebar,
+#         html.Div(
+#             [
+#                 html.Hr(),
+#                 html.Div(
+#                     [
+#                         html.H6("Page / ", style={'display': 'inline'}),
+#                         html.H3("Geospatial Activity Map"),
+#                         html.P("Utilize either counts or a heat map visualization for comprehensive insights into Mobi bike-sharing station usage patterns."),
+#                         html.Span(id='map-container', style={'font-weight': 'bold'})
+#                     ],
+#                     className='top-bar',
+#                     style={'margin-bottom': '20px'}  # Add vertical space between the sidebar and top bar
+#                 ),
+#                 dbc.Row(
+#                     [
+#                         dbc.Col(
+#                             [
+#                                 # Dropdown to choose the plot type.
+#                                 html.Div([
+#                                     html.H5("View:"),
+#                                     dcc.Dropdown(
+#                                         id='plot-type-dropdown',
+#                                         options=[
+#                                             {'label': 'Marker Plot', 'value': 'marker plot'},
+#                                             {'label': 'Density Plot', 'value': 'density plot'}
+#                                         ],
+#                                         value='marker plot',
+#                                         multi = False,
+#                                         clearable=False
+#                                     )
+#                                 ]),
+#                                 html.Div(),
+#                                 # Dropdown to choose bike type.
+#                                 html.Div([
+#                                     html.H5("Bike Type:"),
+#                                     dcc.Dropdown(
+#                                         id='bike-type-dropdown',
+#                                         options=[
+#                                             {'label': 'Electric', 'value': 'electric'},
+#                                             {'label': 'Classic', 'value': 'classic'},
+#                                             {'label': 'Both', 'value': 'both'}
+#                                         ],
+#                                         value = 'both',
+#                                         multi = False,
+#                                         clearable=False
+#                                     )
+#                                 ])
+#                             ],
+#                             width=2,
+#                             style={'margin-right': '20px'}
+#                         ),
+#                         # Range slider for month
+#                         dbc.Col(
+#                             [
+#                                 dcc.RangeSlider(
+#                                     id='map-month-range-slider',
+#                                     marks=marks,
+#                                     min=0,
+#                                     max=len(months) - 1,
+#                                     step=1,
+#                                     value=[0, len(months) - 1]
+#                                 )
+#                             ],
+#                             style={'margin-top': '20px'}
+#                         ),
+#                     ],
+#                     justify="center",
+#                     style={'margin-top': '20px'}  # Add vertical space between top bar and sort tables/map_plot
+#                 ),
+#                 html.Hr()
+#             ],
+#             style={'margin': '0', 'margin-left': '220px', 'padding-left': '20px'}  # Adjusted styles for better alignment
+#         ),
+#     ]
+# )
+
+map_layout = html.Div(
     [
         dcc.Location(id='url', refresh=False),  # Location component to track the URL
         sidebar,
