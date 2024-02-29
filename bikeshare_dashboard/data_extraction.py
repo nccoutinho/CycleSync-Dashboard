@@ -38,7 +38,9 @@ def bikeshare_data():
     # Extract month and season
     combined_df['Month'] = combined_df['Departure'].dt.month
     combined_df['Season'] = combined_df['Departure'].dt.month % 12 // 3 + 1
-
+    
+    combined_df['Day of Week'] = combined_df['Departure'].dt.day_name()
+    
     # Map season and month names
     combined_df['Season'] = combined_df['Season'].map({1: 'Winter', 2: 'Spring', 3: 'Summer', 4: 'Fall'})
     combined_df['Month'] = combined_df['Month'].apply(lambda x: calendar.month_abbr[x])

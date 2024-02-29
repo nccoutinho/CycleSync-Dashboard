@@ -140,22 +140,10 @@ busiest_day_weekly = combined_df['Day of Week'].value_counts().idxmax()
 
 # ---------------PLOT 1-----------------------
 
-# Remove null records
-# combined_df = combined_df.dropna(subset=['Departure station'])
-
-# Count occurrences of each station
-# station_counts = combined_df['Departure station'].value_counts()
-
 # Get the number of unique stations
 num_stations = len(combined_df['Departure station'].unique())
 
 # ---------------PLOT 2-----------------------
-
-# Convert 'Departure Date' column to datetime
-combined_df['Departure'] = pd.to_datetime(combined_df['Departure'])
-
-# Extract day of the week
-combined_df['Day of Week'] = combined_df['Departure'].dt.day_name()
 
 # Count trips by day of the week
 trips_by_day = combined_df['Day of Week'].value_counts()
@@ -380,7 +368,7 @@ common_end_station = dbc.Card(
     [
                 dbc.Col(
                     [
-                        html.H1("Top 10 Most Common End Trip Stations", style={"font-size": "1.5em", "padding-top": "18px", "padding-left": "18px"}),
+                        html.H1("Top 10 Most Used End Trip Stations", style={"font-size": "1.5em", "padding-top": "18px", "padding-left": "18px"}),
                         dcc.Graph(
                             figure=fig.update_traces(marker_color='indianred').update_layout(
                                 width=605,  
@@ -945,7 +933,9 @@ app.layout = html.Div([
             "background": "lightgrey",
         },
         style={
-            "fontFamily": "Arial, sans-serif"
+            "width": "50%",
+            "fontFamily": "Arial, sans-serif",
+            "margin-left": "auto"
         }
     )
 ])
