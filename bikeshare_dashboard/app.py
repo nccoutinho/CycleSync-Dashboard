@@ -3,8 +3,8 @@ import dash_bootstrap_components as dbc
 from dash.dependencies import Input, Output  # Add this line
 
 # Import layouts from separate pages
-from dashboard import dashboard_layout
-from trends import trends_layout
+# from dashboard import dashboard_layout
+# from trends import trends_layout
 from map import map_layout
 
 app = Dash(__name__, external_stylesheets=[dbc.themes.JOURNAL])
@@ -44,11 +44,11 @@ app.layout = html.Div([
 
 def display_page(pathname):
     if not pathname or pathname == '/':
-        return dashboard_layout
-    elif pathname == '/dashboard':
-        return dashboard_layout
-    elif pathname == '/trends':
-        return trends_layout
+        return map_layout
+    # elif pathname == '/dashboard':
+    #     return dashboard_layout
+    # elif pathname == '/trends':
+    #     return trends_layout
     elif pathname == '/map':
         return map_layout
     else:
