@@ -927,7 +927,7 @@ def update_map(value, bike_type, plot_type):
         return html.Iframe(srcDoc=map_html, width='100%', height='600')
 
 
-dashboard_tab = dcc.Tab(label='Dashboard', children=[dashboard_layout])
+dashboard_tab = dcc.Tab(label='Overview', children=[dashboard_layout])
 trends_tab = dbc.Tab(label="Trends", children=[trends_layout])
 map_tab = dbc.Tab(label="Map", children=[map_layout])
 
@@ -942,7 +942,7 @@ app.layout = html.Div([
         colors={
             "border": "white",
             "primary": "#D80808",
-            "background": "#ffe6e6",
+            "background": "lightgrey",
         },
         style={
             "fontFamily": "Arial, sans-serif"
