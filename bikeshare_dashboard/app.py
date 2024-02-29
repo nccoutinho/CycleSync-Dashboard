@@ -527,13 +527,15 @@ def update_chart1(selected_bike, selected_membership, selected_season):
     if 'all' not in selected_membership:
         df = df[df['Membership type'].isin([m for m in selected_membership])]
     
-    season_indicator = ['Dec', 'Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov']
+    # Define custom sort order for months
+    month_order = ['Dec', 'Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov']    
+    
     # Filter data based on selected months
     selected_months = []
     for season_index in range(start_season, end_season + 1):
         start_month_index = season_index * 3
         end_month_index = start_month_index + 2
-        selected_months.extend(season_indicator[start_month_index:end_month_index + 1])
+        selected_months.extend(month_order[start_month_index:end_month_index + 1])
 
     df = df[df['Month'].isin(selected_months)]
 
@@ -543,9 +545,6 @@ def update_chart1(selected_bike, selected_membership, selected_season):
 
     # Group by season, then by month, and calculate average covered distance of bike trips
     seasonal_bike_distance = df.groupby(['Season', 'Month'])['Covered distance (m)'].mean().reset_index(name='Average Covered Distance (m)')
-
-    # Define custom sort order for months
-    month_order = ['Dec', 'Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov']
 
     # Sort the DataFrame by the 'Month' column using the custom order
     average_counts = average_counts.loc[average_counts['Month'].isin(month_order)]
@@ -637,13 +636,15 @@ def update_chart2(selected_bike, selected_membership, selected_season):
     if 'all' not in selected_membership:
         df = df[df['Membership type'].isin([m for m in selected_membership])]
     
-    season_indicator = ['Dec', 'Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov']
+    # Define custom sort order for months
+    month_order = ['Dec', 'Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov']
+    
     # Filter data based on selected months
     selected_months = []
     for season_index in range(start_season, end_season + 1):
         start_month_index = season_index * 3
         end_month_index = start_month_index + 2
-        selected_months.extend(season_indicator[start_month_index:end_month_index + 1])
+        selected_months.extend(month_order[start_month_index:end_month_index + 1])
 
     df = df[df['Month'].isin(selected_months)]
 
@@ -654,8 +655,7 @@ def update_chart2(selected_bike, selected_membership, selected_season):
     # Group by season, then by month, and calculate average covered distance of bike trips
     seasonal_bike_distance = df.groupby(['Season', 'Month'])['Covered distance (m)'].mean().reset_index(name='Average Covered Distance (m)')
 
-    # Define custom sort order for months
-    month_order = ['Dec', 'Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov']
+    
 
     # Sort the DataFrame by the 'Month' column using the custom order
     average_counts = average_counts.loc[average_counts['Month'].isin(month_order)]
