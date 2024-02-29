@@ -183,13 +183,25 @@ sort_table_1 = dcc.Dropdown(
 )
 
 slider = dcc.RangeSlider(
-    id='month_range_slider',
-    marks={i+1: calendar.month_abbr[i+1] for i in range(12)},
+    id='season_range_slider',
+    marks={0: 'Winter', 1: 'Spring', 2: 'Summer', 3: 'Fall'},
     min=0,
-    max=len(months) - 1,
+    max=3,
     step=1,
-    value=[0, len(months) - 1]  # Initial range from Jan to Dec
+    value=[0, 3]  # Initial range from Winter to Fall
 )
+
+months = ['Dec', 'Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov']
+
+
+# slider = dcc.RangeSlider(
+#     id='month_range_slider',
+#     marks={i+1: calendar.month_abbr[i+1] for i in range(12)},
+#     min=0,
+#     max=len(months) - 1,
+#     step=1,
+#     value=[0, len(months) - 1]  # Initial range from Jan to Dec
+# )
 
 # LAYOUT
 app.layout = html.Div(
@@ -243,14 +255,13 @@ app.layout = html.Div(
     Output('trend-plot1', 'figure'),
     [Input('table_filter_2', 'value'),
      Input('table_filter_1', 'value'),
-     Input('month_range_slider', 'value')]
+     Input('season_range_slider', 'value')]
 )
-def update_chart1(selected_bike, selected_membership, selected_month):
+def update_chart1(selected_bike, selected_membership, selected_season):
 
-    start_month = months[selected_month[0]]
-    end_month = months[selected_month[1]]
+    start_season, end_season = selected_season
     
-    # Check if 'Electric bike' is selected
+    # Check for Bike Type selected
     if selected_bike == 'electric':
         # Filter data for 'Electric bike'
         df = combined_df[combined_df['Electric bike'] == True]
@@ -263,8 +274,13 @@ def update_chart1(selected_bike, selected_membership, selected_month):
         df = df[df['Membership type'].isin([m for m in selected_membership])]
 
     # Filter data based on selected months
-    
-    df = df[df['Month'].between(start_month, end_month)]
+    selected_months = []
+    for season_index in range(start_season, end_season + 1):
+        start_month_index = season_index * 3
+        end_month_index = start_month_index + 2
+        selected_months.extend(months[start_month_index:end_month_index + 1])
+
+    df = df[df['Month'].isin(selected_months)]
 
     # Group by season, then by month, and calculate average count of bike departures
     seasonal_bike_count = df.groupby(['Season', 'Month']).size().reset_index(name='Bike Count')
@@ -347,15 +363,14 @@ def update_chart1(selected_bike, selected_membership, selected_month):
     Output('trend-plot2', 'figure'),
     [Input('table_filter_2', 'value'),
      Input('table_filter_1', 'value'),
-     Input('month_range_slider', 'value')]
+     Input('season_range_slider', 'value')]
 )
 
-def update_chart2(selected_bike, selected_membership, selected_month):
+def update_chart2(selected_bike, selected_membership, selected_season):
 
-    start_month = months[selected_month[0]]
-    end_month = months[selected_month[1]]
+    start_season, end_season = selected_season
     
-    # Check if 'Electric bike' is selected
+    # Check for Bike Type selected
     if selected_bike == 'electric':
         # Filter data for 'Electric bike'
         df = combined_df[combined_df['Electric bike'] == True]
@@ -368,7 +383,13 @@ def update_chart2(selected_bike, selected_membership, selected_month):
         df = df[df['Membership type'].isin([m for m in selected_membership])]
 
     # Filter data based on selected months
-    df = df[df['Month'].between(start_month, end_month)]
+    selected_months = []
+    for season_index in range(start_season, end_season + 1):
+        start_month_index = season_index * 3
+        end_month_index = start_month_index + 2
+        selected_months.extend(months[start_month_index:end_month_index + 1])
+
+    df = df[df['Month'].isin(selected_months)]
 
     # Group by season, then by month, and calculate average count of bike departures
     seasonal_bike_count = df.groupby(['Season', 'Month']).size().reset_index(name='Bike Count')
