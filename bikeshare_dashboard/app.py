@@ -239,7 +239,7 @@ active_stations = dbc.Card(
     ],
     className="mb-3",
     style={
-        "width": "610px",
+        "width": "650px",
         "height": "240px",
         "margin-left": "auto",
         "border": "1px solid lightgray",
@@ -267,7 +267,7 @@ pie_chart = dbc.Card(
     ],
     className="mb-3",
     style={
-        "width": "800px",
+        "width": "900px",
         "height": "510px",
         "margin-left": "auto",
         "border": "1px solid lightgray",
@@ -328,7 +328,7 @@ trip_day = dbc.Card(
             ],
     className="mb-3",
     style={
-        "width": "800px",
+        "width": "900px",
         "height": "360px",
         "margin-left": "auto",
         "border": "1px solid lightgray",
@@ -353,7 +353,7 @@ common_end_station = dbc.Card(
     ],
     className="mb-3",
     style={
-        "width": "610px",
+        "width": "650px",
         "height": "630px",
         "margin-left": "auto",
         "border": "1px solid lightgray",
@@ -434,19 +434,19 @@ dashboard_layout = html.Div(
                 dbc.Row(
                     [no_of_rides, avg_temperature, max_distance, busiest_station, busiest_day],
                     justify="center",
-                    style={'margin-top': '20px', 'padding-right': '60px'}
+                    style={'margin-top': '20px', 'padding-right': '75px'}
                 ),
                 dbc.Row(
                     [
                         dbc.Col(
                             [active_stations, html.Div(style={'height': '20px'}), common_end_station],
                             width=5,
-                            style={'margin-top': '10px', 'padding-left': '60px', 'padding-right': '20px'}
+                            style={'margin-top': '10px', 'padding-left': '30px', 'padding-right': '20px'}
                         ),
                         dbc.Col(
                             [pie_chart, html.Div(style={'height': '20px'}), trip_day],
                             width=5,
-                            style={'margin-top': '10px', 'padding-left': '55px', 'padding-right': '60px'}
+                            style={'margin-top': '10px', 'padding-left': '55px', 'padding-right': '30px'}
                         )
                     ],
                     style={'margin-top': '20px'}
