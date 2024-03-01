@@ -494,12 +494,10 @@ trends_layout = html.Div(
                 ),
                 dbc.Row(
                     [
-                        dbc.Col(
+                         dbc.Col(
                             [
                                 html.H5("Bike Type:"),
                                 sort_table_1,
-                                html.H5("Membershipy Type:"),
-                                sort_table_2
                             ],
                             width=2,
                             style={'margin-right': '20px'}  # Add horizontal space between top bar and sort tables
