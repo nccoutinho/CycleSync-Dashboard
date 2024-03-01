@@ -317,8 +317,8 @@ trip_day = dbc.Card(
                                 'layout': {
                                     'xaxis': {'title': 'Day of the Week'},
                                     'yaxis': {'title': 'Trips'},
-                                    'width': 860,
-                                    'height': 300
+                                    'width': 870,
+                                    'height': 305
                                 }
                             }
                         )
