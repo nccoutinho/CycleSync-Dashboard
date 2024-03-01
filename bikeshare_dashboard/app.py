@@ -353,7 +353,7 @@ common_end_station = dbc.Card(
     ],
     className="mb-3",
     style={
-        "width": "660px",
+        "width": "680px",
         "height": "630px",
         "margin-left": "auto",
         "border": "1px solid lightgray",
