@@ -913,7 +913,7 @@ app.layout = html.Div([
             "background": "lightgrey",
         },
         style={
-            "width": "50%",
+            "width": "100%",
             "fontFamily": "Arial, sans-serif",
             "margin-left": "auto"
         }
