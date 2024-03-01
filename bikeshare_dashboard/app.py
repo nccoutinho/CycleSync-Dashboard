@@ -37,13 +37,13 @@ header = html.Div(
     id="app-header",
     children=[
         html.H1(
-            "Bikeshare Dashboard",
+            "CycleSync",
             style={
                 "display": "inline",
-                "font-size": "2em",
+                "font-size": "2.5em",
                 "margin-left": "1.8px",
-                "color": "white",  # Set font color to white
-                "background-color": "#D80808",  # Set background color to red
+                "color": "#D80808",  # Set font color to white
+                #"background-color": "#D80808",  # Set background color to red
                 "padding": "10px",  # Add padding for better appearance
                 "width": "100%"
             }
