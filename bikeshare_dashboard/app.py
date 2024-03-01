@@ -514,7 +514,7 @@ trends_layout = html.Div(
                             width=9
                         ),
                     ],
-                    justify="center",
+                    justify="start",
                     style={'margin-top': '20px'}  # Add vertical space between top bar and sort tables/map_plot
                 ),
                 html.Hr()
