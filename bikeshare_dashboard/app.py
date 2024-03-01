@@ -239,7 +239,7 @@ active_stations = dbc.Card(
     ],
     className="mb-3",
     style={
-        "width": "650px",
+        "width": "660px",
         "height": "240px",
         "margin-left": "auto",
         "border": "1px solid lightgray",
@@ -353,7 +353,7 @@ common_end_station = dbc.Card(
     ],
     className="mb-3",
     style={
-        "width": "650px",
+        "width": "660px",
         "height": "630px",
         "margin-left": "auto",
         "border": "1px solid lightgray",
