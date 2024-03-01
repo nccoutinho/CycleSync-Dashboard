@@ -40,12 +40,20 @@ header = html.Div(
             "CycleSync",
             style={
                 "display": "inline",
-                "font-size": "2.5em",
+                "font-size": "3.2em",
                 "margin-left": "1.8px",
                 "color": "#D80808",  # Set font color to white
-                #"background-color": "#D80808",  # Set background color to red
                 "padding": "10px",  # Add padding for better appearance
                 "width": "100%"
+            }
+        ),
+        html.P(
+            "   Powered by Mobi",
+            style={
+                "font-size": "0.85em",
+                "color": "#666666",  # Set font color to a subdued color
+                "margin-top": "-1px",  # Adjust margin to align with the H1 element
+                "padding": "10px"
             }
         )
     ],
