@@ -37,7 +37,7 @@ header = html.Div(
     id="app-header",
     children=[
         html.Div([
-            html.I(className="fas fa-bicycle", style={"color": "#D80808", "fontSize": "3.9em", "margin-right": "1.5px", "margin-bottom": "15px"}),
+            html.I(className="fas fa-bicycle", style={"color": "#D80808", "fontSize": "4em", "margin-right": "1px", "margin-bottom": "15px"}),
             html.Div([
                 html.H1(
                     "CycleSync",
@@ -55,7 +55,7 @@ header = html.Div(
                     style={
                         "font-size": "0.85em",
                         "color": "#666666",  # Set font color to a subdued color
-                        "margin-top": "-1px",  # Adjust margin to align with the H1 element
+                        "margin-top": "-2px",  # Adjust margin to align with the H1 element
                         "padding": "10px"
                     }
                 ),
