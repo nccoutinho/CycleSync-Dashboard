@@ -36,26 +36,31 @@ app.title = 'Bikeshare Dashboard'
 header = html.Div(
     id="app-header",
     children=[
-        html.H1(
-            "CycleSync",
-            style={
-                "display": "inline",
-                "font-size": "3.2em",
-                "margin-left": "1.8px",
-                "color": "#D80808",  # Set font color to white
-                "padding": "10px",  # Add padding for better appearance
-                "width": "100%"
-            }
-        ),
-        html.P(
-            "   Powered by Mobi",
-            style={
-                "font-size": "0.85em",
-                "color": "#666666",  # Set font color to a subdued color
-                "margin-top": "-1px",  # Adjust margin to align with the H1 element
-                "padding": "10px"
-            }
-        )
+        html.Div([
+            html.I(className="fas fa-bicycle", style={"color": "#D80808", "fontSize": "3.9em", "margin-right": "1.5px", "margin-bottom": "15px"}),
+            html.Div([
+                html.H1(
+                    "CycleSync",
+                    style={
+                        "display": "inline",
+                        "font-size": "3.1em",
+                        "margin-left": "1.8px",
+                        "color": "#D80808",  # Set font color to white
+                        "padding": "10px",  # Add padding for better appearance
+                        "width": "100%"
+                    }
+                ),
+                html.P(
+                    "Powered by Mobi",
+                    style={
+                        "font-size": "0.85em",
+                        "color": "#666666",  # Set font color to a subdued color
+                        "margin-top": "-1px",  # Adjust margin to align with the H1 element
+                        "padding": "10px"
+                    }
+                ),
+            ], style={"flex": 1})
+        ], style={"display": "flex", "align-items": "center"}),
     ],
     style={"align": "center", "margin-left": 15}
 )
