@@ -474,7 +474,6 @@ dashboard_layout = html.Div(
 trends_layout = html.Div(
     [
         dcc.Location(id='trends-url', refresh=False),  # Location component to track the URL
-        sidebar,
         html.Div(
             [
                 html.Hr(),
@@ -511,10 +510,17 @@ trends_layout = html.Div(
                                 dcc.Graph(id='trend-plot1', figure={}),
                             ],
                             width=6  # Adjust the width based on your design
-                        )
+                        ),
+                        dbc.Col(
+                            [
+                                html.H4("Average Covered Distance by Season and Month", style={"margin-bottom": "20px", "text-align": "center"}),
+                                dcc.Graph(id='trend-plot2', figure={}),
+                            ],
+                            width=6  # Adjust the width based on your design
+                        ),
                     ],
-                    className='top-bar',
-                    style={'margin-bottom': '20px'}  # Add vertical space between the sidebar and top bar
+                    justify="center",  # Center the charts
+                    style={'margin-top': '20px'}  # Add vertical space between the top bar and charts
                 ),
                 slider,
                 html.Hr()
