@@ -434,7 +434,7 @@ dashboard_layout = html.Div(
                 dbc.Row(
                     [no_of_rides, avg_temperature, max_distance, busiest_station, busiest_day],
                     justify="center",
-                    style={'margin-top': '20px', 'padding-right': '75px'}
+                    style={'margin-top': '20px', 'padding-right': '85px'}
                 ),
                 dbc.Row(
                     [
