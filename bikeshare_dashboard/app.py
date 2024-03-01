@@ -503,6 +503,14 @@ trends_layout = html.Div(
                             style={'margin-right': '20px'}  # Add horizontal space between top bar and sort tables
                         ),
                         dbc.Col(
+                            [
+                                html.H5("Membership Type:"),
+                                sort_table_2
+                            ],
+                            width=2,
+                            style={'margin-right': '20px'}  # Add horizontal space between top bar and sort tables
+                        ),
+                        dbc.Col(
                             width=9
                         ),
                     ],
