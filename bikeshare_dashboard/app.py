@@ -474,24 +474,10 @@ dashboard_layout = html.Div(
 trends_layout = html.Div(
     [
         dcc.Location(id='trends-url', refresh=False),  # Location component to track the URL
-        #header,
+        sidebar,
         html.Div(
             [
                 html.Hr(),
-                html.Div(
-                    [
-                        # html.H6("Page / ", style={'display': 'inline'}),
-                        html.H4("Average Bike Departures by Season and Month", style={"margin-bottom": "20px"}),
-                        dcc.Graph(id='trend-plot1', figure={}),
-
-                        html.H4("Average Covered Distance by Season and Month", style={"margin-bottom": "20px"}),
-                        dcc.Graph(id='trend-plot2', figure={}),
-
-                        slider
-                    ],
-                    className='top-bar',
-                    style={'margin-bottom': '20px'}  # Add vertical space between the sidebar and top bar
-                ),
                 dbc.Row(
                     [
                          dbc.Col(
@@ -517,6 +503,20 @@ trends_layout = html.Div(
                     justify="start",
                     style={'margin-top': '20px'}  # Add vertical space between top bar and sort tables/map_plot
                 ),
+                dbc.Row(
+                    [
+                        dbc.Col(
+                            [
+                                html.H4("Average Bike Departures by Season and Month", style={"margin-bottom": "20px", "text-align": "center"}),
+                                dcc.Graph(id='trend-plot1', figure={}),
+                            ],
+                            width=6  # Adjust the width based on your design
+                        )
+                    ],
+                    className='top-bar',
+                    style={'margin-bottom': '20px'}  # Add vertical space between the sidebar and top bar
+                ),
+                slider,
                 html.Hr()
             ],
             style={"margin": "0", "padding-left": "20px"}  # Adjusted styles for better alignment
