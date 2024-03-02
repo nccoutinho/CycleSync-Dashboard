@@ -244,7 +244,7 @@ active_stations = dbc.Card(
     [
         dbc.CardBody(
             [
-                html.H1(f"{num_stations}", style={"color": "#D80808", "margin-bottom": "25px", "font-size": "5.8em"}),
+                html.H1(f"{num_stations}", style={"color": "indianred", "margin-bottom": "25px", "font-size": "5.8em"}),
                 dbc.Col(html.H5("active stations around the city, accessible 24/7, 365 days a year."))
             ],
             style={"display": "flex", "flex-direction": "column", "justify-content": "center"}
