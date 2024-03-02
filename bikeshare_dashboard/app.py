@@ -757,7 +757,7 @@ map_layout = html.Div(
                 html.Div(
                     [
                         html.H4("Geospatial Activity Map"),
-                        html.P("Utilize either counts or a heat map visualization for comprehensive insights into Mobi bike-sharing station usage patterns."),
+                        html.P("A dynamic map visualizing Mobi bike-sharing station activity in Vancouver, displaying either individual markers or a heatmap representing station activity."),
                         dbc.Row(
                             [
                                 # Column for the first dropdown (View)
