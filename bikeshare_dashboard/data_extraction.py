@@ -21,7 +21,7 @@ def bikeshare_data():
                     dfs.append(df)  # Append the DataFrame to the list
                     break  # Break the loop if reading is successful
                 except UnicodeDecodeError:
-                    print(f"Error decoding file {filename} with encoding {encoding}. Trying another encoding...")
+                    pass
 
     # Concatenate all DataFrames in the list into one
     combined_df = pd.concat(dfs, ignore_index=True)

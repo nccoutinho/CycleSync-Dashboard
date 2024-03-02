@@ -6,6 +6,9 @@ import altair as alt
 from datetime import date
 import os
 import calendar
+import requests
+from io import BytesIO
+from PIL import Image
 import folium
 from folium.plugins import HeatMap
 
@@ -117,121 +120,89 @@ server = app.server
 # Title
 app.title = 'Bikeshare Dashboard'
 
-# HEADER
-header = html.Div(
-    id="app-header",
-    children=[
-        html.H1(
-            "Bikeshare Dashboard",
-            style={
-                "display": "inline",
-                "font-size": "1.5em",
-                "margin-left": "1.8px",
-                "color": "white",  # Set font color to white
-                "background-color": "#D80808",  # Set background color to red
-                "padding": "10px"  # Add padding for better appearance
-            }
-        )
-    ],
-    style={"align": "center", "margin-left": 15}
-)
 
-# SIDEBAR
-sidebar = dbc.Col(
-    [
-        header,
-        html.Div(style={"height": "20px"}),
-        dbc.Nav(
-            [
-                dbc.NavItem(dbc.NavLink("Dashboard", href="/dashboard")),
-                dbc.NavItem(dbc.NavLink("Trends", href="/trends")),
-                dbc.NavItem(dbc.NavLink("Map", href="/map")),
-            ],
-            vertical=True,
-            pills=True,
-            className="mb-3",
-        ),
-    ],
-    width=2.1,
-    style={"background-color": "#f8f9fa", "height": "100vh", "position": "fixed", "padding-top": "20px"},
-)
 
-map_layout = html.Div(
+app.layout = html.Div(
     [
-        dcc.Location(id='url', refresh=False),  # Location component to track the URL
-        sidebar,
+        dcc.Location(id='map-url', refresh=False),  # Location component to track the URL
+        #header,
         html.Div(
             [
                 html.Hr(),
                 html.Div(
                     [
-                        html.H6("Page / ", style={'display': 'inline'}),
-                        html.H3("Geospatial Activity Map"),
+                        html.H4("Geospatial Activity Map"),
                         html.P("Utilize either counts or a heat map visualization for comprehensive insights into Mobi bike-sharing station usage patterns."),
-                        html.Span(id='map-container', style={'font-weight': 'bold'})
-                    ],
-                    className='top-bar',
-                    style={'margin-bottom': '20px'}  # Add vertical space between the sidebar and top bar
-                ),
-                dbc.Row(
-                    [
-                        dbc.Col(
+                        dbc.Row(
                             [
-                                # Dropdown to choose the plot type.
-                                html.Div([
-                                    html.H5("View:"),
-                                    dcc.Dropdown(
-                                        id='plot-type-dropdown',
-                                        options=[
-                                            {'label': 'Marker Plot', 'value': 'marker plot'},
-                                            {'label': 'Density Plot', 'value': 'density plot'}
-                                        ],
-                                        value='marker plot',
-                                        multi = False,
-                                        clearable=False
-                                    )
-                                ]),
-                                html.Div(),
-                                # Dropdown to choose bike type.
-                                html.Div([
-                                    html.H5("Bike Type:"),
-                                    dcc.Dropdown(
-                                        id='bike-type-dropdown',
-                                        options=[
-                                            {'label': 'Electric', 'value': 'electric'},
-                                            {'label': 'Classic', 'value': 'classic'},
-                                            {'label': 'Both', 'value': 'both'}
-                                        ],
-                                        value = 'both',
-                                        multi = False,
-                                        clearable=False
-                                    )
-                                ])
-                            ],
-                            width=2,
-                            style={'margin-right': '20px'}
+                                # Column for the first dropdown (View)
+                                dbc.Col(
+                                    [   
+                                        html.Label('View:', style={'font-weight':'bold'}),
+                                        dcc.Dropdown(
+                                            id='plot-type-dropdown',
+                                            options=[
+                                                {'label': 'Marker Plot', 'value': 'marker plot'},
+                                                {'label': 'Density Plot', 'value': 'density plot'}
+                                            ],
+                                            value='marker plot',
+                                            multi=False,
+                                            clearable=False,
+                                            style={'width': '100%'}  # Set width for the dropdown
+                                        ),
+                                    ],
+                                    width=2,
+                                    style={'margin-right': '20px', 'margin-bottom': '20px'}  # Add spacing between dropdowns
+                                ),
+                                # Column for the second dropdown (Bike Type)
+                                dbc.Col(
+                                    [
+                                        html.Label('Bike Type:', style={'font-weight':'bold'}),
+                                        dcc.Dropdown(
+                                            id='bike-type-dropdown',
+                                            options=[
+                                                {'label': 'Electric', 'value': 'electric'},
+                                                {'label': 'Classic', 'value': 'classic'},
+                                                {'label': 'Both', 'value': 'both'}
+                                            ],
+                                            value='both',
+                                            multi=False,
+                                            clearable=False,
+                                            style={'width': '100%'}  # Set width for the dropdown
+                                        ),
+                                    ],
+                                    width=2
+                                )
+                            ]
                         ),
-                        # Range slider for month
-                        dbc.Col(
+                        html.Div(id='map-container', style={'font-weight': 'bold'}),
+                        dbc.Row(
                             [
-                                dcc.RangeSlider(
-                                    id='map-month-range-slider',
-                                    marks=marks,
-                                    min=0,
-                                    max=len(months) - 1,
-                                    step=1,
-                                    value=[0, len(months) - 1]
+                                dbc.Col(
+                                    [
+                                        dcc.RangeSlider(
+                                            id='map-month-range-slider',
+                                            marks=marks,
+                                            min=0,
+                                            max=len(months) - 1,
+                                            step=1,
+                                            value=[0, len(months) - 1]
+                                        )
+                                    ],
+                                    style={'margin-top': '20px'}  # Add spacing
                                 )
                             ],
-                            style={'margin-top': '20px'}
+                            justify="center",  # Center justify the row
+                            style={'margin-top': '20px'}  # Add vertical space between dropdowns and slider
                         ),
                     ],
-                    justify="center",
-                    style={'margin-top': '20px'}  # Add vertical space between top bar and sort tables/map_plot
+                    className='top-bar',
+                    style={'margin-bottom': '20px', 'margin-top': '20px'}  # Adjusted styles
                 ),
+                
                 html.Hr()
             ],
-            style={'margin': '0', 'margin-left': '220px', 'padding-left': '20px'}  # Adjusted styles for better alignment
+            style={'margin': '0', 'padding-left': '20px', 'padding-right': '20px'}  # Adjusted styles for better alignment
         ),
     ]
 )
@@ -322,7 +293,7 @@ def update_map(value, bike_type, plot_type):
             folium.Marker(
                 location=location,
                 icon=folium.Icon(icon='bicycle', prefix='fa', color='red'),
-                tooltip=f"{name}: {info}"
+                tooltip=f"{name}<br>Activity: {info}"
             ).add_to(map_vancouver)
 
         # Save the map to HTML and return it
@@ -340,4 +311,4 @@ def update_map(value, bike_type, plot_type):
 
 
 if __name__ == '__main__':
-    app.run_server(debug=True, port=8053) 
+    app.run_server(debug=True, port=8059) 
