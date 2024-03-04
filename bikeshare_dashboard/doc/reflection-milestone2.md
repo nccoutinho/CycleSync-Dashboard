@@ -25,3 +25,13 @@ In developing the CycleSync Bikeshare Dashboard, we successfully implemented sev
    2. **Enhanced Station Analyses:**
 
       While the current version highlights the busiest stations, future improvements could involve more detailed station analyses, including information on station availability, popular bike models, and station utilization patterns throughout the day.
+
+**Reflection on Dashboard Performance:**
+
+   1. **Strengths:**
+
+      The dashboard effectively provides users with a snapshot of bikeshare patterns in Vancouver, offering insights into popular ride durations, frequently used stations, temporal variations, and geospatial activity. Moreover, the use of the Dash framework contributes to a responsive and visually appealing user interface, facilitating a seamless navigation experience.
+
+   2. **Limitations:**
+
+      The lack of real-time data updates may impact the dashboard's ability to reflect the most recent bikeshare trends. Implementing automatic data refresh mechanisms would address this limitation.
