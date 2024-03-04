@@ -16,3 +16,12 @@ In developing the CycleSync Bikeshare Dashboard, we successfully implemented sev
 
       Implemented diverse visualizations to present bikeshare insights in a clear and engaging manner. Ride statistics showcase key metrics such as the total number of rides, average ride duration, and maximum distance covered. Station analyses provide information on the busiest stations, temporal trends reveal patterns over different time intervals, and geospatial activity maps allow users to visually identify areas with the most bike activity.
 
+**Known Limitations and Areas in Development:**
+
+   1. **Real-Time Data Updates:**
+
+      The dashboard currently lacks real-time data updates, and data is loaded at the time of initialization. Implementing real-time updates would enhance the dashboard's responsiveness and ensure that users receive the most recent bikeshare information.
+
+   2. **Enhanced Station Analyses:**
+
+      While the current version highlights the busiest stations, future improvements could involve more detailed station analyses, including information on station availability, popular bike models, and station utilization patterns throughout the day.
