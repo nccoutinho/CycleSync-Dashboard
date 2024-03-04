@@ -5,7 +5,7 @@ import os
 
 def bikeshare_data():
     # Path to the folder containing your files
-    folder_path = '../dataset'
+    folder_path = '../data'
 
     # Initialize an empty list to store DataFrames
     dfs = []
@@ -69,7 +69,7 @@ def bikeshare_data():
     combined_df = combined_df[~combined_df['Departure station'].isin(values_to_remove)]
     combined_df = combined_df[~combined_df['Return station'].isin(values_to_remove)]
 
-    dfc = pd.read_csv('../dataset/coordinates/station_coordinates.csv')
+    dfc = pd.read_csv('../data/coordinates/station_coordinates.csv')
     dfc.drop(columns=['comments'], inplace=True)
     
     return combined_df, dfc
