@@ -481,7 +481,7 @@ trends_layout = html.Div(
                     [
                          dbc.Col(
                             [
-                                html.H5("Bike Type:"),
+                                html.Label('Bike Type:', style={'font-weight':'bold'}),
                                 sort_table_1,
                             ],
                             width=2,
@@ -489,7 +489,7 @@ trends_layout = html.Div(
                         ),
                         dbc.Col(
                             [
-                                html.H5("Membership Type:"),
+                                html.Label('Membership Type:', style={'font-weight':'bold'}),
                                 sort_table_2
                             ],
                             width=2,
