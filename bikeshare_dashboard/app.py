@@ -618,7 +618,7 @@ def update_chart1(selected_bike, selected_membership, selected_season):
         x='Month',
         y='Bike Count',
         line_shape='linear',
-        color_discrete_sequence=['yellow'],
+        color_discrete_sequence=['#ffd300'],
         hover_data={'Month': True, 'Bike Count': True, 'Season': True} 
     )
 
@@ -726,7 +726,7 @@ def update_chart2(selected_bike, selected_membership, selected_season):
         x='Month',
         y='Average Covered Distance (m)',
         line_shape='linear',
-        color_discrete_sequence=['yellow'],
+        color_discrete_sequence=['#ffd300'],
         hover_data={'Month': True, 'Average Covered Distance (m)': True, 'Season': True}  # Add 'Season' to hover
     )
 
