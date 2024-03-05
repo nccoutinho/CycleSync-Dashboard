@@ -11,7 +11,6 @@ from datetime import date
 import calendar
 import folium
 from folium.plugins import HeatMap
-from data_extraction import bikeshare_data
 
 alt.data_transformers.disable_max_rows()
 
@@ -1010,4 +1009,4 @@ app.layout = html.Div([
 
 
 if __name__ == '__main__':
-    app.run_server(debug=True, port=8074) 
+    app.run_server() 
