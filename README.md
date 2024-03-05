@@ -1,5 +1,7 @@
 # DATA551-Project-Group 7
 
+Heroku App: (https://cyclesync-5545a9885611.herokuapp.com/)
+
 The **Bikeshare Dashboard** project aims to transform bikeshare system management through an innovative, data-driven platform. With a focus on the Mobi by Rogers Bikeshare system in Vancouver, the dashboard serves as a strategic compass for stakeholders, providing timely insights into user behavior, operational trends, and marketing opportunities.
 
 The sketch was created on Figma, utilizing icons sourced from the Noun Project and Icon Finder. Our Dashboard comprises three pages. The initial page displays comprehensive bike-sharing data, including station and ride counts, maximum duration, and distance, among other details. The trends page features two interactive line plots based on count and average distance, highlighting every season as one hovers over it, with filters for bike type and membership type. Lastly, the map page includes two maps showcasing bike concentration at each station, toggle-selectable, with filters for bike type and station name. One map displays bike concentration using a heatmap, while the other utilizes markers to indicate the count of bikes at each station.
