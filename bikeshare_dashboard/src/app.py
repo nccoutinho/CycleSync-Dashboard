@@ -28,7 +28,7 @@ app = dash.Dash(
 server = app.server
 
 # Title
-app.title = 'Bikeshare Dashboard'
+app.title = 'CycleSync'
 
 # --------------------------------------
 # HEADER
@@ -93,6 +93,17 @@ marks = {
     11: {'label': 'Dec'}
 }
 
+# ---------------DATE FILTER--------------------
+date_picker = dcc.DatePickerRange(
+    id="calendar",
+    min_date_allowed=date(2023, 1, 1),
+    max_date_allowed=date(2023, 12, 31),
+    start_date=date(2023, 1, 1),
+    end_date=date(2023, 12, 31),
+    start_date_placeholder_text="Start Date",
+    end_date_placeholder_text="End Date",
+    clearable=True
+)
 
 # ---------------ROW 1-----------------------
 
