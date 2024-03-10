@@ -767,7 +767,15 @@ trends_layout = html.Div(
             [
                 html.Hr(),
                 dbc.Row(
-                    [
+                    [   
+                        dbc.Col(
+                            [
+                                html.Label('View Type:', style={'font-weight':'bold'}),
+                                sort_table_3,
+                            ],
+                            width=2,
+                            style={'margin-right': '20px'}  # Add horizontal space between top bar and sort tables
+                        ),
                          dbc.Col(
                             [
                                 html.Label('Bike Type:', style={'font-weight':'bold'}),
@@ -795,15 +803,8 @@ trends_layout = html.Div(
                     [
                         dbc.Col(
                             [
-                                html.H4("Average Bike Departures by Season and Month", style={"margin-bottom": "20px", "text-align": "center"}),
-                                dcc.Graph(id='trend-plot1', figure={}),
-                            ],
-                            width=6  # Adjust the width based on your design
-                        ),
-                        dbc.Col(
-                            [
-                                html.H4("Average Covered Distance by Season and Month", style={"margin-bottom": "20px", "text-align": "center"}),
-                                dcc.Graph(id='trend-plot2', figure={}),
+                                html.H4(id='trends-title', style={"margin-bottom": "20px"}),
+                                dcc.Graph(id='trend-plot', figure={}),
                             ],
                             width=6  # Adjust the width based on your design
                         ),
@@ -820,12 +821,17 @@ trends_layout = html.Div(
 )
 
 @app.callback(
-    Output('trend-plot1', 'figure'),
+   [Output('trend-plot', 'figure'),
+     Output('trends-title', 'children'),
+     Output('trends-url', 'pathname'),
+     Output('trends-url', 'search')],
     [Input('table_filter_2', 'value'),
      Input('table_filter_1', 'value'),
      Input('table_filter_3','value'),
-     Input('season_range_slider', 'value')]
+     Input('season_range_slider', 'value')
+     ]
 )
+
 def update_chart(selected_bike, selected_membership, selected_view, selected_season):
 
     start_season, end_season = selected_season
@@ -913,21 +919,41 @@ def update_chart(selected_bike, selected_membership, selected_view, selected_sea
             hover_data={'Month': True, 'Bike Count': True, 'Season': True} 
         )
 
+        fig_winter.update_traces(name='Winter')
+        fig_summer.update_traces(name='Summer')
+        fig_fall.update_traces(name='Fall')
+        fig_spring.update_traces(name='Spring')
+
 
         # Combine the line plots
-        fig = fig_winter.add_traces(fig_spring.data)
-        fig.add_traces(fig_summer.data)
-        fig.add_traces(fig_fall.data)
+        fig = go.Figure()
+        # fig.add_traces(fig_winter.data)
+        # fig.add_traces(fig_spring.data)
+        # fig.add_traces(fig_summer.data)
+        # fig.add_traces(fig_fall.data)
 
-
-        # Update layout
+        for f in  [fig_winter, fig_spring, fig_summer, fig_fall]:
+            for trace in f.data:
+                fig.add_trace(trace)
+        
         fig.update_layout(
-            yaxis_title='Average Bike Departure Count',
-            xaxis = dict(
+        yaxis_title='Average Bike Departure Count',
+        xaxis = dict(
                 title=None
+            ),
+            legend=dict(
+                title='Season',  # Legend title
+                orientation="h",  # Horizontal layout
+                yanchor='bottom',
+                y=1.02,
+                xanchor='right',
+                x=1
+                # traceorder='reversed',  # Reverse the order of legend items
+                # itemsizing='constant'  # Keep legend item size constant
             )
         )
-        return {'data': fig['data'], 'layout': fig['layout']}
+        
+        title = "Average Bike Departures by Season and Month"
     
     else:
 
@@ -985,115 +1011,13 @@ def update_chart(selected_bike, selected_membership, selected_view, selected_sea
             )
         )
 
-    return {'data': fig['data'], 'layout': fig['layout']}
+        title = "Average Covered Distance by Season and Month"
 
-@app.callback(
-    Output('trend-plot2', 'figure'),
-    [Input('table_filter_2', 'value'),
-     Input('table_filter_1', 'value'),
-     Input('season_range_slider', 'value')]
-)
-
-# def update_chart2(selected_bike, selected_membership, selected_season):
-
-#     start_season, end_season = selected_season
-    
-#     # Check for Bike Type selected
-#     if selected_bike == 'electric':
-#         # Filter data for 'Electric bike'
-#         df = combined_df[combined_df['Electric bike'] == True]
-#     elif selected_bike == 'classic':
-#         df = combined_df[combined_df['Electric bike'] == False]
-#     else:
-#         df = combined_df
-
-#     if 'all' not in selected_membership:
-#         df = df[df['Membership type'].isin([m for m in selected_membership])]
-    
-#     # Define custom sort order for months
-#     month_order = ['Dec', 'Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov']
-    
-#     # Filter data based on selected months
-#     selected_months = []
-#     for season_index in range(start_season, end_season + 1):
-#         start_month_index = season_index * 3
-#         end_month_index = start_month_index + 2
-#         selected_months.extend(month_order[start_month_index:end_month_index + 1])
-
-#     df = df[df['Month'].isin(selected_months)]
-
-#     # Group by season, then by month, and calculate average count of bike departures
-#     seasonal_bike_count = df.groupby(['Season', 'Month']).size().reset_index(name='Bike Count')
-#     average_counts = seasonal_bike_count.groupby(['Month', 'Season'])['Bike Count'].mean().reset_index()
-
-#     # Group by season, then by month, and calculate average covered distance of bike trips
-#     seasonal_bike_distance = df.groupby(['Season', 'Month'])['Covered distance (m)'].mean().reset_index(name='Average Covered Distance (m)')
-
-    
-
-#     # Sort the DataFrame by the 'Month' column using the custom order
-#     average_counts = average_counts.loc[average_counts['Month'].isin(month_order)]
-#     average_counts['Month'] = pd.Categorical(average_counts['Month'], categories=month_order, ordered=True)
-#     average_counts = average_counts.sort_values(by='Month')
-
-#     # Sort the DataFrame by the 'Month' column using the custom order
-#     seasonal_bike_distance = seasonal_bike_distance.loc[seasonal_bike_distance['Month'].isin(month_order)]
-#     seasonal_bike_distance['Month'] = pd.Categorical(seasonal_bike_distance['Month'], categories=month_order, ordered=True)
-#     seasonal_bike_distance = seasonal_bike_distance.sort_values(by='Month')
+    pathname = f"/trends/{selected_view.lower()}"  # Update the pathname based on the selected view
+    search = f"selected_bike={selected_bike}&selected_membership={selected_membership}&selected_view={selected_view}&selected_season={selected_season}"  # Update the search based on user selections
 
 
-#     # Create separate line plots for each season
-#     fig_winter = px.line(
-#         seasonal_bike_distance[seasonal_bike_distance['Month'].isin(['Dec', 'Jan', 'Feb', 'Mar'])],
-#         x='Month',
-#         y='Average Covered Distance (m)',
-#         line_shape='linear',
-#         color_discrete_sequence=['blue'],
-#         hover_data={'Month': True, 'Average Covered Distance (m)': True, 'Season': True}  # Add 'Season' to hover
-#     )
-
-#     fig_spring = px.line(
-#         seasonal_bike_distance[seasonal_bike_distance['Month'].isin(['Mar', 'Apr', 'May', 'Jun'])],
-#         x='Month',
-#         y='Average Covered Distance (m)',
-#         line_shape='linear',
-#         color_discrete_sequence=['green'],
-#         hover_data={'Month': True, 'Average Covered Distance (m)': True, 'Season': True}  # Add 'Season' to hover
-#     )
-
-#     fig_summer = px.line(
-#         seasonal_bike_distance[seasonal_bike_distance['Month'].isin(['Jun', 'Jul', 'Aug', 'Sep'])],
-#         x='Month',
-#         y='Average Covered Distance (m)',
-#         line_shape='linear',
-#         color_discrete_sequence=['red'],
-#         hover_data={'Month': True, 'Average Covered Distance (m)': True, 'Season': True}  # Add 'Season' to hover
-#     )
-
-#     fig_fall = px.line(
-#         seasonal_bike_distance[seasonal_bike_distance['Month'].isin(['Sep', 'Oct', 'Nov'])],
-#         x='Month',
-#         y='Average Covered Distance (m)',
-#         line_shape='linear',
-#         color_discrete_sequence=['#ffd300'],
-#         hover_data={'Month': True, 'Average Covered Distance (m)': True, 'Season': True}  # Add 'Season' to hover
-#     )
-
-#     # Combine the line plots
-#     fig = fig_winter.add_traces(fig_spring.data)
-#     fig.add_traces(fig_summer.data)
-#     fig.add_traces(fig_fall.data)
-
-#     # Update layout
-#     fig.update_layout(
-#         yaxis_title='Average Covered Distance (m)',
-#         xaxis = dict(
-#             title=None
-#         )
-#     )
-    
-#     return {'data': fig['data'], 'layout': fig['layout']}
-
+    return {'data': fig['data'], 'layout': fig['layout']}, title, pathname, search
 
 
 map_layout = html.Div(
