@@ -642,6 +642,12 @@ def update_first_col_cards(start_date, end_date):
 
     return [num_stations_card, space_div, top_end_stations_card]
 
+# Set up callbacks/backend
+@app.callback(
+     Output('second-col-cards', 'children'),
+     [Input('calendar', 'start_date'),
+     Input('calendar', 'end_date')]
+)
 
 trends_layout = html.Div(
     [
