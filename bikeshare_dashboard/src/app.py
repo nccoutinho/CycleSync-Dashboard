@@ -483,12 +483,14 @@ dashboard_layout = html.Div(
                         dbc.Col(
                             [active_stations, html.Div(style={'height': '20px'}), common_end_station],
                             width=5,
-                            style={'margin-top': '10px', 'padding-left': '30px', 'padding-right': '20px'}
+                            style={'margin-top': '10px', 'padding-left': '30px', 'padding-right': '20px'},
+                            id='first-col-cards'
                         ),
                         dbc.Col(
                             [pie_chart, html.Div(style={'height': '20px'}), trip_day],
                             width=5,
-                            style={'margin-top': '10px', 'padding-left': '55px', 'padding-right': '30px'}
+                            style={'margin-top': '10px', 'padding-left': '55px', 'padding-right': '30px'},
+                            id='second-col-cards'
                         )
                     ],
                     style={'margin-top': '20px'}
