@@ -649,6 +649,108 @@ def update_first_col_cards(start_date, end_date):
      Input('calendar', 'end_date')]
 )
 
+def update_second_col_cards(start_date, end_date):
+    # Filter data based on selected date range
+    filtered_df = combined_df[(combined_df['Departure'].notnull()) & (combined_df['Departure'] >= start_date) & (combined_df['Departure'] <= end_date)]
+
+    counts_series = filtered_df['Membership type'].value_counts()
+    index_list = counts_series.index.tolist()
+    counts_list = counts_series.tolist()
+
+    labels = index_list[:18]
+    labels.append('Others')
+    values = counts_list[:18]
+    values.append(sum(counts_list[18:]))
+
+    total_count = sum(values)
+
+    fig2 = go.Figure(data=[go.Pie(labels=labels, values=values, hole=0.5, textinfo='none', marker=dict(colors=px.colors.sequential.Reds[::-1]))])
+
+    fig2.add_annotation(text='Number of Rides<br>' + str(total_count), showarrow=False, font=dict(size=15), x=0.5, y=0.5)
+
+    fig2.update_layout(showlegend=False)
+
+    # Count trips by day of the week
+    trips_by_day = filtered_df['Day of Week'].value_counts()
+
+    # Sort days of the week
+    sorted_days = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday']
+    trips_by_day = trips_by_day.reindex(sorted_days)
+
+    # Define cards
+    pie_chart_card = dbc.Card(
+        id="rides-by-membership-type",
+        children=[
+            dbc.CardBody(
+                [
+                    dbc.Col(
+                        [
+                            html.H1("Rides by Membership Type", style={"font-size": "1.5em"}),
+                            dcc.Graph(
+                                figure=fig2
+                                )
+                        ],
+                        width=12  # Adjust the width as needed
+                    )
+                ],
+                style={"display": "flex", "flex-direction": "column", "justify-content": "center"}
+            )
+        ],
+        className="mb-3",
+        style={
+            "width": "900px",
+            "height": "510px",
+            "margin-left": "auto",
+            "border": "1px solid lightgray",
+            "box-shadow": "0px 1px 4px 0px rgba(0, 0, 0, 0.1)"
+        }
+    )
+
+    trip_day_card = dbc.Card(
+        id="trips-by-day-bar",
+        children=[
+                    dbc.Col(
+                        [
+                            html.H1("Trips by Day of the Week", style={"font-size": "1.5em", "padding-top": "18px", "padding-left": "18px"}),
+                            dcc.Graph(
+                                id='trips-by-day-bar',
+                                figure={
+                                    'data': [
+                                        {'x': trips_by_day.index, 
+                                        'y': trips_by_day.values, 
+                                        'type': 'bar', 
+                                        'name': 'Trips', 
+                                        'marker': {'color': 'indianred'},
+                                        'hovertemplate': 'Day: %{x}<br>Trips: %{y:,.0f}'},
+                                    ],
+                                    'layout': {
+                                        'xaxis': {'title': 'Day of the Week'},
+                                        'yaxis': {'title': 'Trips'},
+                                        'width': 870,
+                                        'height': 305
+                                    }
+                                }
+                            )
+                        ],
+                        width=12  # Adjust the width as needed
+                    )
+                ],
+        className="mb-3",
+        style={
+            "width": "900px",
+            "height": "360px",
+            "margin-left": "auto",
+            "border": "1px solid lightgray",
+            "box-shadow": "0px 1px 4px 0px rgba(0, 0, 0, 0.1)"
+        }
+    )
+
+    # Add space between the cards
+    space_div = html.Div(style={'height': '20px'})
+
+    return [pie_chart_card, space_div, trip_day_card]
+
+
 trends_layout = html.Div(
     [
         dcc.Location(id='trends-url', refresh=False),  # Location component to track the URL
