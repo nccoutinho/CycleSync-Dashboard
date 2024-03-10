@@ -247,11 +247,11 @@ def generate_card(title, content, icon, id):
 
 
 
-no_of_rides = generate_card("No. of rides", rides_count, "fas fa-bicycle")
-avg_temperature = generate_card("Average temperature", average_departure_temperature, "fas fa-hourglass")
-max_distance = generate_card("Maximum distance", max_covered_distance_kilometers, "fas fa-road")
-busiest_station = generate_card("Busiest station", busiest_station_departure[5:], "fas fa-building")
-busiest_day = generate_card("Busiest day", busiest_day_weekly, "fas fa-calendar-alt")
+# no_of_rides = generate_card("No. of rides", rides_count, "fas fa-bicycle")
+# avg_temperature = generate_card("Average temperature", average_departure_temperature, "fas fa-hourglass")
+# max_distance = generate_card("Maximum distance", max_covered_distance_kilometers, "fas fa-road")
+# busiest_station = generate_card("Busiest station", busiest_station_departure[5:], "fas fa-building")
+# busiest_day = generate_card("Busiest day", busiest_day_weekly, "fas fa-calendar-alt")
 
 # SECOND ROW:
 active_stations = dbc.Card(
@@ -456,10 +456,25 @@ dashboard_layout = html.Div(
                         html.Span(id='current-page', style={'font-weight': 'bold'})
                     ],
                     className='top-bar',
-                    style={'margin-bottom': '20px', 'padding': '10px'}
+                    style={'margin-bottom': '5px', 'padding': '10px'}
                 ),
                 dbc.Row(
-                    [no_of_rides, avg_temperature, max_distance, busiest_station, busiest_day],
+                    [
+                        dbc.Col(
+                            [html.H6("Date Range:"), date_picker]
+                        )
+                    ],
+                    style={'margin-bottom': '40px', 'padding-left': '60px'}           
+                ),
+                dbc.Row(
+                    [
+                        generate_card("No. of rides", rides_count, "fas fa-bicycle", id="rides-count"),
+                        generate_card("Average temperature", average_departure_temperature, "fas fa-hourglass", id="average-temperature"),
+                        generate_card("Maximum distance", max_covered_distance_kilometers, "fas fa-road", id="max-covered-distance"),
+                        generate_card("Busiest station", busiest_station_departure, "fas fa-building", id="busiest-station"),
+                        generate_card("Busiest day", busiest_day_weekly, "fas fa-calendar-alt", id="busiest-day")
+                    ],
+                    id='first-row-cards',
                     justify="center",
                     style={'margin-top': '20px', 'padding-right': '90px'}
                 ),
