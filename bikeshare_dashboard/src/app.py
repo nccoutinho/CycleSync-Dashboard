@@ -205,7 +205,7 @@ fig.update_layout(
 # EMPTY CARDS / BOXES
 # FIRST ROW:
 # Define a function to generate card with icon
-def generate_card(title, content, icon):
+def generate_card(title, content, icon, id):
     return dbc.Card(
         [
             dbc.CardHeader(
@@ -226,7 +226,7 @@ def generate_card(title, content, icon):
                                         style={"background-color": "#D80808", "padding": "9px", "border-radius": "8px"}
                                     ),
                                 ],
-                                style={"display": "flex", "align-items": "center", "padding-left" : "5px"}
+                                style={"display": "flex", "align-items": "center", "padding-left": "5px"}
                             ),
                         ],
                         style={"display": "flex", "justify-content": "space-between"}
@@ -236,6 +236,7 @@ def generate_card(title, content, icon):
             ),
         ],
         className="mb-3",
+        id=id,  # Include the id argument here
         style={
             "width": "16%",
             "margin-left": "auto",
