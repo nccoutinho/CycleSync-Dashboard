@@ -557,6 +557,92 @@ def update_first_row_cards(start_date, end_date):
      Input('calendar', 'end_date')]
 )
 
+def update_first_col_cards(start_date, end_date):
+    # Filter data based on selected date range
+    filtered_df = combined_df[(combined_df['Departure'].notnull()) & (combined_df['Departure'] >= start_date) & (combined_df['Departure'] <= end_date)]
+
+    num_stations = len(filtered_df['Departure station'].unique())
+
+    # Get the top 10 most common end trip stations
+    top_end_stations = filtered_df['Return station'].value_counts().nlargest(10)
+    
+    # Calculate percentages
+    percentage_values = (top_end_stations / top_end_stations.sum()) * 100
+
+    # Create a horizontal bar graph using Plotly Express
+    fig = px.bar(
+        top_end_stations,
+        orientation='h',
+        labels={'Return Station', 'Count'},
+        color=percentage_values.index,  # Use the stations as the color variable
+        text=percentage_values.round(2).astype(str) + '%'  # Display percentages as text on the bars
+    )
+    # Sort bars in descending order
+    fig.update_yaxes(categoryorder='total ascending')
+
+    # Remove color legend
+    fig.update_layout(showlegend=False)
+
+    # Remove y-axis and x-axis names
+    fig.update_layout(
+        xaxis_title='',
+        yaxis_title='',
+    )
+
+    # Define the card components
+    num_stations_card = dbc.Card(
+        id="num-stations",
+        children=[
+            dbc.CardBody(
+                [
+                    html.H1(f"{num_stations}", style={"color": "#D80808", "margin-bottom": "25px", "font-size": "5.8em"}),
+                    dbc.Col(html.H5("active stations around the city, accessible 24/7, 365 days a year."))
+                ],
+                style={"display": "flex", "flex-direction": "column", "justify-content": "center"}
+            )
+        ],
+        className="mb-3",
+        style={
+            "width": "660px",
+            "height": "240px",
+            "margin-left": "auto",
+            "border": "1px solid lightgray",
+            "box-shadow": "0px 1px 4px 0px rgba(0, 0, 0, 0.1)"
+        }
+    )
+
+    top_end_stations_card = dbc.Card(
+        id="top-end-stations",
+        children=[
+            dbc.Col(
+                [
+                    html.H1("Top 10 Most Used End Trip Stations", style={"font-size": "1.5em", "padding-top": "18px", "padding-left": "18px"}),
+                    dcc.Graph(
+                        figure=fig.update_traces(marker_color='indianred').update_layout(
+                            width=605,  
+                            height=572,  
+                        )
+                    )
+                ],
+                width=12  # Adjust the width as needed
+            )
+        ],
+        className="mb-3",
+        style={
+            "width": "660px",
+            "height": "630px",
+            "margin-left": "auto",
+            "border": "1px solid lightgray",
+            "box-shadow": "0px 1px 4px 0px rgba(0, 0, 0, 0.1)"
+        }
+    )
+
+    # Add space between the cards
+    space_div = html.Div(style={'height': '20px'})
+
+    return [num_stations_card, space_div, top_end_stations_card]
+
+
 trends_layout = html.Div(
     [
         dcc.Location(id='trends-url', refresh=False),  # Location component to track the URL
