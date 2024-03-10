@@ -809,7 +809,7 @@ trends_layout = html.Div(
                             width=6  # Adjust the width based on your design
                         ),
                     ],
-                    justify="center",  # Center the charts
+                    justify="left",  # Center the charts
                     style={'margin-top': '20px'}  # Add vertical space between the top bar and charts
                 ),
                 slider,
