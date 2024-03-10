@@ -550,6 +550,13 @@ def update_first_row_cards(start_date, end_date):
         generate_card("Busiest day", f"{busiest_day_weekly}", "fas fa-calendar-alt", id="busiest-day")
     )
 
+# Set up callbacks/backend
+@app.callback(
+     Output('first-col-cards', 'children'),
+     [Input('calendar', 'start_date'),
+     Input('calendar', 'end_date')]
+)
+
 trends_layout = html.Div(
     [
         dcc.Location(id='trends-url', refresh=False),  # Location component to track the URL
