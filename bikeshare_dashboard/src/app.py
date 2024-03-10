@@ -500,6 +500,17 @@ dashboard_layout = html.Div(
     ]
 )
 
+# Set up callbacks/backend
+@app.callback(
+     Output('first-row-cards', 'children'),
+    #  Output('average-temperature', 'children'),
+    #  Output('max-covered-distance', 'children'),
+    #  Output('busiest-station', 'children'),
+    #  Output('busiest-day', 'children'),
+     [Input('calendar', 'start_date'),
+     Input('calendar', 'end_date')]
+)
+
 trends_layout = html.Div(
     [
         dcc.Location(id='trends-url', refresh=False),  # Location component to track the URL
