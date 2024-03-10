@@ -442,6 +442,15 @@ slider = dcc.RangeSlider(
     value=[0, 3]  # Initial range from Winter to Fall
 )
 
+sort_table_3 = dcc.Dropdown(
+    id='table_filter_3',
+    options=[
+        {'label': 'Average Departure Count', 'value': 'departure count'},
+        {'label': 'Average Covered Distance (m)', 'value': 'covered distance'}
+   ],
+   value='departure count',
+   clearable=False
+)
 
 dashboard_layout = html.Div(
     [
@@ -814,9 +823,10 @@ trends_layout = html.Div(
     Output('trend-plot1', 'figure'),
     [Input('table_filter_2', 'value'),
      Input('table_filter_1', 'value'),
+     Input('table_filter_3','value'),
      Input('season_range_slider', 'value')]
 )
-def update_chart1(selected_bike, selected_membership, selected_season):
+def update_chart1(selected_bike, selected_membership, selected_view, selected_season):
 
     start_season, end_season = selected_season
     
