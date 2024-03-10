@@ -904,7 +904,7 @@ map_layout = html.Div(
                 
                 html.Hr()
             ],
-            style={'margin': '0', 'padding-left': '20px', 'padding-right': '20px'}  # Adjusted styles for better alignment
+            style={'margin': '0', 'padding-left': '80px', 'padding-right': '80px'}  # Adjusted styles for better alignment
         ),
     ]
 )
