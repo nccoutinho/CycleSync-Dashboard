@@ -511,6 +511,43 @@ dashboard_layout = html.Div(
      Input('calendar', 'end_date')]
 )
 
+def update_first_row_cards(start_date, end_date):
+    # Filter data based on selected date range
+    # filtered_df = combined_df[(combined_df['Departure'] >= start_date) & (combined_df['Departure'] <= end_date)]
+    filtered_df = combined_df[(combined_df['Departure'].notnull()) & (combined_df['Departure'] >= start_date) & (combined_df['Departure'] <= end_date)]
+
+    # Update metrics
+    rides_count = len(filtered_df)
+    average_departure_temperature = f"{round(filtered_df['Departure temperature (C)'].mean(),0)}°C"
+    
+    # Check if there are records in the filtered DataFrame before calculating the maximum covered distance
+    if not filtered_df.empty:
+        max_covered_distance = filtered_df['Covered distance (m)'].max()
+        max_covered_distance_kilometers = f"{round((max_covered_distance / 1000), 0)} km"
+    else:
+        max_covered_distance_kilometers = "No data available"
+
+    # Check if there are records in the filtered DataFrame before calculating the busiest station
+    if not filtered_df.empty:
+        station_counts = filtered_df['Departure station'].value_counts()
+        busiest_station_departure = station_counts.idxmax()
+    else:
+        busiest_station_departure = "No data available"  
+
+    # Check if there are records in the filtered DataFrame before calculating the busiest day
+    if not filtered_df.empty and not filtered_df['Day of Week'].empty:
+        busiest_day_weekly = filtered_df['Day of Week'].value_counts().idxmax()
+    else:
+        busiest_day_weekly = "No data available"  
+    
+    return (
+        generate_card("No. of rides", f"{rides_count}", "fas fa-bicycle", id="rides-count"),
+        generate_card("Average temperature", f"{average_departure_temperature}", "fas fa-hourglass", id="average-temperature"),
+        generate_card("Maximum distance", f"{max_covered_distance_kilometers}", "fas fa-road", id="max-covered-distance"),
+        generate_card("Busiest station", f"{busiest_station_departure}", "fas fa-building", id="busiest-station"),
+        generate_card("Busiest day", f"{busiest_day_weekly}", "fas fa-calendar-alt", id="busiest-day")
+    )
+
 trends_layout = html.Div(
     [
         dcc.Location(id='trends-url', refresh=False),  # Location component to track the URL
