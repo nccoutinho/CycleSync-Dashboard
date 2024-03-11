@@ -869,15 +869,29 @@ trends_layout = html.Div(
                             ],
                             width=6  # Adjust the width based on your design
                         ),
+                        dbc.Col(
+                            [
+                                departure_count_card,
+                                covered_distance_card
+                            ],
+                            style={
+                                "display": "flex",
+                                "flex-direction": "column",
+                                "justify-content": "center",  # Center horizontally
+                                "align-items": "flex-end",  # Align to the end vertically
+                                "height": "1000%",  # Ensure the container takes up the full height
+                                "margin": "175px"  # Add margin
+                            }
+                        ),
                     ],
-                    justify="left",  # Center the charts
+                    justify="left", 
                     style={'margin-top': '20px'}  # Add vertical space between the top bar and charts
                 ),
                 slider,
                 html.Hr()
             ],
             style={"margin": "0", "padding-left": "20px"}  # Adjusted styles for better alignment
-        ),
+        )
     ]
 )
 
