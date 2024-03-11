@@ -338,7 +338,7 @@ trip_day = dbc.Card(
                                      'y': trips_by_day.values, 
                                      'type': 'bar', 
                                      'name': 'Trips', 
-                                     'marker': {'color': 'indianred'},
+                                     'marker': {'color': '#D80808'},
                                      'hovertemplate': 'Day: %{x}<br>Trips: %{y:,.0f}'},
                                 ],
                                 'layout': {
@@ -627,7 +627,7 @@ def update_first_col_cards(start_date, end_date):
                 [
                     html.H1("Top 10 Most Common Bike Stations", style={"font-size": "1.5em", "padding-top": "18px", "padding-left": "18px"}),
                     dcc.Graph(
-                        figure=fig.update_traces(marker_color='indianred').update_layout(
+                        figure=fig.update_traces(marker_color='#D80808').update_layout(
                             width=605,  
                             height=572,  
                         )
