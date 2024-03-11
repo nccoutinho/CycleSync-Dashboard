@@ -1212,7 +1212,28 @@ map_layout = html.Div(
                                     width=2,
                                     style={'margin-right': '20px', 'margin-bottom': '20px'}  # Add spacing between dropdowns
                                 ),
-                                # Column for the second dropdown (Bike Type)
+                                # Column for the second dropdown (Frequent Stations)
+                                dbc.Col(
+                                    [
+                                        html.Label('Frequent Stations:', style={'font-weight':'bold'}),
+                                        dcc.Dropdown(
+                                            id='frequency-type-dropdown',
+                                            options=[
+                                                {'label': 'Top 5', 'value': 'top5'},
+                                                {'label': 'Top 10', 'value': 'top10'},
+                                                {'label': 'Top 20', 'value': 'top20'},
+                                                {'label': 'All', 'value': 'all'}
+                                            ],
+                                            value='all',
+                                            multi=False,
+                                            clearable=False,
+                                            style={'width': '100%'}  # Set width for the dropdown
+                                        ),
+                                    ],
+                                    width=2,
+                                    style={'margin-right': '20px', 'margin-bottom': '20px'}
+                                ),
+                                # Column for the third dropdown (Bike Type)
                                 dbc.Col(
                                     [
                                         html.Label('Bike Type:', style={'font-weight':'bold'}),
@@ -1270,10 +1291,11 @@ map_layout = html.Div(
     Output('map-container', 'children'),
     [Input('map-month-range-slider', 'value'),  # RangeSlider input
      Input('bike-type-dropdown', 'value'),
-     Input('plot-type-dropdown', 'value')]  # Dropdown input
+     Input('plot-type-dropdown', 'value'),
+     Input('frequency-type-dropdown', 'value')]  # Dropdown input
 )
 
-def update_map(value, bike_type, plot_type):
+def update_map(value, bike_type, plot_type, freq_type):
     
     # Filtering based on bike type
     if bike_type == 'electric':
@@ -1315,6 +1337,28 @@ def update_map(value, bike_type, plot_type):
     end_month = months[value[1]]
     filtered_marker_locations = [item for item in marker_locations if start_month <= item['Month'] <= end_month]
 
+    # Aggregate counts for all months
+    aggregated_counts = {}
+    for item in filtered_marker_locations:
+        if item['Station'] not in aggregated_counts:
+            aggregated_counts[item['Station']] = 0
+        aggregated_counts[item['Station']] += item['Total Count']
+
+    # Sort stations based on total count
+    sorted_stations = sorted(aggregated_counts.keys(), key=lambda x: aggregated_counts[x], reverse=True)
+    
+    # Filter stations based on frequency type
+    if freq_type == 'top5':
+        filtered_stations = sorted_stations[:5]
+    elif freq_type == 'top10':
+        filtered_stations = sorted_stations[:10]
+    elif freq_type == 'top20':
+        filtered_stations = sorted_stations[:20]
+    else:
+        filtered_stations = sorted_stations
+    
+    filtered_marker_locations = [item for item in filtered_marker_locations if item['Station'] in filtered_stations]
+    
     # Calculate total count
     total_count = sum(item['Total Count'] for item in filtered_marker_locations)
 
@@ -1377,4 +1421,4 @@ app.layout = html.Div([
 
 
 if __name__ == '__main__':
-    app.run_server(debug=True, port=8065)
+    app.run_server(debug=True, port=8075)
