@@ -800,7 +800,7 @@ covered_distance_card = dbc.Card(
                         html.Tr([html.Td(id="total-covered-distance")]),
                         html.Tr([html.Td(id="average-covered-distance")]),
                         html.Tr([html.Td(id="min-covered-distance")]),
-                        html.Tr([html.Td(id="max-covered-distance")]),
+                        html.Tr([html.Td(id="max-distance")]),
                     ],
                     style={"margin-top": "20px"}
                 ),
@@ -904,7 +904,7 @@ trends_layout = html.Div(
      Output('total-covered-distance', 'children'),
      Output('average-covered-distance', 'children'),
      Output('min-covered-distance', 'children'),
-     Output('max-covered-distance', 'children'),
+     Output('max-distance', 'children'),
      Output('covered_distance_card', 'style'),
      Output('departure_count_card', 'style')],
     [Input('table_filter_2', 'value'),
