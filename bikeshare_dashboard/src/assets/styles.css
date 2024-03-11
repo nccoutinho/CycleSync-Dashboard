@@ -23,3 +23,13 @@
 #map-month-range-slider .rc-slider-dot-active {  
   border-color: #D80808;
 }
+
+#calendar .CalendarDay{
+  background: #fd5c63;
+  color: #fff
+}
+
+#calendar .CalendarDay__selected {
+  background: #D80808;
+  color: #fff
+}
