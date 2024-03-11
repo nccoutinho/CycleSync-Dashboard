@@ -367,7 +367,7 @@ common_end_station = dbc.Card(
     [
                 dbc.Col(
                     [
-                        html.H1("Top 10 Most Used End Trip Stations", style={"font-size": "1.5em", "padding-top": "18px", "padding-left": "18px"}),
+                        html.H1("Top 10 Most Common Bike Stations", style={"font-size": "1.5em", "padding-top": "18px", "padding-left": "18px"}),
                         dcc.Graph(
                             figure=fig.update_traces(marker_color='indianred').update_layout(
                                 width=605,  
@@ -625,7 +625,7 @@ def update_first_col_cards(start_date, end_date):
         children=[
             dbc.Col(
                 [
-                    html.H1("Top 10 Most Used End Trip Stations", style={"font-size": "1.5em", "padding-top": "18px", "padding-left": "18px"}),
+                    html.H1("Top 10 Most Common Bike Stations", style={"font-size": "1.5em", "padding-top": "18px", "padding-left": "18px"}),
                     dcc.Graph(
                         figure=fig.update_traces(marker_color='indianred').update_layout(
                             width=605,  
