@@ -32,5 +32,13 @@
 
 #calendar .CalendarDay__selected {
   background: #D80808;
+  border: 1px double #D80808;
   color: #fff
 }
+
+#calendar .CalendarDay__selected_span {
+  background: #D80808;
+  border: 1px double #D80808;
+  color: #fff
+}
+
