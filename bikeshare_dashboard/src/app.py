@@ -881,6 +881,87 @@ trends_layout = html.Div(
     ]
 )
 
+# Callback function to update covered distance card based on the selected view type
+@app.callback(
+    [Output('total-trips', 'children'),
+     Output('average-trips', 'children'),
+     Output('min-trips', 'children'),
+     Output('max-trips', 'children'),
+     Output('total-covered-distance', 'children'),
+     Output('average-covered-distance', 'children'),
+     Output('min-covered-distance', 'children'),
+     Output('max-covered-distance', 'children'),
+     Output('covered_distance_card', 'style'),
+     Output('departure_count_card', 'style')],
+    [Input('table_filter_2', 'value'),
+     Input('table_filter_1', 'value'),
+     Input('table_filter_3', 'value'),
+     Input('season_range_slider', 'value')]  
+)
+
+def update_card(selected_bike, selected_membership, selected_view, selected_season):
+
+    start_season, end_season = selected_season
+    
+    # Check for Bike Type selected
+    if selected_bike == 'electric':
+        # Filter data for 'Electric bike'
+        df = combined_df[combined_df['Electric bike'] == True]
+    elif selected_bike == 'classic':
+        df = combined_df[combined_df['Electric bike'] == False]
+    else:
+        df = combined_df
+
+    if 'all' not in selected_membership:
+        df = df[df['Membership type'].isin([m for m in selected_membership])]
+    
+    season_indicator = ['Dec', 'Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov']
+    # Filter data based on selected months
+    selected_months = []
+    for season_index in range(start_season, end_season + 1):
+        start_month_index = season_index * 3
+        end_month_index = start_month_index + 2
+        selected_months.extend(season_indicator[start_month_index:end_month_index + 1])
+
+    df = df[df['Month'].isin(selected_months)]
+
+    # Group by season, then by month, and calculate average count of bike departures
+    seasonal_bike_count = df.groupby(['Season', 'Month']).size().reset_index(name='Bike Count')
+    average_counts = seasonal_bike_count.groupby(['Month', 'Season'])['Bike Count'].mean().reset_index()
+
+    # Group by season, then by month, and calculate total and average covered distance of bike trips
+    seasonal_total_distance = df.groupby(['Season', 'Month'])['Covered distance (m)'].sum().reset_index(name='Total Covered Distance (m)')
+    seasonal_bike_distance = df.groupby(['Season', 'Month'])['Covered distance (m)'].mean().reset_index(name='Average Covered Distance (m)')
+
+    # Define custom sort order for months
+    month_order = ['Dec', 'Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov']
+
+    # Sort the DataFrame by the 'Month' column using the custom order
+    average_counts = average_counts.loc[average_counts['Month'].isin(month_order)]
+    average_counts['Month'] = pd.Categorical(average_counts['Month'], categories=month_order, ordered=True)
+    average_counts = average_counts.sort_values(by='Month')
+
+    # Sort the DataFrame by the 'Month' column using the custom order
+    seasonal_bike_distance = seasonal_bike_distance.loc[seasonal_bike_distance['Month'].isin(month_order)]
+    seasonal_bike_distance['Month'] = pd.Categorical(seasonal_bike_distance['Month'], categories=month_order, ordered=True)
+    seasonal_bike_distance = seasonal_bike_distance.sort_values(by='Month')
+
+    if selected_view == 'departure count':
+        total_trips = seasonal_bike_count['Bike Count'].sum()
+        average_trips = round(average_counts['Bike Count'].mean(), 2)
+        min_trips = seasonal_bike_count['Bike Count'].min()
+        max_trips = seasonal_bike_count['Bike Count'].max()
+
+        return f"Total Trips: {total_trips}", f"Average Trips: {average_trips}", f"Minimum Trips: {min_trips}", f"Maximum Trips: {max_trips}", "", "", "", "", {'display': 'none'}, {'display': 'flex'}
+    
+    else:
+        total_covered_distance = round(seasonal_total_distance['Total Covered Distance (m)'].sum(), 2)
+        average_covered_distance = round(seasonal_bike_distance['Average Covered Distance (m)'].mean(), 2)
+        min_covered_distance = round(seasonal_total_distance['Total Covered Distance (m)'].min(), 2)
+        max_covered_distance = round(seasonal_total_distance['Total Covered Distance (m)'].max(), 2)
+
+        return "", "", "", "", f"Total Covered Distance: {total_covered_distance}", f"Average Covered Distance: {average_covered_distance}", f"Minimum Covered Distance: {min_covered_distance}", f"Maximum Covered Distance: {max_covered_distance}", {'display': 'flex'}, {'display': 'none'}
+
 @app.callback(
    [Output('trend-plot', 'figure'),
      Output('trends-title', 'children'),
