@@ -42,3 +42,9 @@
   color: #fff
 }
 
+#calendar .CalendarDay__selected_span:active, .CalendarDay__selected_span:hover {
+  background: #db5959;
+  border: 1px double #db5959;
+  color: #fff
+}
+
