@@ -20,7 +20,7 @@ app = dash.Dash(
     external_stylesheets=[
         "https://fonts.googleapis.com/css2?family=Assistant:wght@300&display=swap",
         dbc.icons.FONT_AWESOME,
-        dbc.themes.JOURNAL
+        dbc.themes.JOURNAL,
     ]
 )
 
@@ -1349,7 +1349,6 @@ def update_map(value, bike_type, plot_type):
 dashboard_tab = dcc.Tab(label='Overview', children=[dashboard_layout])
 trends_tab = dbc.Tab(label="Trends", children=[trends_layout])
 map_tab = dbc.Tab(label="Map", children=[map_layout])
-
 
 app.layout = html.Div([
     header,
