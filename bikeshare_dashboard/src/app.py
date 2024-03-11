@@ -729,7 +729,7 @@ def update_second_col_cards(start_date, end_date):
                                         'y': trips_by_day.values, 
                                         'type': 'bar', 
                                         'name': 'Trips', 
-                                        'marker': {'color': 'indianred'},
+                                        'marker': {'color': '#D80808'},
                                         'hovertemplate': 'Day: %{x}<br>Trips: %{y:,.0f}'},
                                     ],
                                     'layout': {
