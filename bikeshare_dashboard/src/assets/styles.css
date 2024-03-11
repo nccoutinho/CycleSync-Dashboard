@@ -26,6 +26,7 @@
 
 #calendar .CalendarDay{
   background: #FFCCCB;
+  border: 1px double #FFCCCB;
   color: #fff
 }
 
