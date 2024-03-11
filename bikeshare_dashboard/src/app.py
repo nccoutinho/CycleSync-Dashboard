@@ -20,7 +20,7 @@ app = dash.Dash(
     external_stylesheets=[
         "https://fonts.googleapis.com/css2?family=Assistant:wght@300&display=swap",
         dbc.icons.FONT_AWESOME,
-        dbc.themes.JOURNAL,
+        dbc.themes.JOURNAL
     ]
 )
 
@@ -439,7 +439,7 @@ slider = dcc.RangeSlider(
     min=0,
     max=3,
     step=1,
-    value=[0, 3]  # Initial range from Winter to Fall
+    value=[0, 3]
 )
 
 sort_table_3 = dcc.Dropdown(
@@ -1349,6 +1349,7 @@ def update_map(value, bike_type, plot_type):
 dashboard_tab = dcc.Tab(label='Overview', children=[dashboard_layout])
 trends_tab = dbc.Tab(label="Trends", children=[trends_layout])
 map_tab = dbc.Tab(label="Map", children=[map_layout])
+
 
 app.layout = html.Div([
     header,
