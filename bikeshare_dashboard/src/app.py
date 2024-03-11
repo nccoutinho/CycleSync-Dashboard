@@ -598,6 +598,10 @@ def update_first_col_cards(start_date, end_date):
         yaxis_title='',
     )
 
+    fig.update_traces(
+    hovertemplate='<b>Activity:</b> %{x}'
+)
+
     # Define the card components
     num_stations_card = dbc.Card(
         id="num-stations",
