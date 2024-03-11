@@ -760,6 +760,38 @@ def update_second_col_cards(start_date, end_date):
     return [pie_chart_card, space_div, trip_day_card]
 
 
+
+covered_distance_card = dbc.Card(
+    [
+        dbc.CardBody(
+            [
+                html.H4("Covered Distance Summary", className="card-title", style={"margin-bottom": "20px"}),
+                
+                html.Table(
+                    [
+                        html.Tr([html.Td(id="total-covered-distance")]),
+                        html.Tr([html.Td(id="average-covered-distance")]),
+                        html.Tr([html.Td(id="min-covered-distance")]),
+                        html.Tr([html.Td(id="max-covered-distance")]),
+                    ],
+                    style={"margin-top": "20px"}
+                ),
+            ],
+            style={"display": "flex", "flex-direction": "column", "justify-content": "center"}
+        )
+    ],
+    id='covered_distance_card',
+    className="mb-3",
+    style={
+        "width": "200%",
+        "height": "300px",  
+        "border": "1px solid lightgray",
+        "box-shadow": "0px 1px 4px 0px rgba(0, 0, 0, 0.1)",
+        "text-align": "center",  # Center the content horizontally
+        "margin": "auto"  # Center the card within the column
+    }
+)
+
 trends_layout = html.Div(
     [
         dcc.Location(id='trends-url', refresh=False),  # Location component to track the URL
@@ -773,7 +805,7 @@ trends_layout = html.Div(
                                 html.Label('View Type:', style={'font-weight':'bold'}),
                                 sort_table_3,
                             ],
-                            width=2,
+                            width=3,
                             style={'margin-right': '20px'}  # Add horizontal space between top bar and sort tables
                         ),
                          dbc.Col(
