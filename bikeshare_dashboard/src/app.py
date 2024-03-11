@@ -16,7 +16,7 @@ alt.data_transformers.disable_max_rows()
 
 # Setup app and layout/frontend
 app = dash.Dash(
-    __name__,
+    __name__, assets_folder='assets',
     external_stylesheets=[
         "https://fonts.googleapis.com/css2?family=Assistant:wght@300&display=swap",
         dbc.icons.FONT_AWESOME,
