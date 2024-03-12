@@ -25,9 +25,9 @@
 }
 
 #calendar .CalendarDay{
-  background: #FFCCCB;
-  border: 1px double #FFCCCB;
-  color: #fff
+  background: #ffffff;
+  border: 1px double #ffffff;
+  color: #212121
 }
 
 #calendar .CalendarDay__selected {
@@ -37,14 +37,14 @@
 }
 
 #calendar .CalendarDay__selected_span {
-  background: #D80808;
-  border: 1px double #D80808;
+  background: #FFCCCB;
+  border: 1px double #FFCCCB;
   color: #fff
 }
 
-#calendar .CalendarDay__selected_span:active, .CalendarDay__selected_span:hover {
+/* #calendar .CalendarDay__selected_span:active, .CalendarDay__selected_span:hover {
   background: #db5959;
   border: 1px double #db5959;
   color: #fff
-}
+} */
 
