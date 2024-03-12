@@ -102,7 +102,7 @@ date_picker = dcc.DatePickerRange(
     end_date=date(2023, 12, 31),
     start_date_placeholder_text="Start Date",
     end_date_placeholder_text="End Date",
-    clearable=True
+    clearable=False
 )
 
 # ---------------ROW 1-----------------------
