@@ -1196,6 +1196,7 @@ def update_chart(selected_bike, selected_membership, selected_view, selected_sea
 )
 
 def update_polar(selected_bike, selected_membership, selected_season):
+    
     start_season, end_season = selected_season
     
     # Check for Bike Type selected
@@ -1210,8 +1211,7 @@ def update_polar(selected_bike, selected_membership, selected_season):
     if 'all' not in selected_membership:
         df = df[df['Membership type'].isin([m for m in selected_membership])]
     
-    # Define custom sort order for months
-    month_order = ['Dec', 'Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov']    
+    month_order = ['Dec', 'Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov']
     
     # Filter data based on selected months
     selected_months = []
@@ -1225,7 +1225,7 @@ def update_polar(selected_bike, selected_membership, selected_season):
     # Aggregate duration by month
     monthly_duration = df.groupby('Month')['Duration (sec.)'].sum()
     
-    months = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec']
+    months = df['Month'].unique()
     theta = np.linspace(0, 2 * np.pi, len(months), endpoint=False)
     width = (2 * np.pi) / len(months)
     duration = monthly_duration.values
