@@ -654,7 +654,7 @@ def update_first_col_cards(start_date, end_date):
         className="mb-3",
         style={
             "width": "660px",
-            "height": "640px",
+            "height": "649px",
             "margin-left": "auto",
             "border": "1px solid lightgray",
             "box-shadow": "0px 1px 4px 0px rgba(0, 0, 0, 0.1)"
