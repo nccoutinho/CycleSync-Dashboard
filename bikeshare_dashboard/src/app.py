@@ -654,7 +654,7 @@ def update_first_col_cards(start_date, end_date):
         className="mb-3",
         style={
             "width": "660px",
-            "height": "630px",
+            "height": "640px",
             "margin-left": "auto",
             "border": "1px solid lightgray",
             "box-shadow": "0px 1px 4px 0px rgba(0, 0, 0, 0.1)"
@@ -662,7 +662,7 @@ def update_first_col_cards(start_date, end_date):
     )
 
     # Add space between the cards
-    space_div = html.Div(style={'height': '20px'})
+    space_div = html.Div(style={'height': '15px'})
 
     
     return [num_stations_card, space_div, top_end_stations_card]
@@ -787,7 +787,7 @@ def update_second_col_cards(start_date, end_date):
     # )
 
     # Add space between the cards
-    space_div = html.Div(style={'height': '20px'})
+    space_div = html.Div(style={'height': '30px'})
 
     return [mobideo, space_div, pie_chart_card]
 
