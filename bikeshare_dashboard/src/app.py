@@ -768,25 +768,26 @@ departure_count_card = dbc.Card(
     [
         dbc.CardBody(
             [
-                html.H4("Departure Count Summary", className="card-title", style={"margin-bottom": "20px"}),
+                html.H4("Departure Count Summary", className="card-title", style={"margin-bottom": "20px", "text-align": "center"}),
                 
                 html.Table(
                     [
-                        html.Tr([html.Td(id="total-trips")]),
-                        html.Tr([html.Td(id="average-trips")]),
-                        html.Tr([html.Td(id="min-trips")]),
-                        html.Tr([html.Td(id="max-trips")]),
+                        html.Tr([html.Td(id="total-trips", style={"text-align": "center"})]),
+                        html.Tr([html.Td(id="average-trips", style={"text-align": "center"})]),
+                        html.Tr([html.Td(id="min-trips", style={"text-align": "center"})]),
+                        html.Tr([html.Td(id="max-trips", style={"text-align": "center"})]),
                     ],
                     style={"margin-top": "20px"}
                 ),
             ],
-            style={"display": "flex", "flex-direction": "column", "justify-content": "center"}
+            style={"height": "300px", "width": "500px", "display": "flex", "flex-direction": "column", "justify-content": "center"}
         )
     ],
     id='departure_count_card',
     className="mb-3",
     style={
-        "width": "1000%",  
+        #"width": "1000px",
+        #"height": "1000px",  
         "border": "1px solid lightgray",
         "box-shadow": "0px 1px 4px 0px rgba(0, 0, 0, 0.1)",
         "text-align": "center",  # Center the content horizontally
