@@ -143,12 +143,7 @@ num_stations = len(combined_df['Departure station'].unique())
 
 # ---------------PLOT 2-----------------------
 
-# Count trips by day of the week
-trips_by_day = combined_df['Day of Week'].value_counts()
 
-# Sort days of the week
-sorted_days = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday']
-trips_by_day = trips_by_day.reindex(sorted_days)
 
 # ---------------PLOT 3-----------------------
 
@@ -324,44 +319,44 @@ pie_chart = dbc.Card(
 # )
 
 
-# THIRD ROW:
-trip_day = dbc.Card(
-    [
-                dbc.Col(
-                    [
-                        html.H1("Trips by Day of the Week", style={"font-size": "1.5em", "padding-top": "18px", "padding-left": "18px"}),
-                        dcc.Graph(
-                            id='trips-by-day-bar',
-                            figure={
-                                'data': [
-                                    {'x': trips_by_day.index, 
-                                     'y': trips_by_day.values, 
-                                     'type': 'bar', 
-                                     'name': 'Trips', 
-                                     'marker': {'color': '#D80808'},
-                                     'hovertemplate': 'Day: %{x}<br>Trips: %{y:,.0f}'},
-                                ],
-                                'layout': {
-                                    'xaxis': {'title': 'Day of the Week'},
-                                    'yaxis': {'title': 'Trips'},
-                                    'width': 870,
-                                    'height': 305
-                                }
-                            }
-                        )
-                    ],
-                    width=12  # Adjust the width as needed
-                )
-            ],
-    className="mb-3",
-    style={
-        "width": "900px",
-        "height": "360px",
-        "margin-left": "auto",
-        "border": "1px solid lightgray",
-        "box-shadow": "0px 1px 4px 0px rgba(0, 0, 0, 0.1)"
-    }
-)
+# # THIRD ROW:
+# trip_day = dbc.Card(
+#     [
+#                 dbc.Col(
+#                     [
+#                         html.H1("Trips by Day of the Week", style={"font-size": "1.5em", "padding-top": "18px", "padding-left": "18px"}),
+#                         dcc.Graph(
+#                             id='trips-by-day-bar',
+#                             figure={
+#                                 'data': [
+#                                     {'x': trips_by_day.index, 
+#                                      'y': trips_by_day.values, 
+#                                      'type': 'bar', 
+#                                      'name': 'Trips', 
+#                                      'marker': {'color': '#D80808'},
+#                                      'hovertemplate': 'Day: %{x}<br>Trips: %{y:,.0f}'},
+#                                 ],
+#                                 'layout': {
+#                                     'xaxis': {'title': 'Day of the Week'},
+#                                     'yaxis': {'title': 'Trips'},
+#                                     'width': 870,
+#                                     'height': 305
+#                                 }
+#                             }
+#                         )
+#                     ],
+#                     width=12  # Adjust the width as needed
+#                 )
+#             ],
+#     className="mb-3",
+#     style={
+#         "width": "900px",
+#         "height": "360px",
+#         "margin-left": "auto",
+#         "border": "1px solid lightgray",
+#         "box-shadow": "0px 1px 4px 0px rgba(0, 0, 0, 0.1)"
+#     }
+# )
 
 common_end_station = dbc.Card(
     [
@@ -496,7 +491,7 @@ dashboard_layout = html.Div(
                             id='first-col-cards'
                         ),
                         dbc.Col(
-                            [pie_chart, html.Div(style={'height': '20px'}), trip_day],
+                            [pie_chart, html.Div(style={'height': '20px'})],
                             width=5,
                             style={'margin-top': '10px', 'padding-left': '55px', 'padding-right': '30px'},
                             id='second-col-cards'
@@ -878,6 +873,8 @@ trends_layout = html.Div(
                                 dcc.Graph(id='trend-plot', figure={}),
                                 html.H4('Total Duration (hour) by Month', style={"margin-bottom": "20px"}),
                                 dcc.Graph(id='polar-plot', figure={}),
+                                html.H4('Trips by Day of the Week', style={"margin-bottom": "20px"}),
+                                dcc.Graph(id='bar-plot', figure={}),
                             ],
                             width=6  # Adjust the width based on your design
                         ),
@@ -1265,6 +1262,65 @@ def update_polar(selected_bike, selected_membership, selected_season):
     )
     
     return [fig]
+
+@app.callback(
+   Output('bar-plot', 'figure'),
+   [Input('table_filter_2', 'value'),
+    Input('table_filter_1', 'value'),
+    Input('season_range_slider', 'value')]
+)
+def create_day_of_week_bar_plot(selected_bike, selected_membership, selected_season):
+    # Assuming you have the appropriate filtering logic for selected_bike, selected_membership, selected_season
+    # Modify the logic below accordingly
+
+    # Filter data based on selected criteria
+    if selected_bike == 'electric':
+        # Filter data for 'Electric bike'
+        filtered_df = combined_df[combined_df['Electric bike'] == True]
+    elif selected_bike == 'classic':
+        filtered_df = combined_df[combined_df['Electric bike'] == False]
+    else:
+        filtered_df = combined_df
+
+    if 'all' not in selected_membership:
+        filtered_df = filtered_df[filtered_df['Membership type'].isin(selected_membership)]
+
+    # Assuming selected_season is a tuple with start and end seasons
+    start_season, end_season = selected_season
+    
+    season_indicator = ['Dec', 'Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov']
+    # Filter data based on selected seasons
+    selected_months = []
+    for season_index in range(start_season, end_season + 1):
+        start_month_index = season_index * 3
+        end_month_index = start_month_index + 2
+        selected_months.extend(season_indicator[start_month_index:end_month_index + 1])
+
+    filtered_df = filtered_df[filtered_df['Month'].isin(selected_months)]
+
+    # Count trips by day of the week
+    trips_by_day = filtered_df['Day of Week'].value_counts()
+
+    # Sort days of the week
+    sorted_days = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday']
+    trips_by_day = trips_by_day.reindex(sorted_days)
+
+    # Create a bar plot using Plotly Express
+    fig = px.bar(
+        x=trips_by_day.index,
+        y=trips_by_day.values,
+        color_discrete_sequence=['#D80808'],  # You can use color to represent the count if you want
+        labels={'x': 'Day of the Week', 'y': 'Trips'}
+    )
+
+    # Update layout if needed
+    fig.update_layout(
+        xaxis=dict(title='Day of the Week'),
+        yaxis=dict(title='Number of Trips'),
+    )
+
+    return fig
+
 
 
 
