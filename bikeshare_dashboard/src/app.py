@@ -658,9 +658,7 @@ def update_first_col_cards(start_date, end_date):
 
 # Set up callbacks/backend
 @app.callback(
-     [Output('second-col-cards', 'children'),
-      Output('second-col-cards', 'pathname'),
-      Output('second-col-cards', 'search')],
+     Output('second-col-cards', 'children'),
      [Input('calendar', 'start_date'),
       Input('calendar', 'end_date')]
 )
@@ -764,14 +762,7 @@ def update_second_col_cards(start_date, end_date):
     # Add space between the cards
     space_div = html.Div(style={'height': '20px'})
 
-    # Convert dates to string format (assuming they are in string format, adjust accordingly)
-    start_date_str = str(start_date)
-    end_date_str = str(end_date)
-
-    # Construct a safe pathname using urllib.parse.quote
-    pathname = f"/overview/{quote(start_date_str)}_{quote(end_date_str)}"
-
-    return [pie_chart_card, space_div, trip_day_card], pathname
+    return [pie_chart_card, space_div, trip_day_card]
 
 departure_count_card = dbc.Card(
     [
