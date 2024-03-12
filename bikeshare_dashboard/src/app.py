@@ -1036,15 +1036,36 @@ def update_card(selected_bike, selected_membership, selected_view, selected_seas
         min_trips = seasonal_bike_count['Bike Count'].min()
         max_trips = seasonal_bike_count['Bike Count'].max()
 
-        return f"Total Trips: {total_trips}", f"Average Trips: {average_trips}", f"Minimum Trips: {min_trips}", f"Maximum Trips: {max_trips}", "", "", "", "", {'display': 'none'}, {'display': 'flex'}
+        return (
+            f"Total Trips: {total_trips} trips",
+            f"Average Trips: {average_trips} trips",
+            f"Minimum Trips: {min_trips} trips",
+            f"Maximum Trips: {max_trips} trips",
+            "", "", "", "", 
+            {'display': 'none'}, {'display': 'flex'}
+        )
     
     else:
-        total_covered_distance = round(seasonal_total_distance['Total Covered Distance (m)'].sum(), 2)
-        average_covered_distance = round(seasonal_bike_distance['Average Covered Distance (m)'].mean(), 2)
-        min_covered_distance = round(seasonal_total_distance['Total Covered Distance (m)'].min(), 2)
-        max_covered_distance = round(seasonal_total_distance['Total Covered Distance (m)'].max(), 2)
+        # total_covered_distance = round(seasonal_total_distance['Total Covered Distance (m)'].sum(), 2)
+        # average_covered_distance = round(seasonal_bike_distance['Average Covered Distance (m)'].mean(), 2)
+        # min_covered_distance = round(seasonal_total_distance['Total Covered Distance (m)'].min(), 2)
+        # max_covered_distance = round(seasonal_total_distance['Total Covered Distance (m)'].max(), 2)
 
-        return "", "", "", "", f"Total Covered Distance: {total_covered_distance}", f"Average Covered Distance: {average_covered_distance}", f"Minimum Covered Distance: {min_covered_distance}", f"Maximum Covered Distance: {max_covered_distance}", {'display': 'flex'}, {'display': 'none'}
+        total_covered_distance = round(seasonal_total_distance['Total Covered Distance (m)'].sum()/ 1000, 2)
+        average_covered_distance = round(seasonal_bike_distance['Average Covered Distance (m)'].mean()/ 1000, 2)
+        min_covered_distance = round(seasonal_total_distance['Total Covered Distance (m)'].min()/ 1000, 2)
+        max_covered_distance = round(seasonal_total_distance['Total Covered Distance (m)'].max()/ 1000, 2)
+
+        
+
+        return (
+            "", "", "", "", 
+            f"Total Covered Distance: {total_covered_distance} km",
+            f"Average Covered Distance: {average_covered_distance} km",
+            f"Minimum Covered Distance: {min_covered_distance} km",
+            f"Maximum Covered Distance: {max_covered_distance} km",
+            {'display': 'flex'}, {'display': 'none'}
+        )
 
 @app.callback(
    [Output('trend-plot', 'figure'),
@@ -1330,6 +1351,7 @@ def update_polar(selected_bike, selected_membership, selected_season):
     Input('table_filter_1', 'value'),
     Input('season_range_slider', 'value')]
 )
+
 def create_day_of_week_bar_plot(selected_bike, selected_membership, selected_season):
     # Assuming you have the appropriate filtering logic for selected_bike, selected_membership, selected_season
     # Modify the logic below accordingly
@@ -1365,7 +1387,7 @@ def create_day_of_week_bar_plot(selected_bike, selected_membership, selected_sea
     # Sort days of the week
     sorted_days = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday']
     trips_by_day = trips_by_day.reindex(sorted_days)
-
+    
     # Create a bar plot using Plotly Express
     fig = px.bar(
         x=trips_by_day.index,
@@ -1381,9 +1403,6 @@ def create_day_of_week_bar_plot(selected_bike, selected_membership, selected_sea
     )
 
     return fig
-
-
-
 
 map_layout = html.Div(
     [
