@@ -715,49 +715,49 @@ def update_second_col_cards(start_date, end_date):
         }
     )
 
-    trip_day_card = dbc.Card(
-        id="trips-by-day-bar",
-        children=[
-                    dbc.Col(
-                        [
-                            html.H1("Trips by Day of the Week", style={"font-size": "1.5em", "padding-top": "18px", "padding-left": "18px"}),
-                            dcc.Graph(
-                                id='trips-by-day-bar',
-                                figure={
-                                    'data': [
-                                        {'x': trips_by_day.index, 
-                                        'y': trips_by_day.values, 
-                                        'type': 'bar', 
-                                        'name': 'Trips', 
-                                        'marker': {'color': '#D80808'},
-                                        'hovertemplate': 'Day: %{x}<br>Trips: %{y:,.0f}'},
-                                    ],
-                                    'layout': {
-                                        'xaxis': {'title': 'Day of the Week'},
-                                        'yaxis': {'title': 'Trips'},
-                                        'width': 870,
-                                        'height': 305
-                                    }
-                                }
-                            )
-                        ],
-                        width=12  # Adjust the width as needed
-                    )
-                ],
-        className="mb-3",
-        style={
-            "width": "900px",
-            "height": "360px",
-            "margin-left": "auto",
-            "border": "1px solid lightgray",
-            "box-shadow": "0px 1px 4px 0px rgba(0, 0, 0, 0.1)"
-        }
-    )
+    # trip_day_card = dbc.Card(
+    #     id="trips-by-day-bar",
+    #     children=[
+    #                 dbc.Col(
+    #                     [
+    #                         html.H1("Trips by Day of the Week", style={"font-size": "1.5em", "padding-top": "18px", "padding-left": "18px"}),
+    #                         dcc.Graph(
+    #                             id='trips-by-day-bar',
+    #                             figure={
+    #                                 'data': [
+    #                                     {'x': trips_by_day.index, 
+    #                                     'y': trips_by_day.values, 
+    #                                     'type': 'bar', 
+    #                                     'name': 'Trips', 
+    #                                     'marker': {'color': '#D80808'},
+    #                                     'hovertemplate': 'Day: %{x}<br>Trips: %{y:,.0f}'},
+    #                                 ],
+    #                                 'layout': {
+    #                                     'xaxis': {'title': 'Day of the Week'},
+    #                                     'yaxis': {'title': 'Trips'},
+    #                                     'width': 870,
+    #                                     'height': 305
+    #                                 }
+    #                             }
+    #                         )
+    #                     ],
+    #                     width=12  # Adjust the width as needed
+    #                 )
+    #             ],
+    #     className="mb-3",
+    #     style={
+    #         "width": "900px",
+    #         "height": "360px",
+    #         "margin-left": "auto",
+    #         "border": "1px solid lightgray",
+    #         "box-shadow": "0px 1px 4px 0px rgba(0, 0, 0, 0.1)"
+    #     }
+    # )
 
     # Add space between the cards
     space_div = html.Div(style={'height': '20px'})
 
-    return [pie_chart_card, space_div, trip_day_card]
+    return [pie_chart_card, space_div]
 
 departure_count_card = dbc.Card(
     [
