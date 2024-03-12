@@ -859,8 +859,13 @@ trends_layout = html.Div(
                             style={'margin-right': '20px'}  # Add horizontal space between top bar and sort tables
                         ),
                         dbc.Col(
-                            width=9
-                        ),
+                            [
+                                html.Label('Select Range:', style={'font-weight':'bold'}),
+                                slider,  # Include your slider component here
+                            ],
+                            width=3,
+                            style={'margin-right': '20px'}  # Add horizontal space between top bar and sort tables
+                        )
                     ],
                     justify="start",
                     style={'margin-top': '20px'}  # Add vertical space between top bar and sort tables/map_plot
@@ -895,7 +900,6 @@ trends_layout = html.Div(
                     justify="left", 
                     style={'margin-top': '20px'}  # Add vertical space between the top bar and charts
                 ),
-                slider,
                 html.Hr()
             ],
             style={"margin": "0", "padding-left": "20px"}  # Adjusted styles for better alignment
@@ -1192,7 +1196,8 @@ def update_chart(selected_bike, selected_membership, selected_view, selected_sea
 )
 
 def update_polar(selected_bike, selected_membership, selected_season):
-
+    start_season, end_season = selected_season
+    
     # Check for Bike Type selected
     if selected_bike == 'electric':
         # Filter data for 'Electric bike'
@@ -1204,6 +1209,18 @@ def update_polar(selected_bike, selected_membership, selected_season):
 
     if 'all' not in selected_membership:
         df = df[df['Membership type'].isin([m for m in selected_membership])]
+    
+    # Define custom sort order for months
+    month_order = ['Dec', 'Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov']    
+    
+    # Filter data based on selected months
+    selected_months = []
+    for season_index in range(start_season, end_season + 1):
+        start_month_index = season_index * 3
+        end_month_index = start_month_index + 2
+        selected_months.extend(month_order[start_month_index:end_month_index + 1])
+
+    df = df[df['Month'].isin(selected_months)]
     
     # Aggregate duration by month
     monthly_duration = df.groupby('Month')['Duration (sec.)'].sum()
@@ -1248,6 +1265,7 @@ def update_polar(selected_bike, selected_membership, selected_season):
     )
     
     return [fig]
+
 
 
 map_layout = html.Div(
