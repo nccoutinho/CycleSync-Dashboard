@@ -1301,49 +1301,53 @@ def update_polar(selected_bike, selected_membership, selected_season):
 
     df = df[df['Month'].isin(selected_months)]
     
-    # Aggregate duration by month
-    monthly_duration = df.groupby('Month')['Duration (sec.)'].sum()
-    
-    months = df['Month'].unique()
-    theta = np.linspace(0, 2 * np.pi, len(months), endpoint=False)
-    width = (2 * np.pi) / len(months)
-    duration = monthly_duration.values
-    
-    fig = go.Figure()
-    
-    # Define a predefined color scheme for shades of red
-    red_colors = ['#FFEBEE', '#FFCDD2', '#EF9A9A', '#E57373', '#EF5350', '#F44336', '#E53935', '#D32F2F', '#C62828', '#B71C1C', '#FF8A80', '#FF5252']
-    
-    # Add bars to the plot
-    for i, (dur, month) in enumerate(zip(duration, months)):
-        fig.add_trace(go.Barpolar(
-            r=[dur],
-            theta=[i * (360 / len(months))],
-            width=width * 180 / np.pi,
-            hoverinfo='text',
-            hovertext=f"Total Duration: {round(dur/3600)} hours",
-            marker_color=red_colors[i % len(red_colors)],
-        ))
-    
-    # Update layout
-    fig.update_layout(
-        polar=dict(
-            radialaxis=dict(
-                visible=False,
+    # Check if there are rows after filtering by membership type
+    if not df.empty:
+        # Aggregate duration by month
+        monthly_duration = df.groupby('Month')['Duration (sec.)'].sum()
+        months = df['Month'].unique()
+        theta = np.linspace(0, 2 * np.pi, len(months), endpoint=False)
+        width = (2 * np.pi) / len(months)
+        duration = monthly_duration.values
+
+        fig = go.Figure()
+
+        # Define a predefined color scheme for shades of red
+        red_colors = ['#FFEBEE', '#FFCDD2', '#EF9A9A', '#E57373', '#EF5350', '#F44336', '#E53935', '#D32F2F', '#C62828', '#B71C1C', '#FF8A80', '#FF5252']
+
+        # Add bars to the plot
+        for i, (dur, month) in enumerate(zip(duration, months)):
+            fig.add_trace(go.Barpolar(
+                r=[dur],
+                theta=[i * (360 / len(months))],
+                width=width * 180 / np.pi,
+                hoverinfo='text',
+                hovertext=f"Total Duration: {round(dur/3600)} hours",
+                marker_color=red_colors[i % len(red_colors)],
+            ))
+
+        # Update layout
+        fig.update_layout(
+            polar=dict(
+                radialaxis=dict(
+                    visible=False,
+                ),
+                angularaxis=dict(
+                    tickmode='array',
+                    tickvals=[i * (360 / len(months)) for i in range(len(months))],
+                    ticktext=months,
+                ),
             ),
-            angularaxis=dict(
-                tickmode='array',
-                tickvals=[i * (360 / len(months)) for i in range(len(months))],
-                ticktext=months,
+            title=dict(
+                x=0.5,
             ),
-        ),
-        title=dict(
-            x=0.5,
-        ),
-        showlegend=False,
-    )
-    
-    return [fig]
+            showlegend=False,
+        )
+
+        return [fig]
+    else:
+        # Return an empty figure if there are no rows after filtering by membership type
+        return [go.Figure()]
 
 @app.callback(
    Output('bar-plot', 'figure'),
