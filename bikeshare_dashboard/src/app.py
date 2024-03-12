@@ -1469,7 +1469,7 @@ def update_map(value, bike_type, plot_type, freq_type):
 
     # Save the map to HTML and return it
     map_html = map_vancouver.get_root().render()
-    return html.Iframe(srcDoc=map_html, width='100%', height='600')
+    return html.Iframe(srcDoc=map_html, width='100%', height='600'), pathname, search
 
 
 dashboard_tab = dcc.Tab(label='Overview', children=[dashboard_layout])
