@@ -27,19 +27,19 @@
 #calendar .CalendarDay{
   background: #ffffff;
   border: 1px double #ffffff;
-  color: #212121
+  color: #000000
 }
 
 #calendar .CalendarDay__selected {
   background: #D80808;
   border: 1px double #D80808;
-  color: #fff
+  color: #ffffff
 }
 
 #calendar .CalendarDay__selected_span {
-  background: #FFCCCB;
-  border: 1px double #FFCCCB;
-  color: #fff
+  background: #e96e6c;
+  border: 1px double #e96e6c;
+  color: #ffffff
 }
 
 /* #calendar .CalendarDay__selected_span:active, .CalendarDay__selected_span:hover {
