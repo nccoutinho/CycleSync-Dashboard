@@ -383,6 +383,22 @@ common_end_station = dbc.Card(
     }
 )
 
+mobideo = html.Div([
+                    dbc.Card(
+                        dbc.CardBody(
+                            html.Div(
+                                html.Iframe(
+                                    src="https://www.youtube.com/embed/_CG7hpit4S0",
+                                    width="800",
+                                    height="345"
+                                ),
+                                style={"display": "flex", "flex-direction": "column", "justify-content": "center", "align-items": "center", "height": "100%"}
+                            )
+                        ),
+                        style={"width": "900px", "border": "1px solid lightgray", "box-shadow": "0px 1px 4px 0px rgba(0, 0, 0, 0.1)"}
+                    )
+                ])
+
 
 # TABLE FILTER
 sort_table_2 = dcc.Dropdown(
@@ -491,7 +507,7 @@ dashboard_layout = html.Div(
                             id='first-col-cards'
                         ),
                         dbc.Col(
-                            [pie_chart, html.Div(style={'height': '20px'})],
+                            [mobideo, html.Div(style={'height': '20px'}), pie_chart],
                             width=5,
                             style={'margin-top': '10px', 'padding-left': '55px', 'padding-right': '30px'},
                             id='second-col-cards'
@@ -714,6 +730,22 @@ def update_second_col_cards(start_date, end_date):
             "box-shadow": "0px 1px 4px 0px rgba(0, 0, 0, 0.1)"
         }
     )
+    
+    mobideo = html.Div([
+                    dbc.Card(
+                        dbc.CardBody(
+                            html.Div(
+                                html.Iframe(
+                                    src="https://www.youtube.com/embed/_CG7hpit4S0",
+                                    width="800",
+                                    height="345"
+                                ),
+                                style={"display": "flex", "flex-direction": "column", "justify-content": "center", "align-items": "center", "height": "100%"}
+                            )
+                        ),
+                        style={"width": "900px", "border": "1px solid lightgray", "box-shadow": "0px 1px 4px 0px rgba(0, 0, 0, 0.1)"}
+                    )
+                ])
 
     # trip_day_card = dbc.Card(
     #     id="trips-by-day-bar",
@@ -757,7 +789,7 @@ def update_second_col_cards(start_date, end_date):
     # Add space between the cards
     space_div = html.Div(style={'height': '20px'})
 
-    return [pie_chart_card, space_div]
+    return [mobideo, space_div, pie_chart_card]
 
 departure_count_card = dbc.Card(
     [
