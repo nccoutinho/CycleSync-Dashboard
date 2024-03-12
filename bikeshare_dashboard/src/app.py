@@ -67,7 +67,6 @@ header = html.Div(
 combined_df = pd.read_csv('../data/processed/mobi_data.csv')
 
 dfc = pd.read_csv('../data/coordinates/station_coordinates.csv')
-dfc.drop(columns=['comments'], inplace=True)
 
 vancouver_geojson = {
     "type": "Feature",
@@ -1320,7 +1319,7 @@ def update_map(value, bike_type, plot_type, freq_type):
 
     df2 = pd.merge(combined_counts, dfc, on = ['Station'])
 
-    total_counts_by_station = df2.groupby(['Station', 'Coordinates', 'Month'])['Total Count'].sum().reset_index(name='Total Count')
+    total_counts_by_station = df2.groupby(['Station', 'Coordinates', 'Link', 'Month'])['Total Count'].sum().reset_index(name='Total Count')
     
     # Obtain the coordinates of the markers.
     marker_locations = total_counts_by_station.to_dict(orient='records')
@@ -1375,11 +1374,16 @@ def update_map(value, bike_type, plot_type, freq_type):
             location = item["Coordinates"]
             name = item["Station"]
             info = int(item["Total Count"])
-            folium.Marker(
+            link = item["Link"]
+            marker = folium.Marker(
                 location=location,
                 icon=folium.Icon(icon='bicycle', prefix='fa', color='red'),
                 tooltip=f"{name}<br>Activity: {info}"
             ).add_to(map_vancouver)
+            
+            # Add JavaScript code to handle click event
+            marker.add_child(folium.Popup(f"<a href='{link}' target='_blank'>Go to {name}</a>"))
+            marker.add_to(map_vancouver)
 
         # Save the map to HTML and return it
         map_html = map_vancouver.get_root().render()
