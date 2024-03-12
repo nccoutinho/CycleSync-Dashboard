@@ -786,7 +786,8 @@ departure_count_card = dbc.Card(
         "border": "1px solid lightgray",
         "box-shadow": "0px 1px 4px 0px rgba(0, 0, 0, 0.1)",
         "text-align": "center",  # Center the content horizontally
-        "margin": "auto"  # Center the card within the column
+        "margin": "auto",  # Center the card within the column
+        "margin-top": "100px"
     }
 )
 
@@ -812,14 +813,17 @@ covered_distance_card = dbc.Card(
     id='covered_distance_card',
     className="mb-3",
     style={
-        #"width": "1000px",
-        #"height": "1000px",  
+        "width": "1000px",
+        "height": "1000px",  
         "border": "1px solid lightgray",
         "box-shadow": "0px 1px 4px 0px rgba(0, 0, 0, 0.1)",
         "text-align": "center",  # Center the content horizontally
-        "margin": "auto"  # Center the card within the column
+        "margin": "auto",  # Center the card within the column
+        "margin-top": "100px"
     }
 )
+
+
 
 trends_layout = html.Div(
     [
@@ -869,8 +873,12 @@ trends_layout = html.Div(
                     [
                         dbc.Col(
                             [
-                                html.H4(id='trends-title', style={"margin-bottom": "20px"}),
-                                dcc.Graph(id='trend-plot', figure={}),
+                                dbc.Card(
+                                    [
+                                        html.H4(id='trends-title', style={"font-size": "1.5em", "padding-top": "18px", "padding-left": "18px"}),
+                                        dbc.CardBody(dcc.Graph(id='trend-plot', figure={}))
+                                    ]
+                                )
                             ],
                             width=6  # Adjust the width based on your design
                         ),
@@ -885,23 +893,33 @@ trends_layout = html.Div(
                                 "justify-content": "center",  # Center horizontally
                                 "align-items": "center",  # Align to the end vertically
                                 "height": "1000%",  # Ensure the container takes up the full height
-                                "margin": "175px",  # Add margin
-                                "margin-top": "125px"
+                                "margin": "auto",  # Add margin
+                                "margin-top": "115px"
                             }
                         ),
                         dbc.Col(
                             [
-                                html.H4('Total Duration (hour) by Month', style={"margin-bottom": "20px"}),
-                                dcc.Graph(id='polar-plot', figure={}),
+                                dbc.Card(
+                                    [
+                                        html.H4('Total Duration (hour) by Month', style={"font-size": "1.5em", "padding-top": "18px", "padding-left": "18px"}),
+                                        dbc.CardBody(dcc.Graph(id='polar-plot', figure={}))
+                                    ]
+                                )
                             ],
-                            width=6  # Adjust the width based on your design
+                            width=6,
+                            style={"margin-top": "20px"}
                         ),
                         dbc.Col(
                             [
-                                html.H4('Trips by Day of the Week', style={"margin-bottom": "20px"}),
-                                dcc.Graph(id='bar-plot', figure={}),
+                                dbc.Card(
+                                    [
+                                        html.H4('Trips by Day of the Week', style={"font-size": "1.5em", "padding-top": "18px", "padding-left": "18px"}),
+                                        dbc.CardBody(dcc.Graph(id='bar-plot', figure={}))
+                                    ]
+                                )
                             ],
-                            width=6  # Adjust the width based on your design
+                            width=6,
+                            style={"margin-top": "20px"}  
                         ),
                     ],
                     justify="start", 
@@ -913,6 +931,7 @@ trends_layout = html.Div(
         )
     ]
 )
+
 
 # Callback function to update covered distance card based on the selected view type
 @app.callback(
