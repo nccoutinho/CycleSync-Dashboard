@@ -871,10 +871,6 @@ trends_layout = html.Div(
                             [
                                 html.H4(id='trends-title', style={"margin-bottom": "20px"}),
                                 dcc.Graph(id='trend-plot', figure={}),
-                                html.H4('Total Duration (hour) by Month', style={"margin-bottom": "20px"}),
-                                dcc.Graph(id='polar-plot', figure={}),
-                                html.H4('Trips by Day of the Week', style={"margin-bottom": "20px"}),
-                                dcc.Graph(id='bar-plot', figure={}),
                             ],
                             width=6  # Adjust the width based on your design
                         ),
@@ -893,8 +889,22 @@ trends_layout = html.Div(
                                 "margin-top": "125px"
                             }
                         ),
+                        dbc.Col(
+                            [
+                                html.H4('Total Duration (hour) by Month', style={"margin-bottom": "20px"}),
+                                dcc.Graph(id='polar-plot', figure={}),
+                            ],
+                            width=6  # Adjust the width based on your design
+                        ),
+                        dbc.Col(
+                            [
+                                html.H4('Trips by Day of the Week', style={"margin-bottom": "20px"}),
+                                dcc.Graph(id='bar-plot', figure={}),
+                            ],
+                            width=6  # Adjust the width based on your design
+                        ),
                     ],
-                    justify="left", 
+                    justify="start", 
                     style={'margin-top': '20px'}  # Add vertical space between the top bar and charts
                 ),
                 html.Hr()
