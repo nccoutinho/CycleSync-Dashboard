@@ -181,8 +181,13 @@ fig = px.bar(
     orientation='h',
     labels={'Return Station', 'Count'},
     color=percentage_values.index,  # Use the stations as the color variable
+    color_discrete_sequence=[
+                    '#8C0000', '#A50000', '#BF0000', '#D80000', '#F20000',
+                    '#FF3333', '#FF6666', '#FF9999', '#FFCCCC', '#FFFFFF'
+                ],
     text=percentage_values.round(2).astype(str) + '%'  # Display percentages as text on the bars
 )
+
 # Sort bars in descending order
 fig.update_yaxes(categoryorder='total ascending')
 
@@ -364,7 +369,7 @@ common_end_station = dbc.Card(
                     [
                         html.H1("Top 10 Most Common Bike Stations", style={"font-size": "1.5em", "padding-top": "18px", "padding-left": "18px"}),
                         dcc.Graph(
-                            figure=fig.update_traces(marker_color='indianred').update_layout(
+                            figure=fig.update_traces().update_layout(
                                 width=605,  
                                 height=572,  
                                 )
@@ -595,6 +600,10 @@ def update_first_col_cards(start_date, end_date):
         orientation='h',
         labels={'Return Station', 'Count'},
         color=percentage_values.index,  # Use the stations as the color variable
+        color_discrete_sequence=[
+                        '#8C0000', '#A50000', '#BF0000', '#D80000', '#F20000',
+                        '#FF3333', '#FF6666', '#FF9999', '#FFCCCC', '#FFFFFF'
+                    ],
         text=percentage_values.round(2).astype(str) + '%'  # Display percentages as text on the bars
     )
     # Sort bars in descending order
@@ -642,7 +651,7 @@ def update_first_col_cards(start_date, end_date):
                 [
                     html.H1("Top 10 Most Common Bike Stations", style={"font-size": "1.5em", "padding-top": "18px", "padding-left": "18px"}),
                     dcc.Graph(
-                        figure=fig.update_traces(marker_color='#D80808').update_layout(
+                        figure=fig.update_traces().update_layout(
                             width=605,  
                             height=572,  
                         )
