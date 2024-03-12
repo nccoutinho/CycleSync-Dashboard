@@ -653,13 +653,16 @@ def update_first_col_cards(start_date, end_date):
     # Add space between the cards
     space_div = html.Div(style={'height': '20px'})
 
+    
     return [num_stations_card, space_div, top_end_stations_card]
 
 # Set up callbacks/backend
 @app.callback(
-     Output('second-col-cards', 'children'),
+     [Output('second-col-cards', 'children'),
+      Output('second-col-cards', 'pathname'),
+      Output('second-col-cards', 'search')],
      [Input('calendar', 'start_date'),
-     Input('calendar', 'end_date')]
+      Input('calendar', 'end_date')]
 )
 
 def update_second_col_cards(start_date, end_date):
@@ -761,7 +764,14 @@ def update_second_col_cards(start_date, end_date):
     # Add space between the cards
     space_div = html.Div(style={'height': '20px'})
 
-    return [pie_chart_card, space_div, trip_day_card]
+    # Convert dates to string format (assuming they are in string format, adjust accordingly)
+    start_date_str = str(start_date)
+    end_date_str = str(end_date)
+
+    # Construct a safe pathname using urllib.parse.quote
+    pathname = f"/overview/{quote(start_date_str)}_{quote(end_date_str)}"
+
+    return [pie_chart_card, space_div, trip_day_card], pathname
 
 departure_count_card = dbc.Card(
     [
@@ -1358,7 +1368,7 @@ map_layout = html.Div(
 @app.callback(
     [Output('map-container', 'children'),
     Output('map-url', 'pathname'),
-     Output('map-url', 'search')],
+    Output('map-url', 'search')],
     [Input('map-month-range-slider', 'value'),  # RangeSlider input
      Input('bike-type-dropdown', 'value'),
      Input('plot-type-dropdown', 'value'),
