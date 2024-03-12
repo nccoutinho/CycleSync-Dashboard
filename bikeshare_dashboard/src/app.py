@@ -2,6 +2,7 @@ from dash import dash, dash_table, callback, html, dcc, Input, Output
 import dash_bootstrap_components as dbc
 import dash_mantine_components as dmc
 import pandas as pd
+import numpy as np
 import altair as alt
 import os
 import plotly.graph_objects as go
@@ -869,6 +870,8 @@ trends_layout = html.Div(
                             [
                                 html.H4(id='trends-title', style={"margin-bottom": "20px"}),
                                 dcc.Graph(id='trend-plot', figure={}),
+                                html.H4('Total Duration (hour) by Month', style={"margin-bottom": "20px"}),
+                                dcc.Graph(id='polar-plot', figure={}),
                             ],
                             width=6  # Adjust the width based on your design
                         ),
@@ -1177,6 +1180,72 @@ def update_chart(selected_bike, selected_membership, selected_view, selected_sea
 
 
     return {'data': fig['data'], 'layout': fig['layout']}, title, pathname, search
+
+@app.callback(
+   [Output('polar-plot', 'figure')],
+    [Input('table_filter_2', 'value'),
+     Input('table_filter_1', 'value'),
+     Input('season_range_slider', 'value')
+     ]
+)
+
+def update_polar(selected_bike, selected_membership, selected_season):
+
+    # Check for Bike Type selected
+    if selected_bike == 'electric':
+        # Filter data for 'Electric bike'
+        df = combined_df[combined_df['Electric bike'] == True]
+    elif selected_bike == 'classic':
+        df = combined_df[combined_df['Electric bike'] == False]
+    else:
+        df = combined_df
+
+    if 'all' not in selected_membership:
+        df = df[df['Membership type'].isin([m for m in selected_membership])]
+    
+    # Aggregate duration by month
+    monthly_duration = df.groupby('Month')['Duration (sec.)'].sum()
+    
+    months = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec']
+    theta = np.linspace(0, 2 * np.pi, len(months), endpoint=False)
+    width = (2 * np.pi) / len(months)
+    duration = monthly_duration.values
+    
+    fig = go.Figure()
+    
+    # Define a predefined color scheme for shades of red
+    red_colors = ['#FFEBEE', '#FFCDD2', '#EF9A9A', '#E57373', '#EF5350', '#F44336', '#E53935', '#D32F2F', '#C62828', '#B71C1C', '#FF8A80', '#FF5252']
+    
+    # Add bars to the plot
+    for i, (dur, month) in enumerate(zip(duration, months)):
+        fig.add_trace(go.Barpolar(
+            r=[dur],
+            theta=[i * (360 / len(months))],
+            width=width * 180 / np.pi,
+            hoverinfo='text',
+            hovertext=f"Total Duration: {round(dur/3600)} hours",
+            marker_color=red_colors[i % len(red_colors)],
+        ))
+    
+    # Update layout
+    fig.update_layout(
+        polar=dict(
+            radialaxis=dict(
+                visible=False,
+            ),
+            angularaxis=dict(
+                tickmode='array',
+                tickvals=[i * (360 / len(months)) for i in range(len(months))],
+                ticktext=months,
+            ),
+        ),
+        title=dict(
+            x=0.5,
+        ),
+        showlegend=False,
+    )
+    
+    return [fig]
 
 
 map_layout = html.Div(
