@@ -799,33 +799,32 @@ covered_distance_card = dbc.Card(
     [
         dbc.CardBody(
             [
-                html.H4("Covered Distance Summary", className="card-title", style={"margin-bottom": "20px"}),
+                html.H4("Covered Distance Summary", className="card-title", style={"margin-bottom": "20px", "text-align": "center"}),
                 
                 html.Table(
                     [
-                        html.Tr([html.Td(id="total-covered-distance")]),
-                        html.Tr([html.Td(id="average-covered-distance")]),
-                        html.Tr([html.Td(id="min-covered-distance")]),
-                        html.Tr([html.Td(id="max-distance")]),
+                        html.Tr([html.Td(id="total-covered-distance", style={"text-align": "center"})]),
+                        html.Tr([html.Td(id="average-covered-distance", style={"text-align": "center"})]),
+                        html.Tr([html.Td(id="min-covered-distance", style={"text-align": "center"})]),
+                        html.Tr([html.Td(id="max-distance", style={"text-align": "center"})]),
                     ],
                     style={"margin-top": "20px"}
                 ),
             ],
-            style={"display": "flex", "flex-direction": "column", "justify-content": "center"}
+            style={"height": "300px", "width": "500px", "display": "flex", "flex-direction": "column", "justify-content": "center"}
         )
     ],
     id='covered_distance_card',
     className="mb-3",
     style={
-        "width": "200%",
-        "height": "300px",  
+        #"width": "1000px",
+        #"height": "1000px",  
         "border": "1px solid lightgray",
         "box-shadow": "0px 1px 4px 0px rgba(0, 0, 0, 0.1)",
         "text-align": "center",  # Center the content horizontally
         "margin": "auto"  # Center the card within the column
     }
 )
-
 
 trends_layout = html.Div(
     [
@@ -886,9 +885,10 @@ trends_layout = html.Div(
                                 "display": "flex",
                                 "flex-direction": "column",
                                 "justify-content": "center",  # Center horizontally
-                                "align-items": "flex-end",  # Align to the end vertically
+                                "align-items": "center",  # Align to the end vertically
                                 "height": "1000%",  # Ensure the container takes up the full height
-                                "margin": "175px"  # Add margin
+                                "margin": "175px",  # Add margin
+                                "margin-top": "120px"
                             }
                         ),
                     ],
