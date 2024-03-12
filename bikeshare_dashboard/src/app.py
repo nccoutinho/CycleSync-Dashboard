@@ -439,7 +439,7 @@ slider = dcc.RangeSlider(
     min=0,
     max=3,
     step=1,
-    value=[0, 3]
+    value=[0, 3],
 )
 
 sort_table_3 = dcc.Dropdown(
