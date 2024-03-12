@@ -390,7 +390,7 @@ mobideo = html.Div([
                                 html.Iframe(
                                     src="https://www.youtube.com/embed/_CG7hpit4S0",
                                     width="800",
-                                    height="345"
+                                    height="340"
                                 ),
                                 style={"display": "flex", "flex-direction": "column", "justify-content": "center", "align-items": "center", "height": "100%"}
                             )
