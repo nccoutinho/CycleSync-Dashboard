@@ -888,7 +888,7 @@ trends_layout = html.Div(
                                 "align-items": "center",  # Align to the end vertically
                                 "height": "1000%",  # Ensure the container takes up the full height
                                 "margin": "175px",  # Add margin
-                                "margin-top": "120px"
+                                "margin-top": "125px"
                             }
                         ),
                     ],
