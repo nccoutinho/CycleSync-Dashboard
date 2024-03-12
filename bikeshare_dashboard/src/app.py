@@ -1408,29 +1408,28 @@ map_layout = html.Div(
                                 )
                             ]
                         ),
-                        html.Div(id='map-container', style={'font-weight': 'bold'}),
-                        dbc.Row(
-                            [
-                                dbc.Col(
-                                    [
-                                        dcc.RangeSlider(
-                                            id='map-month-range-slider',
-                                            marks=marks,
-                                            min=0,
-                                            max=len(months) - 1,
-                                            step=1,
-                                            value=[0, len(months) - 1]
-                                        )
-                                    ],
-                                    style={'margin-top': '20px'}  # Add spacing
+                        dbc.Card(
+                            dbc.CardBody(
+                                html.Div(id='map-container', style={'font-weight': 'bold'})
+                            ),
+                            style={'margin-top': '20px', 'padding': '15px', "border": "1px solid lightgray", "box-shadow": "0px 1px 4px 0px rgba(0, 0, 0, 0.1)"}
+                        ),
+                        dbc.Card(
+                            dbc.CardBody(
+                                dcc.RangeSlider(
+                                    id='map-month-range-slider',
+                                    marks=marks,
+                                    min=0,
+                                    max=len(months) - 1,
+                                    step=1,
+                                    value=[0, len(months) - 1]
                                 )
-                            ],
-                            justify="center",  # Center justify the row
-                            style={'margin-top': '20px'}  # Add vertical space between dropdowns and slider
+                            ),
+                            style={'margin-top': '20px', 'padding': '15px', "border": "1px solid lightgray", "box-shadow": "0px 1px 4px 0px rgba(0, 0, 0, 0.1)"}  
                         ),
                     ],
                     className='top-bar',
-                    style={'margin-bottom': '20px', 'margin-top': '20px'}  # Adjusted styles
+                    #style={'margin-bottom': '20px', 'margin-top': '20px'}  # Adjusted styles
                 ),
                 
                 html.Hr()
