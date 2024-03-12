@@ -1356,7 +1356,9 @@ map_layout = html.Div(
 
 # Define callback to update the map
 @app.callback(
-    Output('map-container', 'children'),
+    [Output('map-container', 'children'),
+    Output('map-url', 'pathname'),
+     Output('map-url', 'search')],
     [Input('map-month-range-slider', 'value'),  # RangeSlider input
      Input('bike-type-dropdown', 'value'),
      Input('plot-type-dropdown', 'value'),
@@ -1454,17 +1456,20 @@ def update_map(value, bike_type, plot_type, freq_type):
             marker.add_child(folium.Popup(f"<a href='{link}' target='_blank'>Go to {name}</a>"))
             marker.add_to(map_vancouver)
 
-        # Save the map to HTML and return it
-        map_html = map_vancouver.get_root().render()
-        return html.Iframe(srcDoc=map_html, width='100%', height='600')
+        # # Save the map to HTML and return it
+        # map_html = map_vancouver.get_root().render()
+        # return html.Iframe(srcDoc=map_html, width='100%', height='600')
     else:
         # Create HeatMap layer
         heatmap_data = [(loc['Coordinates'][0], loc['Coordinates'][1], loc['Total Count']) for loc in filtered_marker_locations]
         HeatMap(heatmap_data, radius=15, max_zoom=13).add_to(map_vancouver)
-        
-        # Save the map to HTML and return it
-        map_html = map_vancouver.get_root().render()
-        return html.Iframe(srcDoc=map_html, width='100%', height='600')
+    
+    pathname = f"/map/{plot_type.lower()}"  # Update the pathname based on the plot type
+    search = f"bike_type={bike_type}&freq_type={freq_type}&plot_type={plot_type}&value={value}"  # Update the search based on user selections
+
+    # Save the map to HTML and return it
+    map_html = map_vancouver.get_root().render()
+    return html.Iframe(srcDoc=map_html, width='100%', height='600')
 
 
 dashboard_tab = dcc.Tab(label='Overview', children=[dashboard_layout])
