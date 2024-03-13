@@ -264,14 +264,6 @@ def generate_card(title, content, icon, id):
         }
     )
 
-
-
-# no_of_rides = generate_card("No. of rides", rides_count, "fas fa-bicycle")
-# avg_temperature = generate_card("Average temperature", average_departure_temperature, "fas fa-hourglass")
-# max_distance = generate_card("Maximum distance", max_covered_distance_kilometers, "fas fa-road")
-# busiest_station = generate_card("Busiest station", busiest_station_departure[5:], "fas fa-building")
-# busiest_day = generate_card("Busiest day", busiest_day_weekly, "fas fa-calendar-alt")
-
 # SECOND ROW:
 active_stations = dbc.Card(
     [
