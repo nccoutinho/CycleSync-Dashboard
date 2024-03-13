@@ -944,7 +944,8 @@ trends_layout = html.Div(
                                     [
                                         html.H4('Total Duration (hour) by Month', style={"font-size": "1.5em", "padding-top": "18px", "padding-left": "18px"}),
                                         dbc.CardBody(dcc.Graph(id='polar-plot', figure={}))
-                                    ]
+                                    ],
+                                    style={"box-shadow": "0px 4px 8px rgba(0, 0, 0, 0.1)"}
                                 )
                             ],
                             width=6,
