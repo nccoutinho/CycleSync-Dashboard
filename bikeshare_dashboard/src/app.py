@@ -1363,16 +1363,30 @@ def update_polar(selected_bike, selected_membership, selected_season):
 )
 
 def create_day_of_week_bar_plot(selected_bike, selected_membership, selected_season):
+    """
+    Update the bar plot based on selected parameters.
 
-    # Filter data based on selected criteria
+    Parameters:
+    - selected_bike (str): Selected bike type ('electric', 'classic', or 'both').
+    - selected_membership (list): List of selected membership types.
+    - selected_season (list): Selected season ('Winter', 'Spring', 'Summer', 'Fall') based on a slider.
+
+    Returns:
+        tuple: A tuple containing three elements:
+            - The HTML content of the updated bar plot.
+            - The updated pathname for the chart URL.
+            - The updated search parameters for the chart URL.
+    """
+
+    # Filter data based on selected bike type
     if selected_bike == 'electric':
-        # Filter data for 'Electric bike'
         filtered_df = combined_df[combined_df['Electric bike'] == True]
     elif selected_bike == 'classic':
         filtered_df = combined_df[combined_df['Electric bike'] == False]
     else:
         filtered_df = combined_df
 
+    # Filter data based on selected membership type
     if 'all' not in selected_membership:
         filtered_df = filtered_df[filtered_df['Membership type'].isin(selected_membership)]
 
@@ -1412,6 +1426,7 @@ def create_day_of_week_bar_plot(selected_bike, selected_membership, selected_sea
 
     return fig
 
+# Tab 3
 map_layout = html.Div(
     [
         dcc.Location(id='map-url', refresh=False),  # Location component to track the URL
