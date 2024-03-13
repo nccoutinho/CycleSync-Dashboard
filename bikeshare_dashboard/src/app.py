@@ -162,10 +162,6 @@ num_stations = len(combined_df['Departure station'].unique())
 
 # ---------------PLOT 2-----------------------
 
-
-
-# ---------------PLOT 3-----------------------
-
 counts_series = combined_df['Membership type'].value_counts()
 index_list = counts_series.index.tolist()
 counts_list = counts_series.tolist()
@@ -183,7 +179,7 @@ fig2.add_annotation(text='Number of Rides<br>' + str(total_count), showarrow=Fal
 
 fig2.update_layout(showlegend=False)
 
-# ---------------PLOT 4-----------------------
+# ---------------PLOT 3-----------------------
 
 # Remove null records
 combined_df = combined_df.dropna(subset=['Return station'])
@@ -355,69 +351,6 @@ mobideo = html.Div([
                     )
                 ])
 
-
-# TABLE FILTER
-sort_table_2 = dcc.Dropdown(
-    id='table_filter_1',
-    options=[
-        {'label': 'All', 'value': 'all'},
-        {'label': '24 Hour', 'value': '24 Hour'},
-        {'label': '30 Day Pass', 'value': '30 Day Pass'},
-        {'label': '365 Corporate Plus', 'value': '365 Corporate Plus'},
-        {'label': '365 Corporate Plus Renewal', 'value': '365 Corporate Plus Renewal'},
-        {'label': '365 Corporate Standard', 'value': '365 Corporate Standard'},
-        {'label': '365 Corporate Standard Renewal', 'value': '365 Corporate Standard Renewal'},
-        {'label': '365 Day Founding Plus', 'value': '365 Day Founding Plus'},
-        {'label': '365 Day Founding Standard', 'value': '365 Day Founding Standard'},
-        {'label': '365 Day Pass Plus', 'value': '365 Day Pass Plus'},
-        {'label': '365 Day Pass Plus SALE', 'value': '365 Day Pass Plus SALE'},
-        {'label': '365 Day Pass Standard', 'value': '365 Day Pass Standard'},
-        {'label': '365 Day Pass Standard SALE', 'value': '365 Day Pass Standard SALE'},
-        {'label': 'Archived Monthly Plus', 'value': 'Archived Monthly Plus'},
-        {'label': 'Archived Monthly Standard', 'value': 'Archived Monthly Standard'},
-        {'label': 'Community Pass', 'value': 'Community Pass'},
-        {'label': 'Community Pass E-bike', 'value': 'Community Pass E-bike'},
-        {'label': 'Community Pass E-bike (PWD)', 'value': 'Community Pass E-bike (PWD)'},
-        {'label': 'Herbaland Pass', 'value': 'Herbaland Pass'},
-        {'label': 'Limited Classic Bikes Only (60 min)', 'value': 'Limited Classic Bikes Only (60 min)'},
-        {'label': 'Pay Per Ride', 'value': 'Pay Per Ride'},
-        {'label': 'UBC Inclusive Corporate Pass', 'value': 'UBC Inclusive Corporate Pass'},
-        {'label': 'VIP', 'value': 'VIP'}
-],
-   value=['all'],
-   multi=True,
-   clearable=False
-)
-
-sort_table_1 = dcc.Dropdown(
-    id='table_filter_2',
-    options=[
-        {'label': 'Electric', 'value': 'electric'},
-        {'label': 'Classic', 'value': 'classic'},
-        {'label': 'Both', 'value': 'both'}
-   ],
-   value='both',
-   clearable=False
-)
-
-slider = dcc.RangeSlider(
-    id='season_range_slider',
-    marks={0: 'Winter', 1: 'Spring', 2: 'Summer', 3: 'Fall'},
-    min=0,
-    max=3,
-    step=1,
-    value=[0, 3],
-)
-
-sort_table_3 = dcc.Dropdown(
-    id='table_filter_3',
-    options=[
-        {'label': 'Average Departure Count', 'value': 'departure count'},
-        {'label': 'Average Covered Distance (km)', 'value': 'covered distance'}
-   ],
-   value='departure count',
-   clearable=False
-)
 
 dashboard_layout = html.Div(
     [
@@ -633,7 +566,7 @@ def update_first_col_cards(start_date, end_date):
                         )
                     )
                 ],
-                width=12  # Adjust the width as needed
+                width=12  
             )
         ],
         className="mb-3",
@@ -743,6 +676,72 @@ def update_second_col_cards(start_date, end_date):
 
     return [mobideo, space_div, pie_chart_card]
 
+# Tab 2
+
+# TABLE FILTER
+sort_table_2 = dcc.Dropdown(
+    id='table_filter_1',
+    options=[
+        {'label': 'All', 'value': 'all'},
+        {'label': '24 Hour', 'value': '24 Hour'},
+        {'label': '30 Day Pass', 'value': '30 Day Pass'},
+        {'label': '365 Corporate Plus', 'value': '365 Corporate Plus'},
+        {'label': '365 Corporate Plus Renewal', 'value': '365 Corporate Plus Renewal'},
+        {'label': '365 Corporate Standard', 'value': '365 Corporate Standard'},
+        {'label': '365 Corporate Standard Renewal', 'value': '365 Corporate Standard Renewal'},
+        {'label': '365 Day Founding Plus', 'value': '365 Day Founding Plus'},
+        {'label': '365 Day Founding Standard', 'value': '365 Day Founding Standard'},
+        {'label': '365 Day Pass Plus', 'value': '365 Day Pass Plus'},
+        {'label': '365 Day Pass Plus SALE', 'value': '365 Day Pass Plus SALE'},
+        {'label': '365 Day Pass Standard', 'value': '365 Day Pass Standard'},
+        {'label': '365 Day Pass Standard SALE', 'value': '365 Day Pass Standard SALE'},
+        {'label': 'Archived Monthly Plus', 'value': 'Archived Monthly Plus'},
+        {'label': 'Archived Monthly Standard', 'value': 'Archived Monthly Standard'},
+        {'label': 'Community Pass', 'value': 'Community Pass'},
+        {'label': 'Community Pass E-bike', 'value': 'Community Pass E-bike'},
+        {'label': 'Community Pass E-bike (PWD)', 'value': 'Community Pass E-bike (PWD)'},
+        {'label': 'Herbaland Pass', 'value': 'Herbaland Pass'},
+        {'label': 'Limited Classic Bikes Only (60 min)', 'value': 'Limited Classic Bikes Only (60 min)'},
+        {'label': 'Pay Per Ride', 'value': 'Pay Per Ride'},
+        {'label': 'UBC Inclusive Corporate Pass', 'value': 'UBC Inclusive Corporate Pass'},
+        {'label': 'VIP', 'value': 'VIP'}
+],
+   value=['all'],
+   multi=True,
+   clearable=False
+)
+
+sort_table_1 = dcc.Dropdown(
+    id='table_filter_2',
+    options=[
+        {'label': 'Electric', 'value': 'electric'},
+        {'label': 'Classic', 'value': 'classic'},
+        {'label': 'Both', 'value': 'both'}
+   ],
+   value='both',
+   clearable=False
+)
+
+slider = dcc.RangeSlider(
+    id='season_range_slider',
+    marks={0: 'Winter', 1: 'Spring', 2: 'Summer', 3: 'Fall'},
+    min=0,
+    max=3,
+    step=1,
+    value=[0, 3],
+)
+
+sort_table_3 = dcc.Dropdown(
+    id='table_filter_3',
+    options=[
+        {'label': 'Average Departure Count', 'value': 'departure count'},
+        {'label': 'Average Covered Distance (km)', 'value': 'covered distance'}
+   ],
+   value='departure count',
+   clearable=False
+)
+
+# Summary Statistics
 departure_count_card = dbc.Card(
     [
         dbc.CardBody(
@@ -807,8 +806,7 @@ covered_distance_card = dbc.Card(
     }
 )
 
-
-
+# Trends Page Layout
 trends_layout = html.Div(
     [
         dcc.Location(id='trends-url', refresh=False),  # Location component to track the URL
@@ -844,14 +842,14 @@ trends_layout = html.Div(
                         dbc.Col(
                             [
                                 html.Label('Select Range:', style={'font-weight':'bold'}),
-                                slider,  # Include your slider component here
+                                slider,  # Include your slider component 
                             ],
                             width=3,
                             style={'margin-right': '20px'}  # Add horizontal space between top bar and sort tables
                         )
                     ],
                     justify="start",
-                    style={'margin-top': '20px'}  # Add vertical space between top bar and sort tables/map_plot
+                    style={'margin-top': '20px'}  # Add vertical space between top bar and plots
                 ),
                 dbc.Row(
                     [
@@ -865,7 +863,7 @@ trends_layout = html.Div(
                                     style={"box-shadow": "0px 4px 8px rgba(0, 0, 0, 0.1)"}
                                 )
                             ],
-                            width=6  # Adjust the width based on your design
+                            width=6  
                         ),
                         dbc.Col(
                             [
@@ -875,10 +873,10 @@ trends_layout = html.Div(
                             style={
                                 "display": "flex",
                                 "flex-direction": "column",
-                                "justify-content": "center",  # Center horizontally
-                                "align-items": "center",  # Align to the end vertically
-                                "height": "1000%",  # Ensure the container takes up the full height
-                                "margin": "auto",  # Add margin
+                                "justify-content": "center",  
+                                "align-items": "center",  
+                                "height": "1000%",  
+                                "margin": "auto",  
                                 "margin-top": "115px"
                             }
                         ),
@@ -939,29 +937,55 @@ trends_layout = html.Div(
 )
 
 def update_card(selected_bike, selected_membership, selected_view, selected_season):
+    """
+    Update the card display based on selected parameters.
+
+    Parameters:
+    - selected_bike (str): Selected bike type ('electric', 'classic', or 'both').
+    - selected_membership (list): List of selected membership types.
+    - selected_view (str): Selected view ('Average Departure Count' or 'Average Covered Distance (km)').
+    - selected_season (str): Selected season ('Winter', 'Spring', 'Summer', 'Fall') based on a slider.
+
+    Returns:
+    Returns:
+        tuple: A tuple containing 2 HTML cards that switch based on selected_view representing different metrics:
+              - Total Trips
+              - Average Trips
+              - Minimum Trips
+              - Maximum Trips
+
+                    OR
+              
+              - Total Covered Distance
+              - Average Covered Distance
+              - Min Covered Distance
+              - Max Covered Distance
+    """
 
     start_season, end_season = selected_season
     
-    # Check for Bike Type selected
+    # Filter data based on selected bike type
     if selected_bike == 'electric':
-        # Filter data for 'Electric bike'
         df = combined_df[combined_df['Electric bike'] == True]
     elif selected_bike == 'classic':
         df = combined_df[combined_df['Electric bike'] == False]
     else:
         df = combined_df
 
+    # Filter data based on selected membership types
     if 'all' not in selected_membership:
         df = df[df['Membership type'].isin([m for m in selected_membership])]
     
+    # Define months
     season_indicator = ['Dec', 'Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov']
-    # Filter data based on selected months
+    
     selected_months = []
     for season_index in range(start_season, end_season + 1):
         start_month_index = season_index * 3
         end_month_index = start_month_index + 2
         selected_months.extend(season_indicator[start_month_index:end_month_index + 1])
 
+    # Filter data based on selected months
     df = df[df['Month'].isin(selected_months)]
 
     # Group by season, then by month, and calculate average count of bike departures
@@ -985,12 +1009,15 @@ def update_card(selected_bike, selected_membership, selected_view, selected_seas
     seasonal_bike_distance['Month'] = pd.Categorical(seasonal_bike_distance['Month'], categories=month_order, ordered=True)
     seasonal_bike_distance = seasonal_bike_distance.sort_values(by='Month')
 
+    # Filter card based on selected view
     if selected_view == 'departure count':
+        # Calculate statistics for departure count view
         total_trips = seasonal_bike_count['Bike Count'].sum()
         average_trips = round(average_counts['Bike Count'].mean(), 2)
         min_trips = seasonal_bike_count['Bike Count'].min()
         max_trips = seasonal_bike_count['Bike Count'].max()
 
+        # Return strings and display attributes for departure count view
         return (
             f"Total Trips: {total_trips} trips",
             f"Average Trips: {average_trips} trips",
@@ -1001,18 +1028,13 @@ def update_card(selected_bike, selected_membership, selected_view, selected_seas
         )
     
     else:
-        # total_covered_distance = round(seasonal_total_distance['Total Covered Distance (m)'].sum(), 2)
-        # average_covered_distance = round(seasonal_bike_distance['Average Covered Distance (m)'].mean(), 2)
-        # min_covered_distance = round(seasonal_total_distance['Total Covered Distance (m)'].min(), 2)
-        # max_covered_distance = round(seasonal_total_distance['Total Covered Distance (m)'].max(), 2)
-
+        # Calculate statistics for covered distance view
         total_covered_distance = round(seasonal_total_distance['Total Covered Distance (m)'].sum()/ 1000, 2)
         average_covered_distance = round(seasonal_bike_distance['Average Covered Distance (m)'].mean()/ 1000, 2)
         min_covered_distance = round(seasonal_total_distance['Total Covered Distance (m)'].min()/ 1000, 2)
         max_covered_distance = round(seasonal_total_distance['Total Covered Distance (m)'].max()/ 1000, 2)
 
-        
-
+        # Return strings and display attributes for covered distance view
         return (
             "", "", "", "", 
             f"Total Covered Distance: {total_covered_distance} km",
