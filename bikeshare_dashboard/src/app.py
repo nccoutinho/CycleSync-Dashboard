@@ -720,13 +720,6 @@ def update_second_col_cards(start_date, end_date):
 
     fig2.update_layout(showlegend=False)
 
-    # Count trips by day of the week
-    trips_by_day = filtered_df['Day of Week'].value_counts()
-
-    # Sort days of the week
-    sorted_days = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday']
-    trips_by_day = trips_by_day.reindex(sorted_days)
-
     # Define cards
     pie_chart_card = dbc.Card(
         id="rides-by-membership-type",
