@@ -600,10 +600,7 @@ def update_first_col_cards(start_date, end_date):
         orientation='h',
         labels={'Return Station', 'Count'},
         color=percentage_values.index,  # Use the stations as the color variable
-        color_discrete_sequence=[
-                        '#8C0000', '#A50000', '#BF0000', '#D80000', '#F20000',
-                        '#FF3333', '#FF6666', '#FF9999', '#FFCCCC', '#FFFFFF'
-                    ],
+        color_discrete_sequence=['#D80808'],
         text=percentage_values.round(2).astype(str) + '%'  # Display percentages as text on the bars
     )
     # Sort bars in descending order
