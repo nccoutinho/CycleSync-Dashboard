@@ -918,7 +918,8 @@ trends_layout = html.Div(
                                     [
                                         html.H4(id='trends-title', style={"font-size": "1.5em", "padding-top": "18px", "padding-left": "18px"}),
                                         dbc.CardBody(dcc.Graph(id='trend-plot', figure={}))
-                                    ]
+                                    ],
+                                    style={"box-shadow": "0px 4px 8px rgba(0, 0, 0, 0.1)"}
                                 )
                             ],
                             width=6  # Adjust the width based on your design
@@ -935,7 +936,8 @@ trends_layout = html.Div(
                                 "align-items": "center",  # Align to the end vertically
                                 "height": "1000%",  # Ensure the container takes up the full height
                                 "margin": "auto",  # Add margin
-                                "margin-top": "115px"
+                                "margin-top": "115px",
+                                "box-shadow": "0px 4px 8px rgba(0, 0, 0, 0.1)"
                             }
                         ),
                         dbc.Col(
