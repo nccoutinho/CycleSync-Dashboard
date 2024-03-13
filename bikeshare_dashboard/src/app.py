@@ -489,6 +489,22 @@ dashboard_layout = html.Div(
 )
 
 def update_first_row_cards(start_date, end_date):
+    """
+    Update the metrics displayed in the first row of cards based on the selected date range.
+
+    Args:
+        start_date (str): The start date of the selected date range.
+        end_date (str): The end date of the selected date range.
+
+    Returns:
+        tuple: A tuple containing five HTML cards representing different metrics:
+            - Number of rides
+            - Average departure temperature
+            - Maximum covered distance
+            - Busiest station by departure
+            - Busiest day of the week
+    """
+    
     # Filter data based on selected date range
     # filtered_df = combined_df[(combined_df['Departure'] >= start_date) & (combined_df['Departure'] <= end_date)]
     filtered_df = combined_df[(combined_df['Departure'].notnull()) & (combined_df['Departure'] >= start_date) & (combined_df['Departure'] <= end_date)]
@@ -533,6 +549,19 @@ def update_first_row_cards(start_date, end_date):
 )
 
 def update_first_col_cards(start_date, end_date):
+    """
+    Update the metrics displayed in the first column of cards based on the selected date range.
+
+    Args:
+        start_date (str): The start date of the selected date range.
+        end_date (str): The end date of the selected date range.
+
+    Returns:
+        list: A list containing two HTML cards representing different metrics:
+            - Number of active bike stations around the city, accessible 24/7
+            - Top 10 most common bike stations based on end trips
+    """
+    
     # Filter data based on selected date range
     filtered_df = combined_df[(combined_df['Departure'].notnull()) & (combined_df['Departure'] >= start_date) & (combined_df['Departure'] <= end_date)]
 
@@ -631,6 +660,19 @@ def update_first_col_cards(start_date, end_date):
 )
 
 def update_second_col_cards(start_date, end_date):
+    """
+    Update the metrics displayed in the second column of cards based on the selected date range.
+
+    Args:
+        start_date (str): The start date of the selected date range.
+        end_date (str): The end date of the selected date range.
+
+    Returns:
+        list: A list containing two HTML cards representing different metrics:
+            - Rides by Membership Type: A pie chart showing the distribution of rides by membership type.
+            - Mobideo: A video embed from YouTube demonstrating a feature related to bike rides.
+    """
+    
     # Filter data based on selected date range
     filtered_df = combined_df[(combined_df['Departure'].notnull()) & (combined_df['Departure'] >= start_date) & (combined_df['Departure'] <= end_date)]
 
@@ -1438,7 +1480,22 @@ map_layout = html.Div(
      Input('frequency-type-dropdown', 'value')]  # Dropdown input
 )
 
-def update_map(value, bike_type, plot_type, freq_type):
+def update_map(map_month_range, bike_type, plot_type, freq_type):
+    """
+    Update the map based on user selections.
+
+    Args:
+        value (list): The selected range of months.
+        bike_type (str): The type of bike selected (either 'electric', 'classic', or 'all').
+        plot_type (str): The type of plot selected (either 'marker plot' or 'heat map').
+        freq_type (str): The frequency type selected (either 'all', 'top5', 'top10', or 'top20').
+
+    Returns:
+        tuple: A tuple containing three elements:
+            - The HTML content of the updated map.
+            - The updated pathname for the map URL.
+            - The updated search parameters for the map URL.
+    """
     
     # Filtering based on bike type
     if bike_type == 'electric':
@@ -1472,12 +1529,12 @@ def update_map(value, bike_type, plot_type, freq_type):
         entry['Coordinates'] = tuple(map(float, entry['Coordinates'].strip('()').split(', ')))
     
     # Convert float values to integers
-    value = [int(v) for v in value]
+    map_month_range = [int(v) for v in map_month_range]
 
     # Filter marker locations based on selected months
     months = sorted(set(item['Month'] for item in marker_locations))
-    start_month = months[value[0]]
-    end_month = months[value[1]]
+    start_month = months[map_month_range[0]]
+    end_month = months[map_month_range[1]]
     filtered_marker_locations = [item for item in marker_locations if start_month <= item['Month'] <= end_month]
 
     # Aggregate counts for all months
@@ -1538,7 +1595,7 @@ def update_map(value, bike_type, plot_type, freq_type):
         HeatMap(heatmap_data, radius=15, max_zoom=13).add_to(map_vancouver)
     
     pathname = f"/map/{plot_type.lower()}"  # Update the pathname based on the plot type
-    search = f"bike_type={bike_type}&freq_type={freq_type}&plot_type={plot_type}&value={value}"  # Update the search based on user selections
+    search = f"bike_type={bike_type}&freq_type={freq_type}&plot_type={plot_type}&map_month_range={map_month_range}"  # Update the search based on user selections
 
     # Save the map to HTML and return it
     map_html = map_vancouver.get_root().render()
