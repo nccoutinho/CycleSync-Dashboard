@@ -1266,18 +1266,32 @@ def update_chart(selected_bike, selected_membership, selected_view, selected_sea
 )
 
 def update_polar(selected_bike, selected_membership, selected_season):
+    """
+    Update the polar plot based on selected parameters.
+
+    Parameters:
+    - selected_bike (str): Selected bike type ('electric', 'classic', or 'both').
+    - selected_membership (list): List of selected membership types.
+    - selected_season (list): Selected season ('Winter', 'Spring', 'Summer', 'Fall') based on a slider.
+
+    Returns:
+        tuple: A tuple containing three elements:
+            - The HTML content of the updated polar plot.
+            - The updated pathname for the chart URL.
+            - The updated search parameters for the chart URL.
+    """
     
     start_season, end_season = selected_season
     
-    # Check for Bike Type selected
+    # Filter data based on selected bike type
     if selected_bike == 'electric':
-        # Filter data for 'Electric bike'
         df = combined_df[combined_df['Electric bike'] == True]
     elif selected_bike == 'classic':
         df = combined_df[combined_df['Electric bike'] == False]
     else:
         df = combined_df
 
+    # Filter data based on selected membership type
     if 'all' not in selected_membership:
         df = df[df['Membership type'].isin([m for m in selected_membership])]
     
@@ -1340,6 +1354,7 @@ def update_polar(selected_bike, selected_membership, selected_season):
         # Return an empty figure if there are no rows after filtering by membership type
         return [go.Figure()]
 
+# Callback function to update plot based on the selected filters
 @app.callback(
    Output('bar-plot', 'figure'),
    [Input('table_filter_2', 'value'),
