@@ -314,66 +314,6 @@ pie_chart = dbc.Card(
 )
 
 
-
-# day_of_week = dbc.Card(
-#     [
-#         dbc.CardBody(
-#             [
-#                 dbc.Col()
-#             ],
-#             style={"display": "flex", "flex-direction": "column", "justify-content": "center"}
-#         )
-#     ],
-#     className="mb-3",
-#     style={
-#         "width": "29%",
-#         "height": "300px",
-#         "margin-left": "auto",
-#         "border": "1px solid lightgray",
-#         "box-shadow": "0px 1px 4px 0px rgba(0, 0, 0, 0.1)"
-#     }
-# )
-
-
-# # THIRD ROW:
-# trip_day = dbc.Card(
-#     [
-#                 dbc.Col(
-#                     [
-#                         html.H1("Trips by Day of the Week", style={"font-size": "1.5em", "padding-top": "18px", "padding-left": "18px"}),
-#                         dcc.Graph(
-#                             id='trips-by-day-bar',
-#                             figure={
-#                                 'data': [
-#                                     {'x': trips_by_day.index, 
-#                                      'y': trips_by_day.values, 
-#                                      'type': 'bar', 
-#                                      'name': 'Trips', 
-#                                      'marker': {'color': '#D80808'},
-#                                      'hovertemplate': 'Day: %{x}<br>Trips: %{y:,.0f}'},
-#                                 ],
-#                                 'layout': {
-#                                     'xaxis': {'title': 'Day of the Week'},
-#                                     'yaxis': {'title': 'Trips'},
-#                                     'width': 870,
-#                                     'height': 305
-#                                 }
-#                             }
-#                         )
-#                     ],
-#                     width=12  # Adjust the width as needed
-#                 )
-#             ],
-#     className="mb-3",
-#     style={
-#         "width": "900px",
-#         "height": "360px",
-#         "margin-left": "auto",
-#         "border": "1px solid lightgray",
-#         "box-shadow": "0px 1px 4px 0px rgba(0, 0, 0, 0.1)"
-#     }
-# )
-
 common_end_station = dbc.Card(
     [
                 dbc.Col(
@@ -386,7 +326,7 @@ common_end_station = dbc.Card(
                                 )
                             )
                     ],
-                    width=12  # Adjust the width as needed
+                    width=12 
                 )
     ],
     className="mb-3",
@@ -488,7 +428,6 @@ dashboard_layout = html.Div(
                 html.Hr(),
                 html.Div(
                     [
-                        # html.H6("Page / ", style={'display': 'inline'}),
                         html.Span(id='current-page', style={'font-weight': 'bold'})
                     ],
                     className='top-bar',
@@ -1334,8 +1273,6 @@ def update_polar(selected_bike, selected_membership, selected_season):
 )
 
 def create_day_of_week_bar_plot(selected_bike, selected_membership, selected_season):
-    # Assuming you have the appropriate filtering logic for selected_bike, selected_membership, selected_season
-    # Modify the logic below accordingly
 
     # Filter data based on selected criteria
     if selected_bike == 'electric':

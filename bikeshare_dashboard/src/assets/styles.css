@@ -1,11 +1,11 @@
 /* style.css */
 
 #season_range_slider .rc-slider-track {
-    background-color: #D80808; /* Change to whatever color you want */
+    background-color: #D80808; 
 }
 
 #season_range_slider .rc-slider-handle {
-    border-color: #D80808; /* Change to whatever color you want */
+    border-color: #D80808; 
 }
 
 #season_range_slider .rc-slider-dot-active {  
@@ -13,11 +13,11 @@
 }
 
 #map-month-range-slider .rc-slider-track {
-    background-color: #D80808; /* Change to whatever color you want */
+    background-color: #D80808; 
 }
 
 #map-month-range-slider .rc-slider-handle {
-    border-color: #D80808; /* Change to whatever color you want */
+    border-color: #D80808; 
 }
 
 #map-month-range-slider .rc-slider-dot-active {  
@@ -41,10 +41,3 @@
   border: 1px double #e96e6c;
   color: #ffffff
 }
-
-/* #calendar .CalendarDay__selected_span:active, .CalendarDay__selected_span:hover {
-  background: #db5959;
-  border: 1px double #db5959;
-  color: #fff
-} */
-
