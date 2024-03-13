@@ -462,7 +462,7 @@ sort_table_3 = dcc.Dropdown(
     id='table_filter_3',
     options=[
         {'label': 'Average Departure Count', 'value': 'departure count'},
-        {'label': 'Average Covered Distance (m)', 'value': 'covered distance'}
+        {'label': 'Average Covered Distance (km)', 'value': 'covered distance'}
    ],
    value='departure count',
    clearable=False
@@ -936,8 +936,7 @@ trends_layout = html.Div(
                                 "align-items": "center",  # Align to the end vertically
                                 "height": "1000%",  # Ensure the container takes up the full height
                                 "margin": "auto",  # Add margin
-                                "margin-top": "115px",
-                                "box-shadow": "0px 4px 8px rgba(0, 0, 0, 0.1)"
+                                "margin-top": "115px"
                             }
                         ),
                         dbc.Col(
@@ -1028,7 +1027,7 @@ def update_card(selected_bike, selected_membership, selected_view, selected_seas
 
     # Group by season, then by month, and calculate total and average covered distance of bike trips
     seasonal_total_distance = df.groupby(['Season', 'Month'])['Covered distance (m)'].sum().reset_index(name='Total Covered Distance (m)')
-    seasonal_bike_distance = df.groupby(['Season', 'Month'])['Covered distance (m)'].mean().reset_index(name='Average Covered Distance (m)')
+    seasonal_bike_distance = df.groupby(['Season', 'Month'])['Covered distance (m)'].mean().reset_index(name='Average Covered Distance (km)')
 
     # Define custom sort order for months
     month_order = ['Dec', 'Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov']
@@ -1125,7 +1124,10 @@ def update_chart(selected_bike, selected_membership, selected_view, selected_sea
     average_counts = seasonal_bike_count.groupby(['Month', 'Season'])['Bike Count'].mean().reset_index()
 
     # Group by season, then by month, and calculate average covered distance of bike trips
-    seasonal_bike_distance = df.groupby(['Season', 'Month'])['Covered distance (m)'].mean().reset_index(name='Average Covered Distance (m)')
+    seasonal_bike_distance = df.groupby(['Season', 'Month'])['Covered distance (m)'].mean().reset_index(name='Average Covered Distance (km)')
+
+    # Convert distances from meters to kilometers
+    seasonal_bike_distance['Average Covered Distance (km)'] /= 1000
 
     # Sort the DataFrame by the 'Month' column using the custom order
     average_counts = average_counts.loc[average_counts['Month'].isin(month_order)]
@@ -1221,37 +1223,37 @@ def update_chart(selected_bike, selected_membership, selected_view, selected_sea
         fig_winter = px.line(
             seasonal_bike_distance[seasonal_bike_distance['Month'].isin(['Dec', 'Jan', 'Feb', 'Mar'])],
             x='Month',
-            y='Average Covered Distance (m)',
+            y='Average Covered Distance (km)',
             line_shape='linear',
             color_discrete_sequence=['blue'],
-            hover_data={'Month': True, 'Average Covered Distance (m)': True, 'Season': True}  # Add 'Season' to hover
+            hover_data={'Month': True, 'Average Covered Distance (km)': True, 'Season': True}  # Add 'Season' to hover
         )
 
         fig_spring = px.line(
             seasonal_bike_distance[seasonal_bike_distance['Month'].isin(['Mar', 'Apr', 'May', 'Jun'])],
             x='Month',
-            y='Average Covered Distance (m)',
+            y='Average Covered Distance (km)',
             line_shape='linear',
             color_discrete_sequence=['green'],
-            hover_data={'Month': True, 'Average Covered Distance (m)': True, 'Season': True}  # Add 'Season' to hover
+            hover_data={'Month': True, 'Average Covered Distance (km)': True, 'Season': True}  # Add 'Season' to hover
         )
 
         fig_summer = px.line(
             seasonal_bike_distance[seasonal_bike_distance['Month'].isin(['Jun', 'Jul', 'Aug', 'Sep'])],
             x='Month',
-            y='Average Covered Distance (m)',
+            y='Average Covered Distance (km)',
             line_shape='linear',
             color_discrete_sequence=['red'],
-            hover_data={'Month': True, 'Average Covered Distance (m)': True, 'Season': True}  # Add 'Season' to hover
+            hover_data={'Month': True, 'Average Covered Distance (km)': True, 'Season': True}  # Add 'Season' to hover
         )
 
         fig_fall = px.line(
             seasonal_bike_distance[seasonal_bike_distance['Month'].isin(['Sep', 'Oct', 'Nov'])],
             x='Month',
-            y='Average Covered Distance (m)',
+            y='Average Covered Distance (km)',
             line_shape='linear',
             color_discrete_sequence=['yellow'],
-            hover_data={'Month': True, 'Average Covered Distance (m)': True, 'Season': True}  # Add 'Season' to hover
+            hover_data={'Month': True, 'Average Covered Distance (km)': True, 'Season': True}  # Add 'Season' to hover
         )
 
         fig = fig_winter.add_traces(fig_spring.data)
@@ -1260,7 +1262,7 @@ def update_chart(selected_bike, selected_membership, selected_view, selected_sea
 
     # Update layout
         fig.update_layout(
-            yaxis_title='Average Covered Distance (m)',
+            yaxis_title='Average Covered Distance (km)',
             xaxis = dict(
                 title=None
             ),
