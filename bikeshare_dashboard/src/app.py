@@ -1027,7 +1027,7 @@ def update_card(selected_bike, selected_membership, selected_view, selected_seas
 
     # Group by season, then by month, and calculate total and average covered distance of bike trips
     seasonal_total_distance = df.groupby(['Season', 'Month'])['Covered distance (m)'].sum().reset_index(name='Total Covered Distance (m)')
-    seasonal_bike_distance = df.groupby(['Season', 'Month'])['Covered distance (m)'].mean().reset_index(name='Average Covered Distance (km)')
+    seasonal_bike_distance = df.groupby(['Season', 'Month'])['Covered distance (m)'].mean().reset_index(name='Average Covered Distance (m)')
 
     # Define custom sort order for months
     month_order = ['Dec', 'Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov']
