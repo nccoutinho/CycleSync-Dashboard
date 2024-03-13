@@ -918,7 +918,7 @@ trends_layout = html.Div(
 )
 
 
-# Callback function to update covered distance card based on the selected view type
+# Callback function to update summary card statistics based on the selected view type
 @app.callback(
     [Output('total-trips', 'children'),
      Output('average-trips', 'children'),
@@ -944,7 +944,7 @@ def update_card(selected_bike, selected_membership, selected_view, selected_seas
     - selected_bike (str): Selected bike type ('electric', 'classic', or 'both').
     - selected_membership (list): List of selected membership types.
     - selected_view (str): Selected view ('Average Departure Count' or 'Average Covered Distance (km)').
-    - selected_season (str): Selected season ('Winter', 'Spring', 'Summer', 'Fall') based on a slider.
+    - selected_season (list): Selected season ('Winter', 'Spring', 'Summer', 'Fall') based on a slider.
 
     Returns:
     Returns:
@@ -1044,6 +1044,7 @@ def update_card(selected_bike, selected_membership, selected_view, selected_seas
             {'display': 'flex'}, {'display': 'none'}
         )
 
+# Callback function to update plot based on the selected view type
 @app.callback(
    [Output('trend-plot', 'figure'),
      Output('trends-title', 'children'),
@@ -1057,18 +1058,33 @@ def update_card(selected_bike, selected_membership, selected_view, selected_seas
 )
 
 def update_chart(selected_bike, selected_membership, selected_view, selected_season):
+    """
+    Update the chart display based on selected parameters.
+
+    Parameters:
+    - selected_bike (str): Selected bike type ('electric', 'classic', or 'both').
+    - selected_membership (list): List of selected membership types.
+    - selected_view (str): Selected view ('Average Departure Count' or 'Average Covered Distance (km)').
+    - selected_season (list): Selected season ('Winter', 'Spring', 'Summer', 'Fall') based on a slider.
+
+    Returns:
+        tuple: A tuple containing three elements:
+            - The HTML content of the updated chart.
+            - The updated pathname for the chart URL.
+            - The updated search parameters for the chart URL.
+    """
 
     start_season, end_season = selected_season
     
-    # Check for Bike Type selected
+    # Filter data based on selected bike type
     if selected_bike == 'electric':
-        # Filter data for 'Electric bike'
         df = combined_df[combined_df['Electric bike'] == True]
     elif selected_bike == 'classic':
         df = combined_df[combined_df['Electric bike'] == False]
     else:
         df = combined_df
 
+    # Filter data based on selected membership type
     if 'all' not in selected_membership:
         df = df[df['Membership type'].isin([m for m in selected_membership])]
     
@@ -1104,9 +1120,10 @@ def update_chart(selected_bike, selected_membership, selected_view, selected_sea
     seasonal_bike_distance['Month'] = pd.Categorical(seasonal_bike_distance['Month'], categories=month_order, ordered=True)
     seasonal_bike_distance = seasonal_bike_distance.sort_values(by='Month')
 
+    # Filter data based on selected view type
     if selected_view == 'departure count':
 
-        # Create separate line plots for each season
+        # Create separate line plots for each season based on  departure counts
         fig_winter = px.line(
             average_counts[average_counts['Month'].isin(['Dec', 'Jan', 'Feb', 'Mar'])],
             x='Month',
@@ -1115,7 +1132,6 @@ def update_chart(selected_bike, selected_membership, selected_view, selected_sea
             color_discrete_sequence=['blue'],
             hover_data={'Month': True, 'Bike Count': True, 'Season': True}  
         )
-
 
         fig_spring = px.line(
             average_counts[average_counts['Month'].isin(['Mar', 'Apr', 'May', 'Jun'])],
@@ -1126,7 +1142,6 @@ def update_chart(selected_bike, selected_membership, selected_view, selected_sea
             hover_data={'Month': True, 'Bike Count': True, 'Season': True}  
         )
 
-
         fig_summer = px.line(
             average_counts[average_counts['Month'].isin(['Jun', 'Jul', 'Aug', 'Sep'])],
             x='Month',
@@ -1135,7 +1150,6 @@ def update_chart(selected_bike, selected_membership, selected_view, selected_sea
             color_discrete_sequence=['red'],
             hover_data={'Month': True, 'Bike Count': True, 'Season': True}  
         )
-
 
         fig_fall = px.line(
             average_counts[average_counts['Month'].isin(['Sep', 'Oct', 'Nov'])],
@@ -1154,10 +1168,6 @@ def update_chart(selected_bike, selected_membership, selected_view, selected_sea
 
         # Combine the line plots
         fig = go.Figure()
-        # fig.add_traces(fig_winter.data)
-        # fig.add_traces(fig_spring.data)
-        # fig.add_traces(fig_summer.data)
-        # fig.add_traces(fig_fall.data)
 
         for f in  [fig_winter, fig_spring, fig_summer, fig_fall]:
             for trace in f.data:
@@ -1184,7 +1194,7 @@ def update_chart(selected_bike, selected_membership, selected_view, selected_sea
     
     else:
 
-         # Create separate line plots for each season
+         # Create separate line plots for each season based on covered distance
         fig_winter = px.line(
             seasonal_bike_distance[seasonal_bike_distance['Month'].isin(['Dec', 'Jan', 'Feb', 'Mar'])],
             x='Month',
@@ -1240,6 +1250,7 @@ def update_chart(selected_bike, selected_membership, selected_view, selected_sea
 
         title = "Average Covered Distance by Season and Month"
 
+    # Update URL parameters
     pathname = f"/trends/{selected_view.lower()}"  # Update the pathname based on the selected view
     search = f"selected_bike={selected_bike}&selected_membership={selected_membership}&selected_view={selected_view}&selected_season={selected_season}"  # Update the search based on user selections
 
@@ -1508,7 +1519,7 @@ def update_map(map_month_range, bike_type, plot_type, freq_type):
 
     Args:
         value (list): The selected range of months.
-        bike_type (str): The type of bike selected (either 'electric', 'classic', or 'all').
+        bike_type (str): The type of bike selected (either 'electric', 'classic', or 'both').
         plot_type (str): The type of plot selected (either 'marker plot' or 'heat map').
         freq_type (str): The frequency type selected (either 'all', 'top5', 'top10', or 'top20').
 
