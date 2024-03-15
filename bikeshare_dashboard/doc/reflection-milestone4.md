@@ -1,1 +1,3 @@
 ## Reflection Milestone 4
+
+Throughout the development of our CycleSync Bikeshare Dashboard, we have successfully implemented several key features aimed at providing users with insightful analyses of Mobi by Rogers' bikeshare system data. Our dashboard currently offers users the ability to visualize ride statistics, station activities, and usage patterns through interactive maps, trend charts, and bar plots. 
