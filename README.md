@@ -1,6 +1,6 @@
 # DATA551-Project-Group 7
 
-Heroku App: https://cyclesync-2259405176ce.herokuapp.com/
+Heroku App: https://cyclesync-ea5157887347.herokuapp.com/
 
 The **Bikeshare Dashboard** project aims to transform bikeshare system management through an innovative, data-driven platform. With a focus on the Mobi by Rogers Bikeshare system in Vancouver, the dashboard serves as a strategic compass for stakeholders, providing timely insights into user behavior, operational trends, and marketing opportunities.
 
