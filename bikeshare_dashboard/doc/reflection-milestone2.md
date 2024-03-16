@@ -6,7 +6,7 @@ In developing the CycleSync Bikeshare Dashboard, we successfully implemented sev
 
    1. **Comprehensive Data Integration:**
 
-      Leveraging Mobi by Rogers' bikeshare data, the dashboard incorporates essential ride details, including durations, distances, departure stations, and timestamps. This comprehensive dataset forms the foundation for various analytical components within the dashboard.
+   Leveraging Mobi by Rogers' bikeshare data, the dashboard incorporates essential ride details, including durations, distances, departure stations, and timestamps. This comprehensive dataset forms the foundation for various analytical components within the dashboard.
 
    2. **Interactive Dashboard with Dash:**
 
