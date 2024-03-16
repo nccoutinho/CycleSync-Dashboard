@@ -10,6 +10,8 @@ import plotly.express as px
 import altair as alt
 from datetime import date
 import calendar
+import tempfile
+import zipfile
 import folium
 from folium.plugins import HeatMap
 
@@ -370,7 +372,14 @@ dashboard_layout = html.Div(
                     [
                         dbc.Col(
                             [html.H6("Date Range:"), date_picker]
-                        )
+                        ),
+                        dbc.Col(width=7),
+                        dbc.Col(
+                            [
+                                html.Button("Download Raw Data", id="btn-download", className="btn-primary", style={'width': '180px'})
+                            ]
+                        ),
+                        dcc.Download(id="download-dataframes-zip"),
                     ],
                     style={'margin-bottom': '40px', 'padding-left': '60px'}           
                 ),
@@ -675,6 +684,36 @@ def update_second_col_cards(start_date, end_date):
     space_div = html.Div(style={'height': '30px'})
 
     return [mobideo, space_div, pie_chart_card]
+
+@app.callback(
+    Output("download-dataframes-zip", "data"),
+    Input("btn-download", "n_clicks"),
+    prevent_initial_call=True,
+)
+def download_zip(n_clicks):
+    with tempfile.TemporaryDirectory() as temp_dir:
+        columns_to_remove = ['Month', 'Season', 'Day of Week']
+        df1 = combined_df.drop(columns=columns_to_remove)
+        # Save ride data as CSV
+        df1_path = os.path.join(temp_dir, "Ride Data.csv")
+        df1.to_csv(df1_path, index=False)
+        
+        # Save station coordinates as CSV
+        df2_path = os.path.join(temp_dir, "Station Coordinates.csv")
+        dfc.to_csv(df2_path, index=False)
+        
+        # Create a zip file containing both CSVs
+        zip_path = os.path.join(temp_dir, "CycleSync Bikeshare.zip")
+        with zipfile.ZipFile(zip_path, "w") as zip_file:
+            zip_file.write(df1_path, "Ride Data.csv")
+            zip_file.write(df2_path, "Station Coordinates.csv")
+        
+        # Read the zip file as bytes
+        with open(zip_path, "rb") as f:
+            zip_data = f.read()
+    
+    return dcc.send_bytes(zip_data, filename="CycleSync Bikeshare.zip")
+
 
 # Tab 2
 
@@ -1692,4 +1731,4 @@ app.layout = html.Div([
 
 
 if __name__ == '__main__':
-    app.run_server()
+    app.run_server(debug=True, port = 8099)
