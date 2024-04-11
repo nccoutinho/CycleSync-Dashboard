@@ -10,8 +10,7 @@ By showcasing key metrics, detailed ride statistics, and station activities, the
 
 In essence, the Bikeshare Dashboard serves as more than just a monitoring tool—it is a strategic compass guiding stakeholders towards data-driven decisions that optimize operations, enhance user experience, and ultimately propel the growth and sustainability of the bikeshare system.
 
-https://github.com/nccoutinho/CycleSync-Dashboard/assets/139565977/05cda3d1-4f3c-4536-a310-922569c7a35d
-
+https://github.com/nccoutinho/CycleSync-Dashboard/assets/139565977/c48af013-a9aa-4c1e-b88e-ec80e5a70692
 
 ### App Sketch
 
