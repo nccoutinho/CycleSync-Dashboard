@@ -10,6 +10,9 @@ By showcasing key metrics, detailed ride statistics, and station activities, the
 
 In essence, the Bikeshare Dashboard serves as more than just a monitoring tool—it is a strategic compass guiding stakeholders towards data-driven decisions that optimize operations, enhance user experience, and ultimately propel the growth and sustainability of the bikeshare system.
 
+https://github.com/nccoutinho/CycleSync-Dashboard/assets/139565977/05cda3d1-4f3c-4536-a310-922569c7a35d
+
+
 ### App Sketch
 
 The sketch was created on Figma, utilizing icons sourced from the Noun Project and Icon Finder. Our Dashboard comprises three pages. The initial page displays comprehensive bike-sharing data, including station and ride counts, maximum duration, and distance, among other details. The trends page features two interactive line plots based on count and average distance, highlighting every season as one hovers over it, with filters for bike type and membership type. Lastly, the map page includes two maps showcasing bike concentration at each station, toggle-selectable, with filters for bike type and station name. One map displays bike concentration using a heatmap, while the other utilizes markers to indicate the count of bikes at each station.
